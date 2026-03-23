@@ -1,0 +1,108 @@
+site_name: ms2-panel-editor
+
+repo_url: https://github.com/geo2france/ms2-panel-editor
+repo_name: geo2france/ms2-panel-editor
+
+docs_dir: docs
+edit_uri: edit/main/docs/
+
+
+theme:
+  language: en 
+  features:
+    # - toc.integrate
+    - navigation.indexes
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.footer
+  logo: images/georchestra-logo-white.svg
+  favicon: images/favicon.ico
+  name: material
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:psc@georchestra.org
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/georchestra
+    - icon: fontawesome/brands/github
+      link: https://github.com/georchestra
+    - icon: fontawesome/brands/google
+      link: https://groups.google.com/g/georchestra?hl=en
+    - icon: fontawesome/brands/dev
+      link: https://groups.google.com/group/georchestra-dev?hl=fr
+    - icon: fontawesome/regular/comments
+      link: https://matrix.to/#/#georchestra:osgeo.org
+
+
+copyright: '© 2025 - geOrchestra'
+
+extra_css:
+    - css/extra.css
+
+# 1st and 2nd level tree structure to manage here
+# These entries match the documentation template
+# Here do not put .fr or .en in the name of the markdown: the i18n plugin manage this for you
+
+nav:
+    - Home: index.md 
+    - User guide:
+        - Index: user_guide/index.md
+        - Configuration: user_guide/getting_started.md
+        - Global overview: user_guide/global_overview.md
+        - Menus and toolbars: user_guide/tools.md
+    - Technical guides:
+        - Index: technical_guides/index.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+plugins:
+  - search
+  - callouts
+  # - toc-md:
+      # toc_page_title: Contents
+      # toc_page_description: Summary of the section
+      # header_level: 3
+      # pickup_description_meta: false
+      # pickup_description_class: false
+      # output_path: tableofcontent.md
+      # output_log: true
+      # ignore_page_pattern: index.md
+      # remove_navigation_page_pattern: index.md
+      # template_dir_path: custom_template
+  - exclude:
+      glob:
+        - tableofcontent.md
+  - i18n:
+        docs_structure: suffix
+        fallback_to_default: true
+        reconfigure_material: true
+        reconfigure_search: true
+        languages:
+          - locale: en
+            default: true
+            name: English
+            build: true
+            site_name: "ms2-panel-editor"
+          - locale: fr
+            name: Français
+            build: true
+            site_name: "ms2-panel-editor"
+            nav_translations:
+              Home: "Accueil"
+              User guide: "Guide utilisateur"
+              Index: "Sommaire"
+              Configuration: "Configuration"
+              Global overview: "Vue globale"
+              Menus and toolbars: "Barres ou menus d''outils"
+              Technical guides: "Guides techniques"
+
+
+  - git-revision-date-localized:
+      fallback_to_build_date: true
+      enable_creation_date: true
+      strict: false
