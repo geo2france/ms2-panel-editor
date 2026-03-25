@@ -23,6 +23,8 @@ Configuration is defined in `localConfig.json` under the `panel_editor` plugin.
 | `hidden` | `string[]` | no | Fields hidden in read mode. In edit mode, a `hidden` field stays hidden unless it is also declared in `fields`. |
 | `fields` | `array` | no | Detailed field definition (see next table). |
 | `auto` | `array` | no | Fields filled automatically on save. |
+| `allowEdit` | `boolean` | no | If `false`, completely disables layer editing regardless of roles. |
+| `allowEditRoles` | `string[]` | no | If provided, priority list of roles allowed to edit the layer. |
 | `edit` / `editingRoles` | `string[]` | no | Roles allowed to edit the layer. |
 | `allowDelete` | `boolean` | no | Shows the delete button only when set to `true`. |
 | `delete` / `deletionRoles` | `string[]` | no | Roles allowed to delete. |
@@ -142,7 +144,7 @@ Rules:
 - If no `url`, `wkt`, or `wtk` is provided, no control geometry is loaded.
 - `wkt` / `wtk` is interpreted as `EPSG:4326`.
 - When needed, that geometry is reprojected to the Identify features CRS before spatial comparison.
-- If the spatial check fails for the configured operation, the `Edit` button is not shown.
+- If the spatial check fails for the configured operation, the UI shows a `record` status button with a dedicated tooltip.
 - If the user has a role listed in `allowedRoles`, the spatial restriction is bypassed.
 
 ## Complete example (global + layer + fields)
@@ -174,8 +176,9 @@ Rules:
           ["surface_carto", "area"],
           ["longueur_carto", "length"]
         ],
+        "allowEdit": true,
+        "allowEditRoles": ["EDITOR", "ADMIN"],
         "allowDelete": true,
-        "edit": ["EDITOR", "ADMIN"],
         "delete": ["ADMIN"],
         "restrictedArea": {
           "url": "/console/account/areaofcompetence",
@@ -203,7 +206,10 @@ Rules:
 - `auto` fields stay read-only and are populated at save time.
 - `hidden` fields are always hidden in read mode.
 - In edit mode, a `hidden` field is shown only if it is declared in `fields`.
-- The `Edit` button is shown only when the user can actually edit the feature, including `restrictedArea` validation.
+- In read mode, the UI shows either the pencil button or status buttons: `lock` for role denial, `record` for spatial denial, or both when needed.
+- If `allowEdit` is `false`, no role, including `ADMIN`, can enter edit mode.
+- If `allowEditRoles` is defined, it takes precedence over `edit` / `editingRoles`.
+- In edit mode, layer and feature selectors are locked until `Save` or `Cancel`.
 - The delete button is shown only when `allowDelete` is `true`.
 - Default units for geometry-based calculations are `m²` for `area` and `m` for `length`.
 - Spatial restriction key supported by the plugin is `restrictedArea`.

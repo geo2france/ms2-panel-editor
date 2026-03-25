@@ -5,6 +5,8 @@ Le plugin applique les droits par couche et par champ.
 ## Règles générales
 
 - `ADMIN` (ou `ROLE_ADMIN`) a tous les droits.
+- Si `allowEdit` vaut `false`, personne ne peut éditer la couche.
+- Si `allowEditRoles` est renseigné, seuls ces rôles peuvent éditer la couche.
 - Sans règle `edit`/`editingRoles`, l’édition de la couche est autorisée.
 - Sans règle `delete`/`deletionRoles`, la suppression suit la règle d’édition.
 - Si `allowDelete` est absent ou vaut `false`, le bouton supprimer est masqué.
@@ -21,11 +23,13 @@ Le plugin applique les droits par couche et par champ.
 - Lecture : bouton stylo pour passer en édition.
 - Édition : sauvegarder (vert), annuler (jaune), supprimer (rouge).
 - Les actions restent visibles en haut du panneau (hors scroll).
+- En mode édition, il faut valider ou annuler avant de changer de couche ou d’entité.
 
 ## Gestion d’interface selon les droits
 
-- Si l’utilisateur ne peut pas éditer la couche, le bouton stylo est désactivé.
-- Si l’utilisateur échoue au contrôle spatial `restrictedArea`, le bouton `Modifier` n’est pas affiché.
+- Si l’utilisateur ne peut pas éditer à cause des rôles, un bouton `lock` est affiché avec une tooltip.
+- Si l’utilisateur ne peut pas éditer à cause de `restrictedArea`, un bouton `record` est affiché avec une tooltip.
+- Si les deux restrictions s’appliquent, les deux boutons sont affichés.
 - En mode édition, un champ non autorisé reste affiché mais en lecture seule.
 - Un champ `required` vide devient éditable pour permettre la saisie obligatoire, y compris si son édition est normalement limitée à certains rôles.
 - Le bouton supprimer est affiché uniquement si `allowDelete` vaut `true`.

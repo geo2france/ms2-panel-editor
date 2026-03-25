@@ -23,6 +23,8 @@ La configuration se fait dans `localConfig.json` sous le plugin `panel_editor`.
 | `hidden` | `string[]` | non | Champs masqués en lecture. En écriture, un champ `hidden` reste masqué sauf s’il est aussi déclaré dans `fields`. |
 | `fields` | `array` | non | Définition fine des champs (voir tableau suivant). |
 | `auto` | `array` | non | Champs renseignés automatiquement à la sauvegarde. |
+| `allowEdit` | `boolean` | non | Si `false`, interdit toute édition de la couche, quels que soient les rôles. |
+| `allowEditRoles` | `string[]` | non | Si renseigné, liste prioritaire des rôles autorisés à éditer la couche. |
 | `edit` / `editingRoles` | `string[]` | non | Rôles autorisés à éditer la couche. |
 | `allowDelete` | `boolean` | non | Affiche le bouton de suppression uniquement si la valeur est `true`. |
 | `delete` / `deletionRoles` | `string[]` | non | Rôles autorisés à supprimer. |
@@ -142,7 +144,7 @@ Règles :
 - Si aucun `url`, `wkt` ou `wtk` n’est fourni, aucune géométrie de contrôle n’est chargée.
 - Le `wkt` / `wtk` est interprété en `EPSG:4326`.
 - Si nécessaire, cette géométrie est reprojetée vers le CRS des features Identify avant la comparaison spatiale.
-- Si la comparaison spatiale échoue pour l’opération configurée, le bouton `Modifier` n’est pas affiché.
+- Si la comparaison spatiale échoue pour l’opération configurée, l’interface affiche un bouton d’état `record` avec une tooltip métier.
 - Si l’utilisateur possède un rôle présent dans `allowedRoles`, la restriction spatiale est ignorée.
 
 ## Exemple complet (global + couche + champs)
@@ -174,8 +176,9 @@ Règles :
           ["surface_carto", "area"],
           ["longueur_carto", "length"]
         ],
+        "allowEdit": true,
+        "allowEditRoles": ["EDITOR", "ADMIN"],
         "allowDelete": true,
-        "edit": ["EDITOR", "ADMIN"],
         "delete": ["ADMIN"],
         "restrictedArea": {
           "url": "/console/account/areaofcompetence",
@@ -203,7 +206,10 @@ Règles :
 - Les champs `auto` restent en lecture seule et sont valorisés au moment de la sauvegarde.
 - Les champs `hidden` sont toujours masqués en lecture.
 - En mode édition, un champ `hidden` n’est affiché que s’il est déclaré dans `fields`.
-- Le bouton `Modifier` n’est affiché que si l’utilisateur peut réellement éditer la feature, y compris vis-à-vis de `restrictedArea`.
+- En lecture, l’interface affiche soit le bouton stylo, soit des boutons d’état : `lock` pour un refus par rôle, `record` pour un refus par zone, ou les deux si nécessaire.
+- Si `allowEdit` vaut `false`, aucun rôle, y compris `ADMIN`, ne peut passer en édition.
+- Si `allowEditRoles` est défini, il est prioritaire sur `edit` / `editingRoles`.
+- En mode édition, les sélecteurs de couche et d’entité sont verrouillés jusqu’à `Enregistrer` ou `Annuler`.
 - Le bouton supprimer n’est affiché que si `allowDelete` vaut `true`.
 - Les unités par défaut des calculs géométriques sont `m²` pour `area` et `m` pour `length`.
 - La clé de restriction spatiale utilisée par le plugin est `restrictedArea`.

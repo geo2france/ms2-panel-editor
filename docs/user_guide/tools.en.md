@@ -5,6 +5,8 @@ The plugin applies permissions at layer and field levels.
 ## General rules
 
 - `ADMIN` (or `ROLE_ADMIN`) has full access.
+- If `allowEdit` is `false`, nobody can edit the layer.
+- If `allowEditRoles` is provided, only those roles can edit the layer.
 - Without `edit`/`editingRoles`, layer editing is allowed.
 - Without `delete`/`deletionRoles`, delete follows layer edit permission.
 - If `allowDelete` is missing or set to `false`, the delete button is hidden.
@@ -21,11 +23,13 @@ The plugin applies permissions at layer and field levels.
 - Read mode: pencil button to enter edit mode.
 - Edit mode: save (green), cancel (yellow), delete (red).
 - Buttons stay visible in the static toolbar (outside scroll area).
+- In edit mode, the user must save or cancel before switching layer or feature.
 
 ## UI behavior based on permissions
 
-- If the user cannot edit the layer, the pencil button is disabled.
-- If the user fails the `restrictedArea` spatial check, the `Edit` button is not shown.
+- If the user cannot edit because of roles, a `lock` status button is shown with a tooltip.
+- If the user cannot edit because of `restrictedArea`, a `record` status button is shown with a tooltip.
+- If both restrictions apply, both buttons are shown.
 - In edit mode, unauthorized fields are still shown but stay read-only.
 - A `required` empty field becomes editable to allow mandatory input, including when editing is normally restricted to specific roles.
 - Delete button is shown only when `allowDelete` is `true`.
