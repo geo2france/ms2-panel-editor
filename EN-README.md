@@ -10,6 +10,10 @@ This work is funded by **Géo2France**: [https://www.geo2france.fr](https://www.
 
 The documentation follows the same structure as the MkDocs site:
 
+Published documentation: [https://geo2france.github.io/ms2-panel-editor/](https://geo2france.github.io/ms2-panel-editor/)
+
+The documentation is built and published by a GitHub Actions workflow on every push.
+
 - **Home**: project overview and positioning
 - **User guide**: functional usage and configuration
 - **Technical guide**: architecture, local setup, build, and implementation notes

@@ -9,4 +9,8 @@
 - English: [EN-README.md](EN-README.md)
 - Francais : [FR-README.md](FR-README.md)
 
-The full MkDocs documentation is available in [`docs/`](docs/) and is published through GitHub Pages.
+The full MkDocs documentation is available in [`docs/`](docs/).
+
+Published documentation: [https://geo2france.github.io/ms2-panel-editor/](https://geo2france.github.io/ms2-panel-editor/)
+
+The documentation is built and published by a GitHub Actions workflow on every push.

@@ -10,6 +10,10 @@ Ce travail est finance par **Geo2France** : [https://www.geo2france.fr](https://
 
 La documentation reprend la meme structure que le site MkDocs :
 
+Documentation publiee : [https://geo2france.github.io/ms2-panel-editor/](https://geo2france.github.io/ms2-panel-editor/)
+
+La documentation est construite et publiee par une GitHub Action a chaque push.
+
 - **Accueil** : presentation et positionnement du projet
 - **Guide utilisateur** : usage fonctionnel et configuration
 - **Guide technique** : architecture, installation locale, build et notes d'implementation
