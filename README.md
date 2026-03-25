@@ -1,8 +1,8 @@
-# ms2-panel-editor
+# MapStore2 Plugin Editor
 
-`panel_editor` is a MapStore plugin dedicated to attribute **read** and **edit** workflows.
+**EN** : `panelEditor` is a MapStore plugin dedicated to attribute **read** and **edit** workflows.
 
-`panel_editor` est un plugin MapStore dedie a la **lecture** et a l'**edition** d'attributs.
+**FR** : `panelEditor` est un plugin MapStore dedie a la **lecture** et a l'**edition** d'attributs.
 
 ## Documentation
 
