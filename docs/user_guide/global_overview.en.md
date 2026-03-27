@@ -14,6 +14,7 @@ The `panel_editor` plugin adds a right-side panel.
 ## UI behavior
 
 - Panel title comes from `cfg.title`.
+- Sidebar button icon comes from `cfg.icon` or `cfg.iconByContext` depending on the current context.
 - Edit mode is displayed with a label.
 - Action toolbar is fixed (outside scrolling area).
 - Fields are displayed in a scrollable area.

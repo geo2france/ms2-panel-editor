@@ -14,6 +14,7 @@ Le plugin `panel_editor` ajoute un panneau latéral droit.
 ## Comportement de l’interface
 
 - Le titre du panneau vient de `cfg.title`.
+- L’icône du bouton du menu latéral vient de `cfg.icon` ou de `cfg.iconByContext` selon le contexte courant.
 - Le mode édition est affiché par un label.
 - La barre d’actions est fixe (hors scroll).
 - Les champs sont dans une zone scrollable.

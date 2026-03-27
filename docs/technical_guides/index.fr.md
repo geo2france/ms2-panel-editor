@@ -48,6 +48,7 @@ Le zip d’extension est généré dans `dist/`.
 - La configuration d’exécution se fait dans `configs/localConfig.json`.
 - Les champs automatiques (`auto`) sont résolus dans les helpers, puis injectés dans la transaction au moment de la sauvegarde.
 - Les types `auto` supportés incluent `header`, `date`, `area`, `length` et `value`. Les unités par défaut sont `m²` pour `area` et `m` pour `length`.
+- Pour `auto: ["...", "header", source]`, la documentation supporte uniquement `source = "name"` ou `source = "role"`, lus depuis `currentUser` (géré et fournis par MapStore2 lors du mapping entre georchestra et le fonctionnement de mapstore).
 - Les champs `list` acceptent une liste statique, une source JSON distante `{ url, field }`, ou une liste vide pour déduire les valeurs depuis les entités déjà chargées.
 - La visibilité des champs distingue lecture et écriture : `hidden` masque en lecture, tandis qu’en écriture un champ `hidden` peut être réaffiché s’il est configuré dans `fields`.
 - Les permissions de couche supportent `allowEdit`, `allowEditRoles`, puis le fallback historique `edit` / `editingRoles`.

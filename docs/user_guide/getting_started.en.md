@@ -8,11 +8,37 @@ Configuration is defined in `localConfig.json` under the `panel_editor` plugin.
 |---|---|---:|---|
 | `title` | `string` | no | Panel title. |
 | `tooltip` | `string` | no | Plugin button tooltip. |
-| `icon` | `string` | no | MapStore icon (`Glyphicon`). |
+| `icon` | `string` | no | Default MapStore icon (`Glyphicon`). |
+| `iconByContext` | `object` | no | Icon override based on the current context. Keys can be the context id or context name, with an optional `default` key. |
 | `size` | `number` | no | Base panel width (plugin adds +100 px). |
 | `geoserver` | `string` | no | Base GeoServer URL (WFS fallback). |
 | `wfsUrl` | `string` | no | Global WFS URL (higher priority than `geoserver`). |
 | `layers` | `object` | yes | Per-layer rules (`workspace:layer`). |
+
+### Sidebar button icon by context
+
+The `SidebarMenu` button can use a different icon depending on the current context.
+
+Resolution order:
+
+- `cfg.iconByContext[context.resource.id]`
+- `cfg.iconByContext[context.resource.name]`
+- `cfg.iconByContext.default`
+- `cfg.icon`
+- internal fallback: `list-alt`
+
+Example:
+
+```json
+"cfg": {
+  "icon": "list-alt",
+  "iconByContext": {
+    "12": "pencil",
+    "Urban planning context": "folder-open",
+    "default": "map"
+  }
+}
+```
 
 ## 2) Layer configuration (`cfg.layers["workspace:layer"]`)
 
@@ -95,13 +121,14 @@ Each `auto` entry accepts compact format:
 |---:|---|---|---|
 | `0` | `name` | `string` | Field name to populate. |
 | `1` | `type` | `string` | Automatic type. Supported values: `header`, `date`, `area`, `length`, `value`. |
-| `2` | `source` | `string` | Source to use. For `header`, path to read from `security.user`. For `date`, desired display format. For `value`, fixed value to inject. Not used for `area` and `length`. |
+| `2` | `source` | `string` | Source to use. For `header`, only `name` and `role` are documented, read from `currentUser`. For `date`, desired display format. For `value`, fixed value to inject. Not used for `area` and `length`. |
 
 Rules:
 
 - A field declared in `auto` is never editable in the form.
 - The panel always displays the last known value.
-- If `type` is `header`, the value is read from user information already exposed by MapStore/geOrchestra, using the configured path.
+- If `type` is `header`, the value is read from `currentUser`.
+- Documented values for `header`: `name`, `role`.
 - If `type` is `date`, the value is replaced with the current date on save.
 - If `type` is `value`, the configured value is injected as-is on save.
 - If `type` is `area`, the value is computed from the feature geometry. Default unit is square meters (`m²`).
@@ -156,6 +183,11 @@ Rules:
     "title": "Reviewed projects",
     "tooltip": "Reviewed projects",
     "icon": "map",
+    "iconByContext": {
+      "12": "pencil",
+      "Urban planning context": "folder-open",
+      "default": "map"
+    },
     "size": 420,
     "geoserver": "http://localhost/geoserver",
     "layers": {
@@ -171,7 +203,7 @@ Rules:
         ],
         "auto": [
           ["type_saisie", "value", "manual"],
-          ["log_user_modi", "header", "username"],
+          ["log_user_modi", "header", "name"],
           ["log_date_modi", "date", "DD/MM/YYYY"],
           ["surface_carto", "area"],
           ["longueur_carto", "length"]
