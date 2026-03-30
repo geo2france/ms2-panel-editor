@@ -2,7 +2,9 @@
 
 The `panel_editor` plugin adds a right-side panel.
 
-![sidebar location](../images/main-toolbar.png)
+To open it, just click on th plugin's icon into sideBarMenu :
+
+![sidebar location](../images/toolbar-tooltip.png)
 
 ## User flow
 

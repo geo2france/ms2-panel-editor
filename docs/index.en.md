@@ -11,3 +11,6 @@ hide:
 The plugin is **independent from other MapStore plugins**: it owns its Redux state, actions, and access rules without relying on another plugin's business logic.
 
 This work is funded by **Géo2France**: [https://www.geo2france.fr](https://www.geo2france.fr)
+
+
+![general image](./images/read-mode.png)

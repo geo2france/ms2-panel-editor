@@ -2,7 +2,9 @@
 
 Le plugin `panel_editor` ajoute un panneau latéral droit.
 
-![sidebar location](../images/main-toolbar.png)
+Pour y accéder, il faut cliquer sur le bouton
+
+![sidebar location](../images/toolbar-tooltip.png)
 
 ## Parcours utilisateur
 
