@@ -12,6 +12,9 @@ To open it, just click on th plugin's icon into sideBarMenu :
 2. Click on the map to select a feature (identify).
 3. Select the layer (if multiple responses) and the feature.
 4. Read visible attributes in read mode.
+
+![general image](../images/read-mode.png)
+
 5. Switch to edit mode with the pencil button (according to user role and restricted area).
 6. Save, cancel, or delete according to permissions.
 
