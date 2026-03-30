@@ -2,7 +2,7 @@
 
 Le plugin `panel_editor` ajoute un panneau latéral droit.
 
-![sidebar location](images/main-toolbar.png)
+![sidebar location](../images/main-toolbar.png)
 
 ## Parcours utilisateur
 
@@ -13,7 +13,7 @@ Le plugin `panel_editor` ajoute un panneau latéral droit.
 5. Passer en mode édition avec le bouton stylo.
 6. Sauvegarder, annuler ou supprimer selon les droits.
 
-![read mode](images/write-mode.png)
+![read mode](../images/write-mode.png)
 
 ## Comportement de l’interface
 

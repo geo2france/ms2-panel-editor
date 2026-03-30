@@ -11,6 +11,5 @@ Il ne reemplace pas l'outil attributaire natif de MapStore2 mais permet de le si
 
 Il affiche les entités identifiées sur la carte, permet de passer en mode édition et applique les règles de droits définies dans la configuration, par un administrateur.
 
-![general image](images/read-mode.png)
-
+![general image](../images/read-mode.png)
 

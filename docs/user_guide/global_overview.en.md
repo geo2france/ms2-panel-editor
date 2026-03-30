@@ -2,7 +2,7 @@
 
 The `panel_editor` plugin adds a right-side panel.
 
-![sidebar location](images/main-toolbar.png)
+![sidebar location](../images/main-toolbar.png)
 
 ## User flow
 
@@ -13,7 +13,7 @@ The `panel_editor` plugin adds a right-side panel.
 5. Switch to edit mode with the pencil button (according to user role and restricted area).
 6. Save, cancel, or delete according to permissions.
 
-![read mode](images/write-mode.png)
+![read mode](../images/write-mode.png)
 
 
 ## UI behavior
