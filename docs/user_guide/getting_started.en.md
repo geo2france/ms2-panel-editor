@@ -11,8 +11,8 @@ Configuration is defined in `localConfig.json` under the `panel_editor` plugin.
 | `icon` | `string` | no | Default MapStore icon (`Glyphicon`). |
 | `iconByContext` | `object` | no | Icon override based on the current context. Keys can be the context id or context name, with an optional `default` key. |
 | `size` | `number` | no | Base panel width (plugin adds +100 px). |
-| `geoserver` | `string` | no | Base GeoServer URL (WFS fallback). |
-| `wfsUrl` | `string` | no | Global WFS URL (higher priority than `geoserver`). |
+| `serverUrl` | `string` | no | Base GeoServer URL (WFS fallback). |
+| `wfsUrl` | `string` | no | Global WFS URL (higher priority than `serverUrl`). |
 | `layers` | `object` | yes | Per-layer rules (`workspace:layer`). |
 
 ### Sidebar button icon by context
@@ -56,7 +56,7 @@ Example:
 | `delete` / `deletionRoles` | `string[]` | no | Roles allowed to delete. |
 | `wfsUrl` | `string` | no | Layer-specific WFS URL. |
 | `idField` | `string` | no | Identifier field name (default: `id`). |
-| `restrictedArea` | `object` | no | Spatial edit restriction (area of competence) based on either a `wkt`/`wtk` or the JSON returned by a `url`. |
+| `restrictedArea` | `object` | no | Spatial edit restriction (area of competence) based on either a `wkt` or the JSON returned by a `url`. |
 
 ## 3) Field configuration (`fields`)
 
@@ -152,7 +152,7 @@ Example with a WKT provided in configuration:
 
 ```json
 "restrictedArea": {
-  "wtk": "POLYGON((...))",
+  "wkt": "POLYGON((...))",
   "operation": "WITHIN"
 }
 ```
@@ -160,16 +160,16 @@ Example with a WKT provided in configuration:
 Supported keys:
 
 - `url`: any URL returning JSON that the plugin can parse
-- `wkt` / `wtk`: geometry provided directly in configuration
+- `wkt`: geometry provided directly in configuration
 - `operation`: `WITHIN`, `INTERSECTS`, or `CONTAINS`
 - `allowedRoles`: roles that bypass this spatial restriction
 
 Rules:
 
-- The control geometry comes either from `wkt` / `wtk` or from the JSON returned by `url`.
-- No HTTP call is made if a `wkt` / `wtk` is provided.
-- If no `url`, `wkt`, or `wtk` is provided, no control geometry is loaded.
-- `wkt` / `wtk` is interpreted as `EPSG:4326`.
+- The control geometry comes either from `wkt` or from the JSON returned by `url`.
+- No HTTP call is made if a `wkt` is provided.
+- If no `url` or `wkt` is provided, no control geometry is loaded.
+- `wkt` is interpreted as `EPSG:4326`.
 - When needed, that geometry is reprojected to the Identify features CRS before spatial comparison.
 - If the spatial check fails for the configured operation, the UI shows a `record` status button with a dedicated tooltip.
 - If the user has a role listed in `allowedRoles`, the spatial restriction is bypassed.
@@ -189,7 +189,7 @@ Rules:
       "default": "map"
     },
     "size": 420,
-    "geoserver": "http://localhost/geoserver",
+    "serverUrl": "http://localhost/geoserver",
     "layers": {
       "test:reviewed_projects": {
         "featureFieldLabel": "name",
