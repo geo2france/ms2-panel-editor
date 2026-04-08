@@ -1,0 +1,166 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+
+#ms-components-theme(@theme-vars) {
+    .ms-measure-toolbar {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+}
+
+// **************
+// Layout
+// **************
+
+#measure-result-panel {
+    .option-text {
+        font-size: 14px;
+        text-transform: uppercase;
+        vertical-align: middle;
+    }
+
+    .option-icon {
+        font-size: 32px;
+        text-transform: uppercase;
+        vertical-align: middle;
+    }
+
+    .glyphicon {
+        margin-left: 0;
+        margin-top: 0;
+    }
+}
+
+#measure-panel {
+    .measure-feature-selector {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        justify-content: space-between;
+        padding: 12px 0 12px 18px;
+        .Select-input {
+            width: 200px !important;
+        }
+        .Select-menu-outer{
+            z-index: 10;
+        }
+    }
+    .coordinates-row-container {
+        flex: 1 1 auto;
+        overflow: hidden auto;
+        padding: 10px;
+        .glyphicon-menu-hamburger{
+            font-size: 14px;
+            display: table-cell;
+            vertical-align: middle;
+        }
+    }
+    .coordinateRow.aeronautical {
+        .coordinate {
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+    }
+    .coordinateRow.decimal {
+        .coordinate {
+            flex-wrap: nowrap;
+        }
+    }
+    .coordinateRow {
+        .coordinate {
+            display: flex;
+            flex: 1 1 0%;
+            justify-content: space-between;
+            .input-group-container{
+                width: 100%;
+            }
+            .input-group {
+                flex: 1 1 0%;
+                padding: 4px 0px;
+                margin-right: 8px;
+                .form-group {
+                    .react-numeric-input{
+                        b {
+                            z-index: 2;
+                        }
+                        width: 100%;
+                        font-size: @font-size-small;
+                        #intl-numeric{
+                          float: unset;
+                          width: 100%;
+                        }
+                    }
+                    .degrees, .minutes {
+                        min-width: 45px;
+                        flex: 1;
+                        display: flex;
+                    }
+                    .seconds {
+                        flex: 1;
+                        display: flex;
+                        min-width: 75px;
+                    }
+                }
+            }
+        }
+    }
+}
+.measure-container:not(.measure-coords-editor){
+    position: absolute;
+    z-index: 100;
+    right: 46px;
+    margin: 0;
+    top: 48px;
+}
+.measure-container {
+    .ms-measure-toolbar {
+        position: relative;
+        background-color: #ffffff;
+        display: flex;
+        align-items: center;
+        padding: 4px;
+        display: flex;
+        align-items: center;
+        .shadow();
+        .ms-measure-icon {
+            padding: 0 6px;
+            font-size: 15px;
+        }
+    }
+}
+
+.ms-measure-info {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    .rw-dropdownlist {
+        width: 80px;
+        .rw-input {
+            line-height: 30px;
+            height: 30px;
+        }
+    }
+    .measure-value {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+}
+
+#measure-container {
+    .ms-measure-icon {
+        display: none;
+    }
+    .ms-measure-toolbar {
+        box-shadow: none;
+        position: static;
+        padding-left: 18px;
+    }
+}

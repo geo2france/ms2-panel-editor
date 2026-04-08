@@ -1,0 +1,261 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+    .ol-viewport {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    /* OpenLayers minimap style */
+    .ol-custom-overviewmap button {
+        .background-color-var(@theme-vars[primary]);
+    }
+
+    .ol-custom-overviewmap .ol-control button:focus,
+    .ol-custom-overviewmap button:hover {
+        .background-color-var(@theme-vars[primary]);
+    }
+
+    .ol-custom-overviewmap:not(.ol-collapsed) {
+        .background-color-var(@theme-vars[primary]);
+    }
+
+    .ol-attribution.ol-uncollapsible {
+        .color-var(@theme-vars[main-color]);
+    }
+
+    div.ol-scale-line.ol-unselectable {
+        .border-color-var(@theme-vars[main-color]);
+        border-top: none;
+    }
+
+    .ol-attribution ul {
+        .color-var(@theme-vars[main-color]);
+    }
+
+    div.ol-scale-line-inner {
+        .color-var(@theme-vars[main-color]);
+    }
+
+    .ol-scale-line {
+        background-color: transparent;
+        .color-var(@theme-vars[main-color]);
+    }
+
+    .ol-viewport {
+        .segment-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+
+        .segment-overlay-static {
+            background-color: transparent;
+            color: black;
+            text-shadow: -1px 0 #ffa332, 0 1px #ffa332, 1px 0 #ffa332, 0 -1px #ffa332;
+        }
+
+        .tooltip {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+
+        .tooltip-static {
+            background-color: #ffcc33;
+            color: black;
+            border: 1px solid white;
+        }
+
+        .tooltip-measure:before,
+        .tooltip-static:before {
+            border-top: 6px solid rgba(0, 0, 0, 0.5);
+            border-right: 6px solid transparent;
+            border-left: 6px solid transparent;
+        }
+
+        .tooltip-static:before {
+            border-top-color: #ffcc33;
+        }
+    }
+
+    .ol-rotate {
+        .ol-rotate-reset {
+            .color-var(@theme-vars[primary-contrast]);
+            .background-color-var(@theme-vars[primary]);
+            .border-color-var(@theme-vars[main-border-color]);
+        }
+
+        .ol-rotate-reset:hover,
+        .ol-rotate-reset:focus {
+            .background-color-var(@theme-vars[main-variant-bg]);
+        }
+    }
+}
+
+// **************
+// Layout
+// **************
+/* OpenLayers minimap style */
+
+.ol-custom-overviewmap:not(.ol-collapsed) {
+    border-radius: 3px !important;
+}
+
+.ol-custom-overviewmap .ol-overviewmap-map {
+    height: 133px !important;
+}
+
+.ol-custom-overviewmap {
+    margin-bottom: 3px;
+}
+
+.ol-attribution.ol-uncollapsible {
+    li {
+        font-size: 11px;
+    }
+}
+.ol-scale-line.ol-unselectable {
+    bottom: 35px;
+    right: 55px;
+    left: auto;
+    top: auto;
+}
+.mapstore-map-footer{
+    div.ol-scale-line.ol-unselectable {
+        border-width: 2px;
+        border-style: solid;
+        border-top: none;
+        line-height: 1.0;
+        border-radius: 0;
+        right: 10px;
+        padding: 2px 5px 1px;
+        white-space: nowrap;
+        overflow: hidden;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        top: 10px;
+        position: relative;
+    }
+    div.ol-scale-line-inner {
+        border: 0;
+        border-top: 0;
+        font-size: 11px;
+        text-align: center;
+        margin: 0;
+    }
+
+    .ol-scale-line.ol-unselectable {
+        right: 58px;
+        left: auto;
+        bottom: 3px;
+    }
+
+    .ol-scale-line {
+        background-color: transparent !important;
+    }
+}
+.ol-attribution ul {
+    text-shadow: none;
+}
+
+
+.ol-custom-overviewmap,
+.ol-custom-overviewmap.ol-uncollapsible {
+    bottom: 55px !important;
+    left: auto !important;
+    right: 57px !important;
+    top: auto !important;
+}
+
+
+.ol-viewport {
+    .ol-overlay-container.ol-selectable {
+        pointer-events: none !important;
+    }
+
+    .segment-overlay {
+        z-index: 0;
+        position: relative;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 4px;
+        color: white;
+        padding: 4px 8px;
+        white-space: nowrap;
+        font-size: @font-size-small;
+    }
+
+    .segment-overlay-static {
+        background-color: transparent;
+        border: none;
+        color: black;
+        text-shadow: -1px 0 #ffa332, 0 1px #ffa332, 1px 0 #ffa332, 0 -1px #ffa332;
+        opacity: 1;
+    }
+
+    .tooltip {
+        z-index: 0;
+        position: relative;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 4px;
+        color: white;
+        padding: 4px 8px;
+        opacity: 0.7;
+        white-space: nowrap;
+    }
+
+    .tooltip-measure {
+        opacity: 1;
+        font-weight: bold;
+    }
+
+    .tooltip-static {
+        background-color: #ffcc33;
+        color: black;
+        border: 1px solid white;
+    }
+
+    .tooltip-measure:before,
+    .tooltip-static:before {
+        border-top: 6px solid rgba(0, 0, 0, 0.5);
+        border-right: 6px solid transparent;
+        border-left: 6px solid transparent;
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        margin-left: -7px;
+        left: 50%;
+    }
+
+    .tooltip-static:before {
+        border-top-color: #ffcc33;
+    }
+}
+
+.ol-rotate {
+    width: @square-btn-size;
+    height: @square-btn-size;
+    background: none;
+    margin-right: 7px;
+
+    .ol-rotate-reset {
+        box-shadow: -1px 1px 5px 1px #5e5e5e;
+        height: @square-btn-size;
+        width: @square-btn-size;
+
+        .ol-compass {
+            font-size: 36px;
+        }
+    }
+}
+
+.ol-rotate:hover {
+    background: none;
+}

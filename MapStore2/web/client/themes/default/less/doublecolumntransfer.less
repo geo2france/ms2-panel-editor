@@ -1,0 +1,90 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+    .ms2-transfer {
+        .border-color-var(@theme-vars[main-border-color]);
+
+        .btn-group-vertical {
+            .border-color-var(@theme-vars[main-border-color]);
+        }
+    }
+}
+
+// **************
+// Layout
+// **************
+.ms2-transfer {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    border-width: 1px;
+    border-style: solid;
+
+    .ms2-transfer-subpanel {
+        display: flex;
+        flex-direction: column;
+        flex: 0.5;
+        overflow: hidden;
+
+        .ms2-transfer-header {
+            padding: 8px;
+
+            .ms2-transfer-title-area h4 {
+                display: flex;
+                overflow-wrap: anywhere;
+                min-height: @square-btn-medium-size;
+
+                span {
+                    flex: 1;
+                }
+            }
+        }
+
+        .empty-state-container {
+            margin: auto;
+
+            .empty-state-main-view {
+                .empty-state-image {
+                    margin: auto;
+                    max-width: 128px;
+                    max-height: 128px;
+                }
+
+                h1 {
+                    font-size: @font-size-base * 1.1;
+                    overflow-wrap: break-word;
+                }
+            }
+        }
+    }
+
+    .btn-group-vertical {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 8px;
+        border-left-width: 1px;
+        border-left-style: solid;
+        border-right-width: 1px;
+        border-right-style: solid;
+    }
+
+}
+
+.ms2-transfer-sidegrid {
+    padding: 0 8px 0 8px;
+    overflow: auto;
+
+    .ms2-transfer-lastcard {
+        margin: 10px 0 10px 0;
+    }
+}

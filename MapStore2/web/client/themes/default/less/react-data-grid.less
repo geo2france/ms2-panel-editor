@@ -1,0 +1,339 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+
+    .react-grid-Cell,
+    .react-grid-HeaderCell,
+    .react-grid-Header,
+    .react-grid-Grid,
+    .react-grid-Canvas {
+        .color-var(@theme-vars[main-color]);
+        .background-color-var(@theme-vars[main-bg]);
+        .border-color-var(@theme-vars[main-border-color]);
+    }
+
+    .react-grid-Main {
+        .background-color-var(@theme-vars[main-bg]);
+        .outline-color-var(@theme-vars[main-border-color]);
+    }
+
+    .react-grid-Grid {
+        .border-color-var(@theme-vars[main-border-color]);
+    }
+
+    .react-grid-checkbox:checked+.react-grid-checkbox-label:before {
+        .background-color-var(@theme-vars[primary]);
+    }
+
+    .radio-custom+.radio-custom-label:before,
+    .react-grid-checkbox+.react-grid-checkbox-label:before {
+        .background-color-var(@theme-vars[main-bg]);
+        .border-color-var(@theme-vars[main-border-color]);
+    }
+
+    .react-grid-Canvas,
+    .react-grid-Grid {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    .react-grid-HeaderCell {
+        .background-color-var(@theme-vars[main-variant-bg]);
+        .border-right-color-var(@theme-vars[main-border-color]);
+        .border-bottom-color-var(@theme-vars[main-border-color]);
+    }
+
+    .react-grid-Header {
+        .background-color-var(@theme-vars[main-variant-bg]);
+    }
+
+    .react-grid-Cell {
+        .background-color-var(@theme-vars[main-bg]);
+        .border-right-color-var(@theme-vars[main-border-color]);
+        .border-bottom-color-var(@theme-vars[main-border-color]);
+
+        &:hover {
+            .color-var(@theme-vars[main-hover-color]);
+            .background-color-var(@theme-vars[main-hover-bg], true);
+        }
+
+        &:focus {
+            .outline-color-var(@theme-vars[focus-color]);
+        }
+
+        &.row-selected.editing input {
+            .color-var(@theme-vars[main-color]);
+            .background-color-var(@theme-vars[main-bg], true);
+        }
+    }
+
+    .react-grid-Cell--locked:last-of-type {
+        .border-right-color-var(@theme-vars[main-border-color]);
+    }
+
+    .react-grid-Row {
+
+        &.row-selected,
+        .row-selected,
+        .row-selected .react-grid-Cell {
+            .color-var(@theme-vars[main-hover-color], true);
+            .background-color-var(@theme-vars[main-hover-bg], true);
+        }
+
+        .row-context-menu .react-grid-Cell,
+        &:hover .react-grid-Cell {
+            .color-var(@theme-vars[main-hover-color]);
+            .background-color-var(@theme-vars[main-hover-bg], true);
+        }
+
+        .react-grid-Cell.modified,
+        &.row-selected .react-grid-Cell.modified,
+        &.row-selected:active .react-grid-Cell.modified,
+        &:hover .react-grid-Cell.modified {
+            .color-var(@theme-vars[main-variant-color], true);
+            .background-color-var(@theme-vars[main-variant-bg], true);
+            .border-bottom-color-var(@theme-vars[primary]);
+        }
+
+        .react-grid-Cell.modified.invalid,
+        .react-grid-Cell.invalid,
+        &.row-selected .react-grid-Cell.invalid,
+        &.row-selected .react-grid-Cell.modified.invalid {
+            .color-var(@theme-vars[main-variant-color], true);
+            .background-color-var(@theme-vars[main-variant-bg], true);
+            .border-bottom-color-var(@theme-vars[danger]);
+        }
+
+        .react-grid-Cell.modified.invalid:after,
+        .react-grid-Cell.invalid:after,
+        &.row-selected .react-grid-Cell.invalid:after,
+        &.row-selected .react-grid-Cell.modified.invalid:after {
+            .color-var(@theme-vars[danger]);
+        }
+    }
+
+    .data-grid-bottom-toolbar {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    .feature-grid-container .ms2-border-layout-body {
+        .background-color-var(@theme-vars[main-variant-bg]);
+    }
+
+    .data-grid-top-toolbar {
+        .color-var(@theme-vars[main-color]);
+        .background-color-var(@theme-vars[main-bg]);
+    }
+    .feature-grid-container {
+        .ms2-border-layout-body {
+            .react-grid-HeaderRow {
+                .react-grid-HeaderCell {
+                    .rw-datetimepicker.rw-widget input:disabled, 
+                    .rw-datetimepicker.rw-widget .rw-select button:disabled {
+                        .background-color-var(@theme-vars[disabled-bg], true);
+                    }
+                }
+            }
+        }
+   }
+}
+
+// **************
+// Layout
+// **************
+.dockpanel-wrapped-component .react-grid-Grid{
+    min-height: 100% !important;
+}
+
+.radio-custom+.radio-custom-label:before, .react-grid-checkbox+.react-grid-checkbox-label:before{
+    width: 19px;
+    height: 19px;
+}
+
+.dockpanel-wrapped-component .react-grid-Main, .react-grid-Container {
+    height: 100%;
+    width: 100% !important;
+}
+.dockpanel-wrapped-component .react-grid-Container {
+    width: 100% !important;
+}
+
+.react-grid-Main {
+    outline-width: 1px;
+    outline-style: solid;
+}
+
+.react-grid-Grid {
+    border-width: 1px;
+    border-style: solid;
+}
+
+.react-grid-checkbox:checked+.react-grid-checkbox-label:before {
+    box-shadow: inset 0 0 0 4px @ms-main-bg;
+}
+
+.radio-custom+.radio-custom-label:before,
+.react-grid-checkbox+.react-grid-checkbox-label:before {
+    border-width: 2px;
+    border-style: solid;
+}
+
+.react-grid-HeaderCell {
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+.react-grid-Cell {
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:focus {
+        outline-width: 2px;
+        outline-style: solid;
+    }
+
+    &.row-selected.editing input {
+        font-weight: bold;
+    }
+}
+
+.react-grid-Cell--locked:last-of-type {
+    border-right-width: 1px;
+    border-right-style: solid;
+}
+
+.react-grid-Row {
+
+    &.row-selected,
+    .row-selected,
+    .row-selected .react-grid-Cell {
+        font-weight: bold;
+    }
+
+    .row-context-menu .react-grid-Cell,
+    &:hover .react-grid-Cell {
+        cursor: pointer;
+    }
+
+
+    .react-grid-Cell.modified,
+    &.row-selected .react-grid-Cell.modified,
+    &.row-selected:active .react-grid-Cell.modified,
+    &:hover .react-grid-Cell.modified {
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
+    }
+
+    .react-grid-Cell.modified.invalid,
+    .react-grid-Cell.invalid,
+    &.row-selected .react-grid-Cell.invalid,
+    &.row-selected .react-grid-Cell.modified.invalid {
+        border-bottom-width: 3px;
+        border-bottom-style: solid;
+    }
+
+    .react-grid-Cell.modified.invalid:after,
+    .react-grid-Cell.invalid:after,
+    &.row-selected .react-grid-Cell.invalid:after,
+    &.row-selected .react-grid-Cell.modified.invalid:after {
+        content: "*";
+        font-weight: normal;
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 32px;
+        margin-right: 4px;
+    }
+
+}
+
+.data-grid-top-toolbar {
+    height: 42px;
+    overflow: visible;
+    padding: 0 8px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap-reverse;
+    .data-grid-top-toolbar-title {
+        padding: 0 8px;
+        font-weight: bold;
+    }
+    > div:not(.data-grid-top-toolbar-title) {
+        min-width: 30%;
+    }
+    .data-grid-top-toolbar-right {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+}
+
+.data-grid-bottom-toolbar {
+    z-index: 1;
+    height: 32px;
+    overflow: hidden;
+}
+
+@media all and (max-width: 1024px) {
+    .data-grid-bottom-toolbar .col-md-3 {
+        width: 0;
+        display: none;
+    }
+
+    .data-grid-bottom-toolbar .col-md-6 {
+        width: 100%;
+    }
+}
+
+.feature-grid-container{
+     .ms2-border-layout-body{
+         .react-grid-HeaderRow{
+             .react-grid-HeaderCell{
+                 .rw-datetimepicker.rw-widget input {
+                      .input-size(@input-height-small; @padding-small-vertical; @padding-small-horizontal; @font-size-small; @line-height-small; @input-border-radius-small);
+                 }
+                 .rw-datetimepicker.rw-widget input:disabled{
+                    height:100%;
+                 }
+             }
+         }
+     }
+}
+#page-rulesmanager{
+    .ms2-border-layout-body{
+        .rules-data-gird {
+            .react-grid-HeaderCell{
+               .autocompleteField.d-flex div.checkbox-any-field {
+                position: relative;
+                top: 15%;
+               } 
+            }
+        }
+    }
+}
+
+// we are using the validate function to prevent
+// to lose focus on the editing of date/time inside a popover
+// for this reason we are going to hide the error status icon
+.rdg-editor-container.has-error {
+    .rw-datetimepicker ~ .glyphicon-remove {
+        display: none;
+    }
+}

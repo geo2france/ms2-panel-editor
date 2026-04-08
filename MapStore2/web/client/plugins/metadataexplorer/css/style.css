@@ -1,0 +1,33 @@
+div.record-grid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+div.record-grid .record-item{
+    height: auto;
+}
+div.record-grid .record-item .panel-body{
+    padding: 0;
+}
+
+#mapstore-catalog-panel button.search-button {
+    margin-bottom: 10px;
+}
+
+#mapstore-catalog-panel .record-item {
+    min-height: 150px;
+}
+
+/*
+!important is needed because the library we used
+use inline style which cannot be overridden unless
+we use !important*/
+@media (max-width: 500px) {
+    div .catalog-sidebar.nav-menu {
+        width: 100% !important
+    }
+}
+
+#mapstore-metadata-explorer{
+    margin-bottom: 0
+}

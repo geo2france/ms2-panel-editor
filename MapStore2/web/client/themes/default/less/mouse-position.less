@@ -1,0 +1,160 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+    #mapstore-mouseposition {
+        span {
+            .color-var(@theme-vars[main-color]);
+        }
+
+        .mapstore-mouse-coordinates {
+            h5 {
+                .background-color-var(@theme-vars[main-variant-bg]);
+
+            }
+        }
+
+        .mapstore-mouse-elevation {
+            h5 {
+                .background-color-var(@theme-vars[main-variant-bg]);
+            }
+        }
+
+        button {
+            span {
+                .color-var(@theme-vars[primary-contrast]);
+            }
+        }
+
+        .form-group {
+            select {
+                .background-color-var(@theme-vars[main-variant-bg]);
+                .color-var(@theme-vars[main-variant-color]);
+            }
+
+            option {
+                .background-color-var(@theme-vars[main-bg]);
+                .color-var(@theme-vars[main-color]);
+            }
+        }
+
+        .mouseposition-crs {
+            .background-color-var(@theme-vars[main-variant-bg]);
+            .color-var(@theme-vars[main-variant-color]);
+        }
+    }
+}
+
+// **************
+// Layout
+// **************
+#mapstore-mouseposition {
+    width: auto !important;
+    background-color: transparent !important;
+    span {
+        font-size: @font-size-small;
+        font-weight: normal;
+    }
+
+
+    label {
+        font-weight: normal;
+        font-size: @font-size-small;
+        margin-right: 5px;
+    }
+
+    .mapstore-mouse-coordinates {
+        float: left;
+
+        & > span {
+            display: inline-block;
+        }
+
+        h5 {
+            display: inline-block;
+            margin: 0 !important;
+            width: 250px;
+            height: 25px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            padding: 4px;
+            text-align: center;
+        }
+    }
+
+    .mapstore-mouse-elevation {
+        float: left;
+        margin-left: 5px;
+
+        & > span {
+            display: inline-block;
+        }
+
+        h5 {
+            display: inline-block;
+            margin: 0 !important;
+            width: 90px;
+            height: 25px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            padding: 4px;
+            text-align: center;
+        }
+    }
+
+    button {
+        float: left;
+        height: 25px;
+        width: 25px !important;
+        padding: 0;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .form-group {
+		height: 25px;
+		padding: 0 0 0 4px;
+        float: left !important;
+        border: none;
+        .control-label {
+            display: inline-block !important;
+        }
+
+        select {
+            display: inline-block;
+            border: none;
+            margin-bottom: 0;
+            width: 171px !important;
+            height: 25px;
+        }
+	}
+
+    .mouseposition-crs {
+        width: 95px;
+        height: 25px;
+        font-weight: normal !important;
+        display: block;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        padding: 4px;
+        font-size: @font-size-small !important;
+        text-align: center;
+    }
+
+    .mouseposition-separator {
+        display: inline;
+    }
+
+}
+
+#mapstore-map-footer #mapstore-mouseposition {
+    position: static !important;
+}

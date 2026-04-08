@@ -1,0 +1,20 @@
+
+.featuregrid-toolbar {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#featuregrid-toolbar .btn {
+    overflow: hidden;
+}
+
+#featuregrid-toolbar .spinner {
+    margin: 0 auto;
+    width: 100%;
+}
+
+#featuregrid-toolbar .spinner > div {
+    background-color: white;
+    width: 8px;
+    height: 8px;
+}

@@ -1,0 +1,30 @@
+#map {
+    bottom: 0;
+}
+
+.map-logo{
+	bottom:5px;
+}
+
+#navigationBar .mapToolbar {
+    bottom: 25px;
+    margin-bottom: 0;
+    box-shadow: none;
+}
+
+.background-plugin-position {
+    bottom: 20px;
+    margin-bottom: 0;
+}
+
+.leaflet-control-attribution {
+    background-color: transparent;
+}
+
+.ol-attribution.ol-uncollapsible {
+    background-color: transparent;
+}
+
+.ms-primary.ms-header {
+    box-shadow: none;
+}

@@ -1,0 +1,42 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>it.geosolutions.mapstore</groupId>
+        <artifactId>mapstore-root</artifactId>
+        <version>1.8-SNAPSHOT</version>
+    </parent>
+
+    <groupId>it.geosolutions.mapstore</groupId>
+    <artifactId>mapstore-java</artifactId>
+    <packaging>pom</packaging>
+
+    <name>MapStore 2</name>
+    <url>http://www.geo-solutions.it</url>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>services</module>
+                <module>web</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>printingbundle</id>
+            <activation>
+                <property>
+                    <name>printingbundle</name>
+                </property>
+            </activation>
+            <modules>
+                <module>services</module>
+                <module>web</module>
+                <module>printing</module>
+            </modules>
+        </profile>
+    </profiles>
+</project>

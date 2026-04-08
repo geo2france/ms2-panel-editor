@@ -1,0 +1,256 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+    .ms-popup-close-button {
+        .color-var(@theme-vars[main-color]);
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    .map-popup-ol {
+        >.ol-popup-content-wrapper {
+            .color-var(@theme-vars[main-color]);
+            .background-color-var(@theme-vars[main-bg]);
+
+            >.ol-popup-content {
+                .background-color-var(@theme-vars[main-bg]);
+            }
+        }
+    }
+
+    .map-popup-ol:after {
+        .border-top-color-var(@theme-vars[main-bg]);
+    }
+
+    .map-popup-ol:before {
+        .border-top-color-var(@theme-vars[main-border-color]);
+    }
+    .map-popup-ol:has(.hidePopupIfNoResults), .ms-leaflet-popup:has(.hidePopupIfNoResults) {
+        display: none;
+    }
+    .ol-popup-closer {
+        .ms-popup-close-button();
+    }
+
+    .ms-leaflet-popup {
+        .leaflet-popup-content {
+            .background-color-var(@theme-vars[main-bg]);
+        }
+
+        .leaflet-popup-content-wrapper,
+        .leaflet-popup-tip {
+            .color-var(@theme-vars[main-color]);
+            .background-color-var(@theme-vars[main-bg]);
+        }
+
+        a.leaflet-popup-close-button {
+            .ms-popup-close-button();
+
+            &:before {
+                .color-var(@theme-vars[main-color]);
+            }
+        }
+    }
+}
+
+// **************
+// Layout
+// **************
+.ms-popup-close-button {
+    text-decoration: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    padding: 0;
+    font-size: 12px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    font-weight: normal;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: "mapstore2";
+    .shadow-soft();
+}
+
+.map-popup-ol {
+    margin-bottom: 15px;
+    text-align: left;
+
+    > .ol-popup-content-wrapper {
+        padding: 0;
+        .shadow-far;
+        border-radius: 0;
+
+        > .ol-popup-content {
+            overflow: auto;
+            position: relative;
+            display: flex;
+            margin: 0;
+        }
+    }
+
+    * {
+        user-select: text !important;
+    }
+}
+
+.map-popup-ol:after,
+.map-popup-ol:before {
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    bottom: -11px;
+}
+
+.map-popup-ol:after {
+    border-width: 13px;
+    left: 50%;
+    margin-left: -13px;
+}
+
+.map-popup-ol:before {
+    border-width: 13px;
+    left: 50%;
+    margin-left: -13px;
+}
+
+.ol-popup-closer {
+    .ms-popup-close-button();
+    &:before {
+        display: block;
+        .glyphicon-1-close-content();
+    }
+    &:hover {
+        opacity: 0.6;
+    }
+}
+
+
+.ms-leaflet-popup {
+    transition: none !important;
+    .leaflet-popup-content-wrapper {
+        overflow: hidden;
+        border-radius: 0;
+        .shadow-far;
+    }
+
+    .leaflet-popup-content {
+        overflow: auto;
+        position: relative;
+        display: flex;
+        margin: 0;
+        z-index: 10;
+    }
+
+    a.leaflet-popup-close-button {
+        -webkit-tap-highlight-color: transparent;
+        .ms-popup-close-button();
+        color: transparent;
+        z-index: 10;
+        &:hover {
+            color: transparent;
+            opacity: 0.6;
+        }
+        &:before {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: block;
+            .glyphicon-1-close-content();
+        }
+    }
+    .leaflet-popup-tip-container {
+        overflow: unset;
+    }
+}
+
+.ms-map-popup {
+    display: flex;
+    overflow: visible;
+    font-size: @font-size-small;
+    .mapstore-identify-viewer {
+        display: flex;
+        flex-direction: column;
+        .ms-identify-swipe-header-title {
+            text-align: center;
+        }
+        .ms-properties-viewer,
+        pre,
+        .alert,
+        .alert h4 {
+            white-space: pre-wrap;
+            font-size: @font-size-small;
+            font-size: @font-size-small;
+        }
+        .alert,
+        .alert h4 {
+            margin: 0;
+        }
+        .alert {
+            max-width: 300px;
+        }
+        .panel {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            width: 100%;
+            min-width: 200px;
+            min-height: 100px;
+            max-height: 300px;
+            max-width: 300px;
+            overflow: hidden;
+            margin: 0 auto;
+            border: none;
+            .panel-heading {
+                .panel-title {
+                    >span {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+                }
+            }
+            .panel-body {
+                overflow: auto;
+                flex: 1;
+                & > div {
+                    overflow: visible;
+                    margin: auto;
+                }
+            }
+        }
+        .ms-template-viewer {
+            font-size: @font-size-small;
+        }
+    }
+
+    .loader-container {
+        min-width: 50px;
+        min-height: 50px;
+    }
+    .mapstore-annotations-info-viewer .mapstore-annotations-info-viewer-items {
+        height: auto;
+        .mapstore-annotations-info-viewer-item {
+            & > span > p, & > p {
+                margin: 0;
+            }
+        }
+    }
+}

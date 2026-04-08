@@ -1,0 +1,123 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+    .mapstore-switch-panel {
+        .panel-heading {
+            .color-var(@theme-vars[main-color]);
+            .background-color-var(@theme-vars[main-bg]);
+        }
+    }
+}
+
+// **************
+// Layout
+// **************
+.mapstore-switch-panel {
+    padding: 8px;
+    .panel {
+        border: none;
+        box-shadow: none;
+        margin: 0;
+    }
+    .panel-heading {
+        height: @square-btn-size;
+        border: none;
+        padding: 0;
+        .pull-left {
+            line-height: @square-btn-size;
+        }
+        .mapstore-switch-btn, .switch-error, .switch-loading {
+            float: right;
+            margin: ((@square-btn-size - @square-btn-small-size) / 2) 0;
+        }
+        .switch-loading {
+            width:  @square-btn-small-size;
+            height: @square-btn-small-size;
+        }
+        .btn-group {
+            float: right;
+            margin: (((@square-btn-size - @square-btn-small-size) / 2) - 2) 0;
+            margin-right: ((((@square-btn-size - @square-btn-small-size) / 2) - 2) / 2);
+            .square-button-sm {
+                padding: 0;
+                text-align: center;
+                padding-top: (@icon-size-md / 8);
+                margin-left: ((((@square-btn-size - @square-btn-small-size) / 2) - 2) / 2);
+                span {
+                    font-size: @icon-size-md;
+                }
+            }
+        }
+    }
+
+    .panel-body {
+        .mapstore-block-width {
+            .m-label {
+                height: @square-btn-medium-size;
+                line-height: @square-btn-medium-size;
+                width: 100%;
+                text-overflow: ellipsis;
+                margin-top: ((@square-btn-size - @square-btn-medium-size) / 2);
+            }
+            .rw-combobox {
+                margin-top: ((@square-btn-size - 34) / 2);
+            }
+
+            .btn-group {
+                margin-top: ((@square-btn-size - @square-btn-medium-size) / 2);
+            }
+        }
+        padding: 0;
+        /** TODO MOVE THIS ANIMATION IN QUERY PANEL */
+        .switch-panel-transition-enter {
+            &.mapstore-block-width,
+            &.mapstore-conditions-group .mapstore-block-width {
+                height: 0;
+            }
+        }
+
+        .switch-panel-transition-enter.switch-panel-transition-enter-active {
+            &.mapstore-block-width,
+            &.mapstore-conditions-group .mapstore-block-width {
+                overflow: hidden;
+                height: @square-btn-size;
+                transition: 300ms ease-in;
+            }
+        }
+
+        .switch-panel-transition-leave {
+            &.mapstore-block-width,
+            &.mapstore-conditions-group .mapstore-block-width {
+                overflow: hidden;
+                height: @square-btn-size;
+                transition: 300ms ease-in;
+            }
+        }
+
+        .switch-panel-transition-leave.switch-panel-transition-leave-active {
+            &.mapstore-block-width,
+            &.mapstore-conditions-group .mapstore-block-width {
+                height: 0;
+            }
+        }
+    }
+}
+
+.catalog-panel {
+    .form-group {
+        width: 100%;
+    }
+
+    .ms2-border-layout-body {
+        overflow-x: hidden;
+    }
+}

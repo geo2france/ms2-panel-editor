@@ -1,0 +1,431 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+
+#ms-components-theme(@theme-vars) {
+    .ms-toc-container {
+        .toc-empty-message {
+            .border-top-color-var(@theme-vars[main-border-color]);
+            .glyphicon {
+                .color-var(@theme-vars[main-border-color]);
+            }
+        }
+    }
+    .ms-toc-toolbar-container,
+    .ms-toc-header,
+    .ms-context-menu,
+    .ms-layers-tree {
+        .color-var(@theme-vars[main-color]);
+        .background-color-var(@theme-vars[main-bg]);
+    }
+    .ms-context-menu {
+        button {
+            &.active {
+                .background-color-var(@theme-vars[selected-bg]);
+            }
+            &:hover {
+                .color-var(@theme-vars[main-hover-color]);
+                .background-color-var(@theme-vars[main-hover-bg]);
+            }
+        }
+    }
+    .inline-loader-container {
+        .background-color-var(@theme-vars[main-variant-bg]);
+        .inline-loader-bar {
+            .background-color-var(@theme-vars[primary]);
+        }
+    }
+    .ms-layers-tree {
+        &.focused {
+            .border-color-var(@theme-vars[focus-color]);
+        }
+        ul {
+            .border-left-color-var(@theme-vars[main-border-color]);
+        }
+        button:not(.btn):active,
+        button:not(.btn).active {
+            .color-var(@theme-vars[selected-color]);
+        }
+        .ms-node {
+            &.focused {
+                .outline-color-var(@theme-vars[focus-color]);
+            }
+            &.error {
+                .outline-color-var(@theme-vars[danger]);
+            }
+        }
+        .ms-node {
+            &.dragging {
+                .outline-color-var(@theme-vars[focus-color]);
+            }
+        }
+
+        .ms-node-header {
+            .border-color-var(@theme-vars[main-border-color]);
+        }
+
+        .ms-node-group > .ms-node-header,
+        .ms-node-group > .ms-drop-node > .ms-node-header {
+            .background-color-var(@theme-vars[main-variant-bg]);
+        }
+    
+        .ms-node-header:hover,
+        .ms-node-group > .ms-node-header:hover,
+        .ms-node-group > .ms-drop-node > .ms-node-header:hover {
+            .background-color-var(@theme-vars[selected-hover-bg]);
+        }
+
+        .ms-node.selected > .ms-node-header,
+        .ms-node.selected > .ms-drop-node > .ms-node-header {
+            .background-color-var(@theme-vars[selected-bg]);
+            .outline-color-var(@theme-vars[focus-color]);
+        }
+        .wms-json-legend-rule.filter-enabled:hover {
+            .background-color-var(@theme-vars[selected-hover-bg]);
+        }
+        .wms-json-legend-rule.filter-enabled.active {
+            .background-color-var(@theme-vars[selected-bg]);
+        }
+    }
+}
+
+// **************
+// Layout
+// **************
+
+.ms-toc-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    & > * {
+        padding: 0 8px;
+    }
+    .ms-layers-tree {
+        padding-top: 0;
+    }
+    &.empty {
+        display: flex;
+        flex-direction: column;
+    }
+    .toc-empty-message {
+        position: relative;
+        flex: 1;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border-top: 1px solid transparent;
+        .glyphicon {
+            font-size: 64px;
+        }
+    }
+}
+
+.ms-toc-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    margin-bottom: 2px;
+}
+
+.ms-toc-title {
+    font-size: @font-size-large;
+}
+
+.ms-toc-filter {
+    .form-group {
+        margin: 0;
+    }
+}
+
+.ms-toc-toolbar-container {
+    position: relative;
+    hr {
+        margin: 0;
+    }
+    .toc-toolbar-button {
+        width: @square-btn-medium-size;
+        height: @square-btn-medium-size;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+    .dropdown-toggle {
+        padding: 0;
+        border: transparent;
+        height: @square-btn-medium-size;
+        width: @square-btn-medium-size / 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .dropdown-menu {
+        font-size: 12px;
+        width: 250px;
+        > li > a {
+            padding: 4px 8px;
+            display: flex;
+            word-break: break-word;
+            white-space: normal;
+        }
+    }
+    .ms-toc-toolbar-dropdown {
+        width: @square-btn-medium-size / 2;
+    }
+}
+
+.ms-context-menu {
+    font-size: 12px;
+    gap: 4px;
+    padding: 4px 0;
+    border-radius: 4px;
+    text-align: left;
+    .shadow();
+    .glyphicon {
+        margin-right: 8px;
+    }
+    button {
+        border-color: transparent;
+        text-align: left;
+        background-color: transparent;
+    }
+    hr {
+        margin: 0;
+    }
+}
+
+// line loader placed on top of layers and groups
+.inline-loader-container {
+    height: 1px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    .inline-loader-bar {
+        height: 100%;
+        width: 50%;
+        position: absolute;
+        left: -50%;
+        animation: inline-loading 2s ease-in 0.5s infinite;
+        transition: 0.3s all;
+    }
+    @keyframes inline-loading {
+        0% {
+            transform:translateX(0)
+        }
+        to {
+            transform:translateX(400%)
+        }
+    }
+}
+
+// layers tree style
+.ms-layers-tree {
+    position: relative;
+    width: 100%;
+    font-size: 12px;
+    padding: 8px;
+    border: 2px solid transparent;
+    ul {
+        list-style: none;
+        border-left: 1px solid transparent;
+        padding-left: 16px;
+        display: flex;
+        flex-direction: column;
+    }
+    & > ul {
+        list-style: none;
+        margin-bottom: 0;
+        padding: 0;
+        border: none;
+    }
+    .ms-node-layer {
+        .shadow-soft();
+        ul:not(.ms-legend) {
+            padding: 4px 8px;
+        }
+    }
+    .glyphicon,
+    button:not(.btn) {
+        font-size: 12px;
+        padding: 0;
+        width: 14px;
+        height: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+        border: transparent;
+    }
+    button:not(.btn):hover {
+        opacity: 0.8;
+    }
+    .ms-node {
+        position: relative;
+        & + .ms-node {
+            margin-top: 8px;
+        }
+        &.focused {
+            outline: 2px solid transparent;
+        }
+        &.error {
+            outline: 1px solid transparent;
+        }
+        &.dragging {
+            outline: 1px solid transparent;
+        }
+    }
+    .ms-drop-node {
+        position: relative;
+    }
+
+    .ms-node-header {
+        font-size: 1em;
+        position: relative;
+        padding: 2px 4px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        padding-left: 0;
+        .grab-handle {
+            width: 12px;
+            .glyphicon {
+                width: auto;
+                &.disabled {
+                    cursor: default;
+                }
+            }
+        }
+        .ms-node-header-info {
+            display: flex;
+        }
+        .ms-node-header-addons {
+            display: flex;
+            gap: 2px;
+            padding: 2px 0;
+        }
+    }
+    .ms-node-title-container {
+        word-break: break-word;
+        margin: 0 4px;
+        flex: 1;
+        position: relative;
+    }
+
+    .ms-node-title {
+        position: relative;
+        word-break: break-word;
+        width: 100%;
+    }
+
+    .mapstore-slider .noUi-target {
+        margin: 0;
+    }
+
+    .ms-node.selected > .ms-node-header,
+    .ms-node.selected > .ms-drop-node > .ms-node-header {
+        outline: 2px solid transparent;
+    }
+
+    .ms-node-group.inactive > .ms-node-header,
+    .ms-node-group.inactive  > .ms-drop-node > .ms-node-header,
+    .ms-node-layer.inactive {
+        opacity: 0.6;
+    }
+
+    // show title on single line with ellipsis
+    &.single-line-title {
+        .ms-node-title-container {
+            overflow: hidden;
+        }
+        .ms-node-title {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+}
+
+// Legend theme
+// legend style for layer tree
+.ms-layers-tree.legend-tree {
+    .grab-handle {
+        display: none;
+    }
+    .ms-node-layer {
+        box-shadow: none;
+        ul {
+            border: none;
+        }
+    }
+    .ms-node-header  {
+        border: none;
+        padding-left: 2px;
+    }
+    .ms-node-icon {
+        display: none;
+    }
+}
+
+// cursor icon changes for sort handler
+.grab-handle {
+    cursor: move;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    &:active {
+        cursor: move;
+        cursor: grabbing;
+        cursor: -moz-grabbing;
+        cursor: -webkit-grabbing;
+    }
+}
+
+// style for wms json legend
+.wms-legend {
+    .wms-json-legend-rule {
+        display: flex;
+        margin-bottom: @padding-left-square-md;
+        .ms-legend-icon {
+            margin-right: 8px;
+        }
+    }
+}
+
+// legend style
+.ms-legend-title {
+    font-weight: bold;
+    margin: 8px 0;
+}
+.ms-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    ul& {
+        border-left: none;
+        padding-left: 0;
+    }
+    .ms-legend-rule {
+        display: flex;
+    }
+    .ms-legend-icon {
+        margin-right: 8px;
+        align-items: normal;
+    }
+}
+.wms-json-legend-rule.filter-enabled:hover {
+    cursor: pointer;
+}

@@ -1,0 +1,187 @@
+/*
+ * Copyright 2019, GeoSolutions Sas.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+import { get, findIndex, find, merge } from 'lodash';
+import { MediaTypes } from '../utils/GeoStoryUtils';
+import { SourceTypes } from '../utils/MediaEditorUtils';
+import {
+    ADDING_MEDIA,
+    EDITING_MEDIA,
+    HIDE,
+    LOAD_MEDIA_SUCCESS,
+    SELECT_ITEM,
+    UPDATE_ITEM,
+    SET_MEDIA_SERVICE,
+    SET_MEDIA_TYPE,
+    SHOW,
+    LOADING_SELECTED_MEDIA,
+    LOADING_MEDIA_LIST,
+    MEDIA_TYPE_DISABLE
+} from '../actions/mediaEditor';
+import {LOCATION_CHANGE} from 'connected-react-router';
+import { compose, set, unset} from '../utils/ImmutableUtils';
+import {
+    sourceIdSelector,
+    currentMediaTypeSelector,
+    resultDataSelector
+} from './../selectors/mediaEditor';
+
+const GEOSTORY_SOURCE_ID = "geostory";
+export const DEFAULT_STATE = {
+    open: false,
+    // contains local data (path for data is mediaType, sourceId, e.g. data: {image : { geostory: { resultData: {...}, params: {...}}})
+    data: {},
+    settings: {
+        mediaType: MediaTypes.IMAGE, // current selected media type
+        sourceId: GEOSTORY_SOURCE_ID, // current selected service
+        // available media types
+        mediaTypes: {
+            image: {
+                defaultSource: GEOSTORY_SOURCE_ID, // source selected when this media is selected
+                sources: [GEOSTORY_SOURCE_ID] // services for the selected media type
+            },
+            video: {
+                defaultSource: GEOSTORY_SOURCE_ID,
+                sources: [GEOSTORY_SOURCE_ID]
+            },
+            map: {
+                defaultSource: GEOSTORY_SOURCE_ID,
+                sources: [GEOSTORY_SOURCE_ID, "geostoreMap"]
+            }
+        },
+        // all media sources available, with their type and other parameters
+        sources: {
+            geostory: {
+                name: "geostory.storyResources",
+                type: SourceTypes.GEOSTORY, // determines the type related to the API
+                addMediaEnabled: {
+                    image: true,
+                    video: true,
+                    map: true
+                },
+                editMediaEnabled: {
+                    image: true,
+                    video: true,
+                    map: true
+                },
+                removeMediaEnabled: {
+                    image: true,
+                    video: true,
+                    map: true
+                }
+            },
+            geostoreMap: {
+                name: "geostory.geostoreMap", // id for Message comp
+                type: SourceTypes.GEOSTORE,
+                baseURL: "rest/geostore/",
+                category: "MAP",
+                editMediaEnabled: {
+                    map: true
+                }
+            }
+        }
+    }
+};
+
+export default (state = DEFAULT_STATE, action) => {
+    switch (action.type) {
+    case ADDING_MEDIA: {
+        return compose(
+            set('saveState.addingMedia', action.adding),
+            set('selected', "")
+        )(state);
+    }
+    case EDITING_MEDIA: {
+        return compose(
+            set('saveState.addingMedia', action.editing),
+            set('saveState.editing', action.editing)
+        )(state);
+    }
+    // hide resets the media editor as well as selected
+    // resets all media editor settings
+    case HIDE:
+        return compose(
+            set('open', false),
+            set('owner', undefined),
+            set('saveState.addingMedia', false),
+            set('saveState.editing', false),
+            set('settings', {
+                ...(state.stashedSettings || DEFAULT_STATE.settings), // restore defaults, TODO SOURCE ID IS NOT RESTORED
+                ...(state.settings?.mediaType && { mediaType: state.settings.mediaType }) // restore the latest selected media type
+            }),
+            set('stashedSettings', undefined),
+            unset('selected'),
+            set('disabledMediaType', [])
+        )(state);
+    // set adding media state (to toggle add/select in media selectors)
+    case LOAD_MEDIA_SUCCESS: {
+        const {resultData, params, mediaType, sourceId} = action;
+        return compose(
+            set(`data["${mediaType}"]["${sourceId}"]`, { params, resultData }),
+            set('loadingList', false)
+        )(state);
+    }
+    case UPDATE_ITEM: {
+        const {item, mode} = action;
+        const sourceId = sourceIdSelector({mediaEditor: state});
+        const mediaType = currentMediaTypeSelector({mediaEditor: state});
+        const resources = resultDataSelector({mediaEditor: state}).resources;
+        const indexItem = findIndex(resources, {id: item.id});
+        const resource = find(resources, {id: item.id});
+        const newResource = mode === "merge" ? merge({}, merge({}, resource), merge({}, item)) : item;
+        return set(`data["${mediaType}"]["${sourceId}"].resultData.resources[${indexItem}]`, newResource, state);
+    }
+    case SELECT_ITEM: {
+        if (action.id === state.selected) {
+            return set('selected', '', state);
+        }
+        return set('selected', action.id, state);
+    }
+    case SET_MEDIA_TYPE: {
+        const defaultSource = get(state, `settings.mediaTypes[${action.mediaType}].defaultSource`, "geostory");
+        return compose(
+            set('settings.sourceId', defaultSource), // reset sourceId to default when media type changes
+            set('settings.mediaType', action.mediaType)
+        )(state);
+    }
+    case SET_MEDIA_SERVICE: {
+        return set('settings.sourceId', action.id, state);
+    }
+    case SHOW:
+        // setup media editor settings
+        const settings = action.settings && {
+            ...action.settings,
+            // mediaType could be updated during the app lifecycle separately
+            // so we should use the one on the state if available
+            ...(state.settings.mediaType && { mediaType: state.settings.mediaType })
+        };
+        return compose(
+            set('open', true),
+            set('owner', action.owner),
+            set('settings', settings || state.settings), // TODO: allow fine customization
+            set('stashedSettings', state.settings) // This should allow to use default config or customize for a different usage
+        )(state);
+    case LOCATION_CHANGE:
+        return {
+            ...DEFAULT_STATE,
+            settings: {
+                ...state.settings,
+                // restore the default mediaType but keep the current updated settings
+                mediaType: DEFAULT_STATE.settings.mediaType
+            }
+        };
+    case LOADING_SELECTED_MEDIA:
+        return set('loadingSelected', action.loading, state);
+    case LOADING_MEDIA_LIST:
+        return set('loadingList', true, state);
+    case MEDIA_TYPE_DISABLE:
+        return set('disabledMediaType', action.mediaTypes || [], state);
+    default:
+        return state;
+    }
+};

@@ -1,0 +1,368 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+
+#ms-components-theme(@theme-vars) {
+    .ms-dragg.ms-below .coordinateRow,
+    .ms-dragg.ms-above .coordinateRow {
+        & {
+            .background-color-var(@theme-vars[main-bg]);
+        }
+
+        &:hover {
+            input,
+            select,
+            .col-xs-5 span {
+                .color-var(@theme-vars[primary]);
+            }
+        }
+    }
+
+    .ms-over {
+        .coordinateRow {
+            .border-color-var(@theme-vars[primary]);
+        }
+
+        &.ms-dragging {
+            .coordinateRow {
+                .border-color-var(@theme-vars[main-border-color]);
+            }
+        }
+    }
+    .ms-style-rules-editor-head,
+    .coordinates-editor .measure-feature-selector {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    .ms-features-editor {
+        .ms-features-editor-tools {
+            .ms-features-editor-tools-body {
+                .border-left-color-var(@theme-vars[main-border-color]);
+            }
+        }
+
+        .coordinates-row-container {
+            > div + div {
+                .border-top-color-var(@theme-vars[main-border-color]);
+            }
+        }
+    
+        .ms-features-editor-tools-empty {
+            .border-left-color-var(@theme-vars[main-border-color]);
+            .glyphicon {
+                .color-var(@theme-vars[main-border-color]);
+            }
+        }
+        .ms-features-editor-item {
+            .border-color-var(@theme-vars[main-border-color]);
+            input {
+                .border-bottom-color-var(@theme-vars[main-border-color]);
+                .color-var(@theme-vars[main-color]);
+                .background-color-var(@theme-vars[main-bg]);
+            }
+            &.selected {
+                .color-var(@theme-vars[primary-contrast]);
+                .background-color-var(@theme-vars[primary]);
+                input {
+                    .color-var(@theme-vars[primary-contrast]);
+                    .background-color-var(@theme-vars[primary]);
+                }
+                .glyphicon {
+                    .color-var(@theme-vars[primary-contrast]);
+                }
+            }
+            &:hover:not(.selected) {
+                .color-var(@theme-vars[main-hover-color]);
+                .background-color-var(@theme-vars[main-hover-bg]);
+                input {
+                    .color-var(@theme-vars[main-hover-color]);
+                    .background-color-var(@theme-vars[main-hover-bg]);
+                }
+            }
+        }
+    }
+}
+
+// **************
+// Layout
+// **************
+
+.ms-dragging {
+    opacity: 0.5;
+}
+
+.ms-over {
+    box-sizing: border-box;
+    .coordinateRow {
+        border: 1px solid transparent;
+    }
+    &.ms-dragging {
+        .coordinateRow {
+            border: 1px solid transparent;
+        }
+    }
+}
+
+.ms-dragg.ms-below .coordinateRow,
+.ms-dragg.ms-above .coordinateRow {
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.coordinateRow {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    border: 0;
+    font-family: @font-family-monospace;
+    font-size: @font-size-small;
+    .col-xs-5, .col-xs-1 {
+        padding: 0;
+        float: unset;
+        width: auto;
+        margin: 0 4px;
+    }
+    .coordinate {
+        flex: 1;
+    }
+    .form-group {
+        width: 100%;
+    }
+    .col-xs-5 {
+        flex: 1;
+        .form-group {
+            margin: 4px 0;
+        }
+    }
+    .input-group-addon,
+    input {
+        font-size: @font-size-small;
+    }
+    .degrees {
+        min-width: 50px;
+    }
+    .minutes {
+        min-width: 45px;
+    }
+    .seconds {
+        max-width: 85px;
+    }
+    .direction-select {
+        min-width: 40px;
+    }
+    .coordinate {
+        padding: 0 4px;
+    }
+}
+.label-texts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 600;
+    padding: 10px;
+}
+
+.ms-annotations-editor {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#ms-annotations-editor-target {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    overflow: auto;
+}
+
+.ms-features-editor {
+    position: relative;
+    display: flex;
+    flex: 1 1 0%;
+    height: 100%;
+    .ms-style-rules-editor-head,
+    .coordinates-editor .measure-feature-selector {
+        position: sticky;
+        top: 0;
+        z-index: 200;
+        padding: 8px 0;
+    }
+
+    .coordinates-row-container {
+        > div + div {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid transparent;
+        }
+    }
+    .coordinateRow {
+        .input-group-container + .input-group-container {
+            margin-top: 4px;
+        }
+    }
+
+    .ms-annotations-label-input {
+        padding: 8px 4px;
+    }
+    .ms-features-editor-list {
+        width: 250px;
+        position: relative;
+        display: flex;
+        overflow: auto;
+        height: 100%;
+        flex-direction: column;
+        margin-right: 4px;
+        .ms-features-editor-list-header {
+            display: flex;
+            justify-content: space-between;
+        }
+        .ms-features-editor-list-body {
+            flex: 1 1 0%;
+            overflow: auto;
+            list-style: none;
+            margin: 0px;
+            padding: 4px;
+            position: relative;
+        }
+    }
+    .ms-features-editor-list-empty {
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+    .ms-features-editor-tools {
+        flex: 1;
+        position: relative;
+        display: flex;
+        overflow: auto;
+        height: 100%;
+        flex-direction: column;
+        margin-right: 4px;
+        .ms-features-editor-tools-body {
+            flex: 1 1 0%;
+            overflow: auto;
+            list-style: none;
+            margin: 0px;
+            padding: 4px;
+            padding-top: 0;
+            position: relative;
+            border-left: 1px solid transparent;
+        }
+    }
+
+    .ms-features-editor-tools-empty {
+        flex: 1 1 0%;
+        position: relative;
+        display: flex;
+        overflow: auto;
+        height: 100%;
+        flex-direction: column;
+        border-left: 1px solid transparent;
+        align-items: center;
+        justify-content: center;
+        padding: 8px;
+        text-align: center;
+        .glyphicon {
+            font-size: 64px;
+        }
+    }
+    .ms-features-editor-item {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding: 4px;
+        margin: 4px 0px;
+        border: 1px solid transparent;
+        input {
+            width: 100%;
+            border-top: none;
+            border-right: none;
+            border-bottom: 1px solid transparent;
+            border-left: none;
+            border-image: initial;
+        }
+        .glyphicon  {
+            padding: 0 4px;
+        }
+        .btn-group {
+            display: flex;
+            .btn-default {
+                border-color: transparent;
+            }
+        }
+    }
+    .ms-coordinates-editor-radius {
+        padding: 0 4px !important; // there is an inline style
+        .form-group {
+            margin: 0;
+        }
+    }
+}
+
+.ms-annotations-panel {
+    .shadow-soft();
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 0px;
+    left: 0px;
+    width: 600px;
+    z-index: 1030;
+    background: rgb(255, 255, 255);
+    overflow: auto;
+    .ms-annotations-panel-header {
+        display: flex;
+        align-items: center;
+        .ms-annotations-title {
+            flex: 1;
+            padding: 0px 0.5rem;
+            font-size: @font-size-large;
+            text-align: center;
+        }
+    }
+    .ms-annotations-panel-nav {
+        button {
+            position: absolute;
+            right: 0;
+            margin: 6px;
+        }
+    }
+    .ms-annotations-panel-body {
+        flex: 1;
+        position: relative;
+        .ms-annotations-panel-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 8px 16px;
+            overflow: auto;
+        }
+    }
+}
+
+.ms-annotations-fields.preview {
+    padding: 8px 0;
+    .ms-annotations-field {
+        margin-bottom: 8px;
+        .ms-annotations-field-label {
+            font-weight: bold;
+        }
+        iframe {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+        }
+    }
+}

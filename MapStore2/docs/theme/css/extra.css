@@ -1,0 +1,100 @@
+.md-header {
+    height: 80px;
+    background-image: linear-gradient(120deg, #155799, #159957);
+}
+.md-sidebar[data-md-state="lock"] {
+    top: 8rem;
+}
+a,
+a:active,
+a:hover {
+    outline: None;
+}
+.md-header-nav > div > div > a {
+    margin: 0px;
+}
+.md-header-nav > div > div > a > img {
+    height: 63px;
+    width: auto;
+}
+/* footer */
+
+.md-footer {
+    text-align: center;
+}
+
+.md-footer-brand-img {
+    max-height: 30px;
+    width: auto;
+}
+.md-copyright, .md-social, .md-custom-content {
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.md-social {
+    justify-content: center;
+}
+.md-footer .md-footer-nav {
+    background-color: rgba(21, 147, 93, 0.89) !important;
+}
+/* end footer */
+.md-container {
+    padding-top: 80px;
+}
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 80px;
+}
+.md-tabs {
+  background-image: linear-gradient(120deg, #155799, #159957);
+}
+
+li.md-tabs__item:hover{
+  background: rgba(157, 204, 242, 0.2);
+}
+
+/* exclude rtd menu not working items */
+.rst-other-versions dl:nth-child(3), .rst-other-versions dl:nth-child(4) {
+    display: none;
+}
+.ms-docimage, .md-typeset .ms-docimage{
+    max-width: 700px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 4px 4px 4px #cccccc, -.5px -.5px 4px #cccccc;
+    -moz-box-shadow: 4px 4px 4px #cccccc, -.5px -.5px 4px #cccccc;
+    -moz-box-shadow: 4px 4px 4px #cccccc, -.5px -.5px 4px #cccccc;
+}
+
+.ms-doc-caption {
+    text-align: center;
+    font-style: italic;
+    font-size: 70%;
+
+}
+.ms-docbutton, .md-typeset .ms-docbutton {
+    vertical-align: middle;
+    height: 30px;
+}
+.md-content__button.md-icon svg {
+    fill: #009688;
+    height: 1.8rem !important;
+    width: 1.8rem !important;
+    float: right;
+}
+
+.pdf-icon {
+    background-image: url(../img/download-pdf-icon.png);
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+    background-position: center;
+    background-repeat: no-repeat;
+}

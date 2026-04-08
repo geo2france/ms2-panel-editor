@@ -1,0 +1,165 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+    .maps-search .input-group-addon {
+        .background-color-var(@theme-vars[main-bg]);
+        .border-top-color-var(@theme-vars[main-border-color]);
+        .border-bottom-color-var(@theme-vars[main-border-color]);
+    }
+
+    .search-result-list {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    .search-result-list .search-result {
+        .border-bottom-color-var(@theme-vars[main-border-color]);
+    }
+
+    .search-result-list .search-result:hover {
+        .background-color-var(@theme-vars[main-hover-bg]);
+    }
+}
+
+// **************
+// Layout
+// **************
+.MapSearchBar {
+    left: 65px;
+    position: absolute;
+    right: 55px;
+    top: 10px;
+}
+.maps-search .input-group-addon{
+    background-color:white;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+}
+.MapSearchBar .input-group,
+.MapSearchBar .advanced-search-panel {
+    .shadow();
+    border-radius: 4px;
+}
+
+/* hide the clearing x in IE 11 and Edge */
+.MapSearchBar input::-ms-clear,
+.MapSearchBar input::-ms-reveal {
+    display: none;
+}
+
+.search-result-list{
+    position: absolute;
+    top: 50px;
+    left: 45px;
+    right: 55px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    max-height: 80%;
+    overflow: auto;
+}
+
+.search-result-list .search-result {
+    display: flex;
+    flex-direction: row;
+    padding: 15px;
+    border-bottom: 1px solid lightgray;
+    cursor: pointer;
+}
+.search-result-list .search-result:hover{
+    background-color: rgba(204,204,204,0.9);
+}
+.search-result-list .search-result .icon{
+    height: 100%;
+    margin-right: 5px;
+    display: block;
+    float: left;
+}
+.search-result-list .search-result .search-result-left-container {
+    flex-grow: 1
+}
+
+.search-result-list .search-result:last-child{
+    border-bottom: none;
+    border-radius: 0 0 10px 10px;
+}
+
+.search-result-list .search-result:first-child{
+    border-radius:10px 10px 0 0;
+}
+
+#mapstore-navbar .MapSearchBar {
+    top: 0;
+    left: -500px;
+    right: 0;
+}
+
+.search-toggle {
+    display: none;
+}
+
+/* Maps Search */
+.maps-search.MapSearchBar{
+    width: 90%;
+    left: 0;
+    position: relative;
+    right: 0;
+    top: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+.maps-search.MapSearchBar .input-group {
+    width: 100%;
+    display: flex;
+}
+.maps-search .search-toolbar-options {
+    display: flex;
+    align-items: center;
+}
+@media (min-width: 768px) {
+    .maps-search.MapSearchBar {
+        width: 580px;
+    }
+}
+
+/* User Search */
+.user-search.MapSearchBar{
+    width: 90%;
+    left: 0;
+    position: relative;
+    right: 0;
+    top: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+.user-search.MapSearchBar .input-group {
+    width: 100%;
+    display: flex;
+}
+
+.user-search .search-toolbar-options {
+    display: flex;
+    align-items: center;
+}
+.MapSearchBar.user-search input {
+    z-index: 0
+}
+@media (min-width: 768px) {
+    .user-search.MapSearchBar {
+        width: 580px;
+    }
+}
+
+.input-group-addon .selectedItem-text {
+    font-size: 14px;
+    overflow: hidden;
+    max-width: 400px;
+    text-overflow: ellipsis;
+}

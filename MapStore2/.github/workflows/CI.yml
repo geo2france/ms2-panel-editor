@@ -1,0 +1,192 @@
+# This workflow will run tests for npm and java
+
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+    # using filter pattern: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+    - '[cC][0-9][0-9][0-9]-+**' # c123 or c123-something for custom branch
+    - '[0-9][0-9][0-9][0-9].[0-9][0-9].xx' # stable brances. E.g. 2021.01.xx
+  pull_request:
+    branches:
+    - master
+    # using filter pattern: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+    - '[cC][0-9][0-9][0-9]-+**' # c123 or c123-something for custom branch
+    - '[0-9][0-9][0-9][0-9].[0-9][0-9].xx' # stable brances. E.g. 2021.01.xx
+
+jobs:
+  test-front-end:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "checking out"
+        uses: actions/checkout@v3
+
+      - name: "setting up npm"
+        uses: actions/setup-node@v3
+        with:
+            node-version: '20.x'
+
+      ############
+      # CACHING
+      ##########
+      - name: "cache node modules"
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      ###############
+      # NPM CHECKS
+      #############
+      - name: npm install
+        run: npm install
+
+      - name: ESlint
+        run: npm run lint
+
+      - name: Doc build
+        run: npm run jsdoc:build
+
+      - name: Check i18n
+        run: npm run i18n
+
+      - name: Unit Tests
+        run: npm test -- --reporters mocha,coverage,coveralls
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  test-back-end:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "checking out"
+        uses: actions/checkout@v3
+
+      ###########
+      # SET UP
+      #########
+      - name: "setting up Java"
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11.x'
+
+      - name: "cache maven dependencies"
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: mapstore-${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            mapstore-${{ runner.os }}-maven-
+      ################
+      # JAVA CHECKS
+      ##############
+      - name: java
+        run: mvn --batch-mode --update-snapshots verify -Pprintingbundle,binary
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "checking out"
+        uses: actions/checkout@v3
+
+      ###########
+      # SET UP
+      #########
+      - name: "setting up Java"
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11.x'
+
+      - name: "setting up npm"
+        uses: actions/setup-node@v2
+        with:
+            node-version: '20.x'
+
+      ############
+      # CACHING
+      ##########
+      - name: "cache node modules"
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: "cache maven dependencies"
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: mapstore-${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            mapstore-${{ runner.os }}-maven-
+
+      ###############
+      # NPM CHECKS
+      #############
+      - name: npm install
+        run: npm install
+
+      - name: compile
+        run: npm run fe:build
+      ################
+      # JAVA CHECKS
+      ##############
+      - name: java
+        run: mvn --batch-mode --update-snapshots verify
+  build-publish:
+    runs-on: ubuntu-latest
+    if:  ${{ github.event_name == 'push' && github.repository == 'geosolutions-it/MapStore2' }}
+    needs: [test-front-end, test-back-end, build]
+    steps:
+      - name: "checking out"
+        uses: actions/checkout@v3
+      - name: "setting up npm"
+        uses: actions/setup-node@v2
+        with:
+            node-version: '20.x'
+      - name: "setting up Java"
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11.x'
+      ############
+      # Publish
+      ##########
+      - name: Set up Maven Central Repository
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          server-id: geosolutions
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+      - name: Publish maven packages
+        # Here it deploys only java modules and root, needed for MS project builds.
+        # Product, binary modules are to big to be hosted on the repository in snapshots, so they are skipped
+        run: |
+          # deploys java packages
+          mvn clean install deploy -f java/pom.xml
+          # deploys also the root module, needed for dependencies
+          mvn deploy --non-recursive
+        env:
+          MAVEN_USERNAME: ${{ secrets.GS_MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.GS_MAVEN_PASSWORD }}
+
+
+

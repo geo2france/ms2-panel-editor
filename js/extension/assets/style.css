@@ -1,0 +1,83 @@
+.panel-editor-container {
+    z-index: 1029;
+}
+
+.panel-editor-dock-panel .panel-body {
+    padding: 0;
+}
+
+.panel-editor-body {
+    padding: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.panel-editor-empty-state {
+    color: #6b6b6b;
+    font-style: italic;
+}
+
+.panel-editor-content {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-editor-static-header {
+    flex-shrink: 0;
+}
+
+.panel-editor-static-value {
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #333333;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.panel-editor-static-value-icon {
+    color: #666666;
+    flex-shrink: 0;
+}
+
+.panel-editor-mode-title {
+    margin: 0;
+}
+
+.panel-editor-mode-title .label {
+    font-size: 15px;
+}
+
+.panel-editor-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.panel-editor-toolbar {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.panel-editor-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.panel-editor-toolbar .panel-editor-mode-title {
+    margin-right: auto;
+}
+
+.panel-editor-attributes-table th {
+    width: 45%;
+}

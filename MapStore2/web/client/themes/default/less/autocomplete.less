@@ -1,0 +1,44 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+    .autocompleteField .autocomplete-toolbar .chevron-left,
+    .autocompleteField .autocomplete-toolbar .chevron-right,
+    .autocompleteField .autocomplete-toolbar .rw-list-option:hover {
+        .color-var(@theme-vars[primary]);
+    }
+}
+
+// **************
+// Layout
+// **************
+.autocompleteField .autocomplete-toolbar .chevron-left {
+    float: left;
+}
+.autocompleteField .autocomplete-toolbar .chevron-right {
+    float: right;
+}
+
+.autocompleteField ul li:last-child {
+    border: none !important;
+}
+
+.rw-combobox .rw-list {
+    width: -webkit-fill-available;
+}
+
+.rw-combobox .rw-btn {
+    overflow: hidden;
+}
+.autocompleteField.d-flex{
+    display: flex;
+    height: 100%;
+}

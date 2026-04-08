@@ -1,0 +1,26 @@
+/**
+ * Copyright 2015, GeoSolutions Sas.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+import Layers from '../../../../utils/leaflet/Layers';
+import MQ from '../../../../libs/mapquest';
+
+Layers.registerType('mapquest', {
+    create: (options) => {
+        if (MQ) {
+            return MQ.mapLayer({
+                maxZoom: 23, ...options});
+        }
+        if (options && options.onError) {
+            options.onError();
+        }
+        return false;
+    },
+    isValid: () => {
+        return MQ ? true : false;
+    }
+});

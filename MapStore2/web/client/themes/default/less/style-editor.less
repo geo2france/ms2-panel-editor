@@ -1,0 +1,864 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+
+#ms-components-theme(@theme-vars) {
+    .ms-style-editor-container {
+        .background-color-var(@theme-vars[main-bg]);
+        .ms2-mask-container   {
+            .ms2-mask {
+                .color-var(@theme-vars[main-color]);
+                .background-color-var(@theme-vars[main-bg]);
+            }
+        }
+    }
+
+    .ms-style-editor {
+        .ms-style-editor-inline-widget {
+            .border-color-var(@theme-vars[main-bg]);
+        }
+        .ms-style-editor-error {
+            .color-var(@theme-vars[danger]);
+        }
+        .ms-style-editor-head {
+            background: #262626;
+            .border-bottom-color-var(@theme-vars[main-border-color]);
+            .mapstore-info-popover {
+                background-color: #eee;
+                .text-danger {
+                    .color-var(@theme-vars[danger]);
+                }
+            }
+        }
+    }
+
+    ul.CodeMirror-hints {
+        background-color: @ms-main-color;
+        li.CodeMirror-hint {
+            color: @ms-main-bg;
+            &.CodeMirror-hint-active {
+                background-color: @ms-primary;
+            }
+        }
+    }
+
+    .ms-style-template-title {
+        .border-top-color-var(@theme-vars[main-border-color]);
+    }
+
+    // color picker and selector
+    .ms-color-picker {
+        .color-var(@theme-vars[main-bg]);
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    .ms-sketch-picker,
+    .ms-sketch-picker input {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+    .ms-sketch-picker span {
+        .color-var(@theme-vars[main-color], true);
+    }
+    .ms-sketch-picker-arrow {
+        .border-right-color-var(@theme-vars[main-bg]);
+    }
+
+    .ms-dash-array {
+        .stroke-var(@theme-vars[main-color]);
+    }
+    .Select-option.is-selected .ms-dash-array {
+        .stroke-var(@theme-vars[primary-contrast]);
+    }
+    .Select-option.is-focused .ms-dash-array {
+        .stroke-var(@theme-vars[main-color]);
+    }
+
+    .ms-color-selector {
+        .border-color-var(@theme-vars[main-border-color]);
+    }
+
+    .ms-style-editor-toolbar {
+        .border-bottom-color-var(@theme-vars[main-border-color]);
+        .btn-group {
+            .border-color-var(@theme-vars[main-border-color]);
+        }
+    }
+
+    .ms-style-rules-editor {
+        .ms-style-rule {
+            &.ms-drop-target {
+                .border-color-var(@theme-vars[primary]);
+            }
+        }
+
+        .ms-symbolizer {
+            .border-color-var(@theme-vars[main-border-color]);
+        }
+    }
+
+    .ms-symbolizer-field {
+        .ms-symbolizer-value {
+            &.ms-symbolizer-value-invalid {
+                .outline-color-var(@theme-vars[danger]);
+            }
+            &.ms-symbolizer-value-warning {
+                .outline-color-var(@theme-vars[warning]);
+            }
+        }
+    }
+
+    .ms-symbolizer-field-divider {
+        .border-bottom-color-var(@theme-vars[main-border-color]);
+    }
+
+    .ms-symbolizer {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+    .ms-style-rule-overlay-loader {
+        .background-color-var(@theme-vars[main-bg]);
+        opacity: 0.4;
+    }
+
+    .ms-mark-list {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    .ms-popover-overlay {
+        .ms-style-rule-scale {
+            .background-color-var(@theme-vars[main-bg]);
+        }
+        .ms-style-rule-filter {
+            .background-color-var(@theme-vars[main-bg]);
+        }
+    }
+
+    .ms-classification-popover {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+    .ms-rule-collapse * {
+        .color-var(@theme-vars[main-color]);
+    }
+
+    .ms-style-band-container {
+        .ms-style-band-editor {
+            .ms-style-band {
+                .border-color-var(@theme-vars[main-border-color]);
+            }
+        }
+    }
+    .ms-classification-layer-settings {
+        .color-var(@theme-vars[main-color]);
+        .background-color-var(@theme-vars[main-bg]);
+    }
+}
+
+// **************
+// Layout
+// **************
+.ms-style-editor-container {
+    .shadow-soft;
+    background-color: @ms-main-bg;
+    .ms2-border-layout-content {
+        .ms2-border-layout-content {
+            background-color: transparent;
+        }
+    }
+    .ms-style-editor-container-header {
+        padding: 8px;
+    }
+    .mapstore-filter  {
+        margin: 8px;
+    }
+    .msSideGrid {
+        position: relative;
+        margin: 0 10px;
+        width: ~"calc(100% - 20px)";
+        .items-list {
+            margin: 0;
+        }
+        .row {
+            margin: 0;
+        }
+        .col-xs-12 {
+            padding: 0;
+        }
+        .mapstore-side-card {
+            &:hover {
+                transform: unset;
+            }
+        }
+    }
+    .ms2-mask-container {
+        .ms2-mask {
+            background-color: @ms-main-bg;
+            color: @ms-main-color;
+        }
+    }
+    .empty-state-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        .empty-state-main-view {
+            width: 300px;
+            margin: auto;
+        }
+    }
+}
+
+.ms-style-editor {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .ms2-border-layout-content {
+        position: relative;
+    }
+
+    .alert {
+        margin-bottom: 0;
+    }
+
+    .react-codemirror2 {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        & > .CodeMirror {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .ms-style-editor-inline-widget {
+        display: inline-block;
+        margin-top: -15px;
+        width: 10px;
+        height: 10px;
+        border: 1px solid @ms-main-bg;
+        z-index: 10;
+        &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+    }
+    .ms-style-editor-error {
+        color: lighten(#dd2200, 10%);
+        text-decoration: underline wavy;
+        text-decoration-color: #dd2200;
+    }
+
+    .ms-style-editor-head {
+        background: #262626;
+        height: 28px;
+        display: flex;
+        border-bottom: 1px solid #aaa;
+        .ms-style-editor-loader {
+            margin: auto;
+            margin-right: 5px;
+        }
+        .mapstore-info-popover {
+            margin: auto;
+            margin-right: 5px;
+            background-color: #eee;
+            border-radius: 50%;
+            width: 20px;
+            text-align: center;
+            .text-danger {
+                color: #dd2200
+            }
+        }
+    }
+    .CodeMirror-hints {
+        position: fixed;
+    }
+}
+
+ul.CodeMirror-hints {
+    border: none;
+    border-radius: 0;
+    background-color: @ms-main-color;
+    .shadow-soft;
+    li.CodeMirror-hint {
+        color: @ms-main-bg;
+        &.CodeMirror-hint-active {
+            background-color: @ms-primary;
+        }
+    }
+}
+
+.ms-style-template-title {
+    margin: 0 16px;
+    margin-top: 16px;
+    padding-top: 8px;
+    text-align: center;
+    font-style: italic;
+    border-top: 1px solid @ms-main-border-color;
+}
+
+.ms-inline-widget-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    & > div:last-child {
+        flex: 1;
+        display: flex;
+        & > * {
+            margin: auto;
+            /* !important for color picker */
+            border-radius: 0 !important;
+        }
+    }
+
+    button.close {
+        right: 0;
+    }
+}
+
+/* display correctly text overflow ellipsis in firefox */
+.ms-style-editor-list {
+    & > .ms2-border-layout-body {
+        position: relative;
+        & > .ms2-border-layout-content {
+            position: absolute;
+            padding-bottom: 15px;
+        }
+    }
+}
+
+/*
+http://lesscss.org/ dark theme
+Ported to CodeMirror by Peter Kroon
+*/
+.cm-s-lesser-dark { line-height: 1.3em;}
+
+.cm-s-lesser-dark.CodeMirror { background: #262626; color: #EBEFE7; text-shadow: 0 -1px 1px #262626; }
+.cm-s-lesser-dark div.CodeMirror-selected { background: #45443B; } /* 33322B*/
+.cm-s-lesser-dark .CodeMirror-line::selection, .cm-s-lesser-dark .CodeMirror-line > span::selection, .cm-s-lesser-dark .CodeMirror-line > span > span::selection { background: rgba(69, 68, 59, .99); }
+.cm-s-lesser-dark .CodeMirror-line::-moz-selection, .cm-s-lesser-dark .CodeMirror-line > span::-moz-selection, .cm-s-lesser-dark .CodeMirror-line > span > span::-moz-selection { background: rgba(69, 68, 59, .99); }
+.cm-s-lesser-dark .CodeMirror-cursor { border-left: 1px solid white; }
+.cm-s-lesser-dark pre { padding: 0 8px; }/*editable code holder*/
+
+.cm-s-lesser-dark.CodeMirror span.CodeMirror-matchingbracket { color: #7EFC7E; }/*65FC65*/
+
+.cm-s-lesser-dark .CodeMirror-gutters { background: #262626; border-right:1px solid #aaa; }
+.cm-s-lesser-dark .CodeMirror-guttermarker { color: #599eff; }
+.cm-s-lesser-dark .CodeMirror-guttermarker-subtle { color: #777; }
+.cm-s-lesser-dark .CodeMirror-linenumber { color: #777; }
+
+.cm-s-lesser-dark span.cm-header { color: #a0a; }
+.cm-s-lesser-dark span.cm-quote { color: #090; }
+.cm-s-lesser-dark span.cm-keyword { color: #599eff; }
+.cm-s-lesser-dark span.cm-atom { color: #C2B470; }
+.cm-s-lesser-dark span.cm-number { color: #B35E4D; }
+.cm-s-lesser-dark span.cm-def { color: white; }
+.cm-s-lesser-dark span.cm-variable { color:#D9BF8C; }
+.cm-s-lesser-dark span.cm-variable-2 { color: #669199; }
+.cm-s-lesser-dark span.cm-variable-3 { color: white; }
+.cm-s-lesser-dark span.cm-property { color: #92A75C; }
+.cm-s-lesser-dark span.cm-operator { color: #92A75C; }
+.cm-s-lesser-dark span.cm-comment { color: #666; }
+.cm-s-lesser-dark span.cm-string { color: #BCD279; }
+.cm-s-lesser-dark span.cm-string-2 { color: #f50; }
+.cm-s-lesser-dark span.cm-meta { color: #738C73; }
+.cm-s-lesser-dark span.cm-qualifier { color: #555; }
+.cm-s-lesser-dark span.cm-builtin { color: #ff9e59; }
+.cm-s-lesser-dark span.cm-bracket { color: #EBEFE7; }
+.cm-s-lesser-dark span.cm-tag { color: #669199; }
+.cm-s-lesser-dark span.cm-attribute { color: #00c; }
+.cm-s-lesser-dark span.cm-hr { color: #999; }
+.cm-s-lesser-dark span.cm-link { color: #00c; }
+
+
+.cm-s-lesser-dark .CodeMirror-activeline-background { background: #3C3A3A; }
+.cm-s-lesser-dark .CodeMirror-matchingbracket { outline:1px solid grey; color:white !important; }
+
+/* NEW */
+.cm-s-lesser-dark span.cm-logic {color: #9a8fff;}
+.cm-s-lesser-dark span.cm-filter {color: #72e285;}
+.cm-desc {color: #ffaa00;}
+
+.cm-s-lesser-dark span.cm-error {
+    color: #ffdbd4;
+    text-decoration: underline wavy;
+    text-decoration-color: #dd2200;
+}
+
+// color picker and selector
+.ms-color-picker {
+    color: @ms-main-color;
+    background-color: @ms-main-bg;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(45deg, #dddddd 25%, transparent 25%), linear-gradient(-45deg, #dddddd 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #dddddd 75%), linear-gradient(-45deg, transparent 75%, #dddddd 75%);
+    background-size: 24px 24px;
+    background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
+    .ms-color-picker-swatch {
+        position: static;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        padding: 6px;
+        min-width: 60px;
+        & * {
+            color: inherit;
+        }
+        &:hover {
+            cursor: pointer;
+            .shadow-soft;
+        }
+    }
+    &.ms-disabled {
+        cursor: not-allowed;
+        opacity: 0.3;
+        .ms-color-picker-swatch:hover {
+            cursor: not-allowed;
+            .box-shadow(none);
+        }
+    }
+}
+
+.ms-sketch-picker {
+    background: @ms-main-bg;
+    .shadow-far();
+}
+
+.ms-color-selector {
+    position: relative;
+    display: flex;
+    height: @square-btn-medium-size;
+    width: 100%;
+    border: 1px solid @ms-main-border-color;
+    padding: 4px;
+    .ms-popover {
+        position: relative;
+        display: flex;
+        width: 100%;
+    }
+    .ms-color-picker .ms-color-picker-swatch {
+        padding: 0;
+        min-width: auto;
+        & > span {
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 4px;
+            margin: 0;
+            font-size: @font-size-base;
+        }
+    }
+}
+
+.ms-text-style {
+    .content {
+        display: flex;
+        flex: 1;
+        margin: 8px 0;
+    }
+
+    .left {
+        flex: 1
+    }
+
+    .right {
+        position: static;
+        flex: 1;
+        padding-left: 30px
+    }
+
+    .font-size input {
+        height: 32px;
+        padding: 4px 6px;
+        border-radius: 4px;
+    }
+
+    .font-uom {
+        flex: 1
+    }
+}
+
+.ms-style-editor-toolbar {
+    padding: 4px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid @ms-main-border-color;
+    .ms-style-editor-toolbar-left {
+        display: flex;
+    }
+    .btn-group {
+        border: 1px solid @ms-main-border-color;
+    }
+}
+
+.ms-style-rules-editor {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    .ms-style-rules-editor-head {
+        display: flex;
+        flex-wrap: wrap;
+        .ms-style-rules-editor-left {
+            flex: 1;
+            .btn-group > span {
+                display: flex;
+            }
+        }
+        .ms-style-rules-editor-right {
+            text-align: right;
+            flex: 1;
+        }
+    }
+    ul, li {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+    }
+    .ms-style-rule-head {
+        display: flex;
+        align-items: center;
+        .ms-style-rule-grab-handle {
+            cursor: move;
+            cursor: grab;
+            cursor: -moz-grab;
+            cursor: -webkit-grab;
+            &:active {
+                cursor: move;
+                cursor: grabbing;
+                cursor: -moz-grabbing;
+                cursor: -webkit-grabbing;
+            }
+        }
+        .ms-style-rule-head-info,
+        .form-group {
+            flex: 1;
+            margin-right: 8px;
+        }
+        .ms-legend-icon {
+            padding: 0 4px;
+        }
+    }
+    .ms-rule-collapse {
+        border: transparent;
+        padding: 0 4px;
+        width: 21px;
+        height: 21px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+    .ms-style-rule-body {
+        margin-top: 8px;
+    }
+    .ms-style-rule-head-tools {
+        display: flex;
+        align-items: center;
+    }
+    .ms-style-rules-editor-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .ms-style-rule {
+        padding: 8px;
+        .shadow-soft;
+        &.ms-drop-target {
+            border: 1px dashed @ms-primary;
+            .box-shadow(none);
+            > * {
+                opacity: 0;
+            }
+        }
+    }
+    .ms-style-rule + .ms-style-rule {
+        margin-top: 8px;
+    }
+    .ms-style-rule:last-child {
+        margin-bottom: 8px;
+    }
+
+    .ms-symbolizer-info {
+        padding: 4px;
+        padding-right: 0;
+        display: flex;
+        align-items: center;
+        > *:not(.ms-symbolizer-tools) {
+            flex: 1;
+        }
+    }
+    .ms-symbolizer {
+        padding: 8px;
+        border: 1px solid @ms-main-border-color;
+    }
+    .ms-symbolizer + .ms-symbolizer {
+        border-top: none;
+    }
+    .form-group {
+        margin: 0;
+    }
+}
+
+.ms-symbolizer-field-wrapper {
+    display: flex;
+    align-items: center;
+    &.ms-symbolizer-type-channel {
+        display: unset;
+    }
+}
+
+.ms-symbolizer-nested-fields {
+    width: 100%;
+    .ms-symbolizer-field-wrapper {
+        width: 100%;
+    }
+}
+
+.ms-symbolizer-field {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    min-height: 40px;
+    flex: 1;
+    .form-group {
+        margin: 0;
+    }
+    > .ms-symbolizer-value,
+    > .ms-symbolizer-label {
+        flex: 1;
+    }
+    &.ms-symbolizer-field-disabled {
+        opacity: 0.4;
+        filter: saturate(0%);
+    }
+    .ms-symbolizer-value {
+        display: flex;
+        align-items: center;
+        > *:not(.ms-symbolizer-tools) {
+            flex: 1;
+        }
+        .ms-popover {
+            text-align: center;
+        }
+
+        .btn-group span {
+            display: flex;
+            flex-wrap: wrap;
+            > .btn {
+                flex: 1;
+            }
+        }
+
+        &.ms-symbolizer-value-invalid {
+            outline: 1px solid @ms-danger;
+        }
+        &.ms-symbolizer-value-warning {
+            outline: 1px solid @ms-warning;
+        }
+    }
+}
+
+.ms-style-editor-multi-input {
+    display: flex;
+    .form-group {
+        flex: 1;
+    }
+    .dropdown-toggle {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        > * {
+            margin: 0;
+        }
+    }
+    .dropdown {
+        margin-left: 4px;
+    }
+    input[type='number'] {
+        height: 35px;
+    }
+}
+
+.ms-symbolizer-field-divider {
+    border-bottom: 1px solid @ms-main-border-color;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.ms-symbolizer {
+    padding: 8px;
+    margin: 0;
+    list-style-type: none;
+    background-color: @ms-main-bg;
+    .Select-menu-outer {
+        z-index: 2 !important;
+    }
+}
+
+.ms-mark-list {
+    background-color: @ms-main-bg;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    ul:not(.nav), ul:not(.nav) li {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+    }
+    ul:not(.nav) {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .ms-mark-preview {
+        margin: 4px;
+    }
+}
+
+.ms-mark-preview {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+}
+
+.ms-popover-overlay {
+    z-index: 4000; // over modals and dialogs
+    .ms-style-rule-scale {
+        background-color: @ms-main-bg;
+        .shadow-far;
+        width: 350px;
+        overflow: visible;
+        padding: 8px;
+    }
+    .ms-style-rule-filter {
+        background-color: @ms-main-bg;
+        font-size: @font-size-small;
+        * {
+            font-size: @font-size-small;
+        }
+        .shadow-far;
+        width: 450px;
+        height: 300px;
+        overflow: auto;
+    }
+    .ms-mark-list {
+        .shadow-far;
+        width: 256px;
+        max-height: 256px;
+    }
+}
+
+
+
+.ms-classification-popover {
+    width: 400px;
+    height: 300px;
+    padding: 8px;
+    background-color: @ms-main-bg;
+    .shadow-far;
+    overflow: auto;
+}
+
+.thema-classes-editor {
+    padding: 8px 0;
+    .form-group {
+        display: flex;
+        margin: 0;
+        align-items: center;
+        &>*:not(.dropdown.btn-group) {
+            flex: 1;
+        }
+        &>*+* {
+            margin-left: 4px;
+        }
+        .dropup.btn-group {
+            flex: none;   
+        }
+    }
+    .form-group + .form-group {
+        margin-top: 4px;
+    }
+}
+
+.ms-legend-icon {
+    display: flex;
+    align-items: center;
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+.ms-style-band-container {
+    padding: 8px;
+    .ms-style-band-editor {
+        padding: 8px;
+        .shadow-soft;
+        .ms-style-band {
+            padding: 8px;
+            border: 1px solid @ms-main-border-color;
+            .enable-band {
+                display: flex;
+                justify-content: flex-end;
+                gap: 4px;
+                padding-right: 4px;
+            }
+        }
+    }
+}
+
+.ms-classification-layer-settings {
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    height: 450px;
+    .shadow();
+    .ms-classification-layer-settings-title {
+        display: flex;
+        padding: 8px;
+        > span {
+            flex: 1;
+        }
+    }
+    .code-editor {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        .react-codemirror2 {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .CodeMirror {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .alert {
+        margin: 0;
+    }
+}

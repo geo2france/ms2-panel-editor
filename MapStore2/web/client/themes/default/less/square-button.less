@@ -1,0 +1,90 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+
+// #ms-components-theme(@theme-vars) {}
+
+// **************
+// Layout
+// **************
+.square-button {
+    // !important due to vertical btn-group eg. dashboard
+    height: @square-btn-size;
+    width: @square-btn-size;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    outline: 0;
+    padding: 0;
+    .glyphicon {
+        margin: auto;
+        font-size: @icon-size;
+    }
+    .ms-loader {
+        height: @icon-size;
+        width: @icon-size;
+        margin: auto;
+        > div {
+            margin: auto;
+            .mapstore-circle-loader-with-css-variables(@icon-size / 10, @icon-size);
+            
+        }
+    }
+}
+
+.btn-group-vertical > .square-button {
+    width: @square-btn-size;
+}
+
+.square-button-md {
+    // !important due to vertical btn-group eg. dashboard
+    &.input-group-addon {
+        display: flex;
+    }
+    &, .btn-group-vertical & {
+        height: @square-btn-medium-size;
+        width: @square-btn-medium-size;
+        padding: 0;
+        outline: 0;
+    }
+
+    .glyphicon {
+        margin: auto;
+        font-size: @icon-size-md;
+    }
+    .ms-loader {
+        height: @icon-size-md;
+        width: @icon-size-md;
+        margin: auto;
+        > div {
+            margin: auto;
+            .mapstore-circle-loader-with-css-variables(@icon-size-md/10, @icon-size-md);
+        }
+    }
+}
+
+.square-button-sm {
+     &, .btn-group-vertical & {
+        height: @square-btn-small-size;
+        width: @square-btn-small-size ;
+        padding: 0;
+        outline: 0 ;
+     }
+    .glyphicon {
+        margin: auto;
+        font-size: @icon-size-sm;
+    }
+}
+
+.dropdown.btn-group > .square-button-md+button.dropdown-toggle {
+    height: @square-btn-medium-size;
+    padding: 2px;
+}

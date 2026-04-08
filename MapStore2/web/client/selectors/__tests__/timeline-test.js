@@ -1,0 +1,307 @@
+/*
+* Copyright 2019, GeoSolutions Sas.
+* All rights reserved.
+*
+* This source code is licensed under the BSD-style license found in the
+* LICENSE file in the root directory of this source tree.
+*/
+
+import expect from 'expect';
+
+import {
+    isCollapsed,
+    hasLayers,
+    isVisible,
+    isAutoSelectEnabled,
+    currentTimeRangeSelector,
+    itemsSelector,
+    rangeDataSelector,
+    multidimOptionsSelectorCreator,
+    timelineLayersSelector,
+    timelineLayersSetting,
+    timelineLayersParsedSettings,
+    getTimeItems
+} from '../timeline';
+
+import { set, compose } from '../../utils/ImmutableUtils';
+import timeline from '../../reducers/timeline';
+import { rangeDataLoaded } from '../../actions/timeline';
+import dimension from '../../reducers/dimension';
+import { updateLayerDimensionData } from '../../actions/dimension';
+
+const T1 = '2016-01-01T00:00:00.000Z';
+const T2 = '2016-02-01T00:00:00.000Z';
+const T3 = '2016-03-01T00:00:00.000Z';
+const TEST_LAYER_ID = "TEST_LAYER";
+
+const DIMENSION_SINGLE = {
+    currentTime: T1
+};
+const DIMENSION_RANGE = {
+    ...DIMENSION_SINGLE,
+    offsetTime: T2
+};
+
+const SAMPLE_RANGE = {
+    start: DIMENSION_SINGLE.currentTime,
+    end: DIMENSION_RANGE.offsetTime
+};
+
+const TIME_DIMENSION_DATA = {
+    source: {
+        type: "multidim-extension",
+        url: "FAKE"
+    },
+    name: "time",
+    dimension: `${T1}--${T2}`
+};
+// sample timeline state with histogram
+const TIMELINE_STATE_HISTOGRAM = timeline(undefined, rangeDataLoaded(
+    TEST_LAYER_ID,
+    SAMPLE_RANGE,
+    {
+        values: Array(31).fill().map((x, i) => i),
+        domain: `${DIMENSION_RANGE.offsetTime}/${DIMENSION_RANGE.currentTime}/1D`
+    },
+    undefined
+));
+// sample timeline state with histogram
+const TIMELINE_STATE_VALUES = timeline(undefined, rangeDataLoaded(
+    TEST_LAYER_ID,
+    SAMPLE_RANGE,
+    // sample with daily histogram of values 1,2,3,..., 31
+    {
+        values: Array(31).fill().map((x, i) => i),
+        domain: `${DIMENSION_RANGE.offsetTime}/${DIMENSION_RANGE.currentTime}/1D`
+    },
+    { values: [T1, T2, T3] }
+));
+
+// sample dimension state for TEST_LAYER
+const DIMENSION_STATE = dimension(undefined, updateLayerDimensionData(TEST_LAYER_ID, "time", TIME_DIMENSION_DATA));
+
+const LAYERS_STATE = {
+    flat: [{
+        id: TEST_LAYER_ID
+    }]
+};
+
+const LAYERS_WITH_TIME = {
+    flat: [{
+        id: TEST_LAYER_ID,
+        dimensions: [TIME_DIMENSION_DATA]
+    }]
+};
+const SAMPLE_STATE_HISTOGRAM = {
+    layers: LAYERS_STATE,
+    dimension: DIMENSION_STATE,
+    timeline: TIMELINE_STATE_HISTOGRAM
+};
+
+const SAMPLE_STATE_DOMAIN_VALUES = {
+    layers: LAYERS_STATE,
+    dimension: DIMENSION_STATE,
+    timeline: TIMELINE_STATE_VALUES
+};
+const SHOW_HIDDEN_LAYER = { showHiddenLayers: true };
+
+describe('timeline selector', () => {
+    it('isCollapsed', () => {
+        expect(isCollapsed({})).toBeFalsy();
+        expect(isCollapsed({ timeline: { settings: {} } })).toBeFalsy();
+        expect(isCollapsed({ timeline: { settings: { collapsed: true } } })).toBe(true);
+    });
+    it('hasLayers', () => {
+        expect(hasLayers({})).toBe(false);
+        expect(hasLayers({ timeline: {settings: SHOW_HIDDEN_LAYER}, layers: LAYERS_WITH_TIME, dimension: DIMENSION_STATE })).toBe(true);
+    });
+    it('isVisible', () => {
+        expect(isVisible({})).toBe(false);
+        expect(isVisible({ timeline: { settings: {} } })).toBe(false);
+        // collapsed, no time data
+        expect(isVisible({ timeline: { settings: { collapsed: true } } })).toBe(false);
+        // not collapsed, with time data
+        expect(isVisible({ timeline: { ...TIMELINE_STATE_VALUES, settings: { collapsed: false, ...SHOW_HIDDEN_LAYER }}, layers: LAYERS_WITH_TIME })).toBe(true);
+        // collapsed with time data
+        expect(isVisible({ timeline: { ...TIMELINE_STATE_VALUES, settings: { collapsed: true, ...SHOW_HIDDEN_LAYER }}, layers: LAYERS_WITH_TIME })).toBe(false);
+    });
+    it('isAutoSelectEnabled', () => {
+        expect(isAutoSelectEnabled({})).toBeFalsy();
+        expect(isAutoSelectEnabled({ timeline: { settings: {} } })).toBeFalsy();
+        expect(isAutoSelectEnabled({ timeline: { settings: { autoSelect: true } } })).toBe(true);
+    });
+    it('currentTimeRangeSelector', () => {
+        expect(currentTimeRangeSelector({
+            dimension: DIMENSION_RANGE
+        })).toEqual(SAMPLE_RANGE);
+    });
+    it('rangeSelector', () => {
+        expect(rangeDataSelector(SAMPLE_STATE_HISTOGRAM)[TEST_LAYER_ID]).toExist();
+    });
+    describe('timelineLayersSelector', () => {
+        const dimensions = [{ source: { type: 'multidim-extension', url: 'some url'}, name: 'time'}];
+        const state = {...SAMPLE_STATE_DOMAIN_VALUES, layers: {flat: [
+            {id: "test", visibility: true, dimensions},
+            {id: "test2", visibility: false, dimensions }]}
+        };
+        it('timelineLayersSelector with default settings', ()=>{
+            expect(timelineLayersSelector(state).length).toBe(2);
+        });
+        it('timelineLayersSelector with showHiddenLayers', ()=>{
+            const _state = {...state, timeline: {layers: state.layers.flat, settings: SHOW_HIDDEN_LAYER}};
+            expect(timelineLayersSelector(_state).length).toBe(2);
+        });
+        it('timelineLayersSelector with time layer settings', ()=>{
+            const _state = {...state, timeline: {...state, settings: SHOW_HIDDEN_LAYER, layers: [{"test": { hideInTimeline: true }}]}};
+            expect(timelineLayersSelector(_state).length).toBe(1);
+        });
+    });
+    it('timelineLayersSetting', () => {
+        const layers = [{ [TEST_LAYER_ID]: { hideInTimeline: true}}];
+        const _state = {...LAYERS_WITH_TIME, timeline: {settings: SHOW_HIDDEN_LAYER, layers}};
+        expect(timelineLayersSetting(_state).length).toBe(1);
+        expect(timelineLayersSetting(_state)).toEqual(layers);
+    });
+    it('timelineLayersParsedSettings', () => {
+        const layers = [{ [TEST_LAYER_ID]: { hideInTimeline: true}}];
+        const _state = {...LAYERS_WITH_TIME, timeline: {settings: SHOW_HIDDEN_LAYER, layers}};
+        const timelayer = timelineLayersParsedSettings(_state);
+        expect(timelayer.length).toBe(1);
+        expect(timelayer[0].id).toEqual(TEST_LAYER_ID);
+        expect(timelayer[0].hideInTimeline).toEqual(true);
+    });
+    it('getTimeItems should give priority to rangeData', () => {
+        const data = {
+            source: {
+                type: 'multidim-extension',
+                version: '1.2',
+                url: '/geoserver/gwc/service/wmts'
+            },
+            name: 'time',
+            domain: '2022-06-01T00:00:00.000Z/2023-06-01T00:00:00.000Z,2023-01-01T00:00:00.000Z/2023-06-01T00:00:00.000Z,2023-01-01T00:00:00.000Z/2023-12-31T00:00:00.000Z'
+        };
+        const range = {
+            start: '2022-06-01T00:00:00.000Z',
+            end: '2024-01-09T11:07:53.218Z'
+        };
+        let timeItems = getTimeItems(data, range);
+        expect(timeItems.length).toBe(3);
+        const rangeData = {
+            range: {
+                start: '2022-06-01T00:00:00.000Z',
+                end: '2024-01-09T11:07:53.218Z'
+            },
+            histogram: {
+                values: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                domain: '2022-06-01T00:00:00.000Z/2023-06-01T00:00:00.000Z/PT704H'
+            },
+            domain: {
+                values: [
+                    '2022-06-01T00:00:00.000Z/2023-06-01T00:00:00.000Z'
+                ]
+            }
+        };
+        timeItems = getTimeItems(data, range, rangeData);
+        expect(timeItems.length).toBe(1);
+    });
+    it('getTimeItems should give priority to rangeData even when both domain and histogram are empty (so no data in the current viewport, with filter active)', () => {
+        const data = {
+            source: {
+                type: 'multidim-extension',
+                version: '1.2',
+                url: '/geoserver/gwc/service/wmts'
+            },
+            name: 'time',
+            domain: '2022-06-01T00:00:00.000Z/2023-06-01T00:00:00.000Z,2023-01-01T00:00:00.000Z/2023-06-01T00:00:00.000Z,2023-01-01T00:00:00.000Z/2023-12-31T00:00:00.000Z'
+        };
+        const range = {
+            start: '2022-06-01T00:00:00.000Z',
+            end: '2024-01-09T11:07:53.218Z'
+        };
+        let timeItems = getTimeItems(data, range);
+        expect(timeItems.length).toBe(3);
+        const rangeData = {
+            range: {
+                start: '2022-06-01T00:00:00.000Z',
+                end: '2024-01-09T11:07:53.218Z'
+            }
+        };
+        timeItems = getTimeItems(data, range, rangeData);
+        expect(timeItems.length).toBe(0);
+    });
+    it('itemsSelector', () => {
+        const histogramItems = itemsSelector(SAMPLE_STATE_HISTOGRAM);
+        expect(histogramItems.length).toBe(31);
+        // test histogram items generation
+        histogramItems.map( (item, index) => {
+            expect(item.type).toBe("range");
+            expect(item.count).toBe(index);
+            expect(item.group).toBe(TEST_LAYER_ID);
+            expect(item.className).toBe('histogram-item');
+            // create a div with height as value % of max, with value written inside it.
+            expect(item.content).toEqual(`<div><div class="histogram-box" style="height: ${(100 * item.count / 30)}%"></div> <span class="histogram-count">${item.count}</span></div>`);
+        });
+        const domainValuesItems = itemsSelector(SAMPLE_STATE_DOMAIN_VALUES);
+        expect(domainValuesItems.length).toBe(3);
+        // test domain values items generation
+        domainValuesItems.map((item) => {
+            expect(item.type).toBe("point");
+            expect(item.group).toBe(TEST_LAYER_ID);
+            expect(item.start).toExist();
+            expect(item.end).toEqual(item.start);
+            expect(item.count).toNotExist();
+            expect(item.className).toNotExist();
+            expect(item.content).toBe(" ");
+        });
+        // TODO: test items from static time values inside layer, not fully supported yet.
+    });
+    describe('multidimOptionsSelectorCreator', () => {
+        const STATE_WITH_MAP = {
+            ...SAMPLE_STATE_DOMAIN_VALUES,
+            map: {
+
+                present: {
+                    projection: "EPSG:4326",
+                    bbox: {
+                        bounds: {
+                            minx: -20,
+                            miny: -20,
+                            maxx: 20,
+                            maxy: 20
+                        },
+                        crs: "EPSG:4326"
+                    }
+                }
+            }
+        };
+
+        it('mapSync on, v 1.0 - no space dimension', () => {
+            const opts = multidimOptionsSelectorCreator(TEST_LAYER_ID)(set(
+                'timeline.settings.mapSync', true
+            )(STATE_WITH_MAP));
+            expect(opts).toEqual({});
+        });
+        it('mapSync on v 1.0 - with space dimension', () => {
+            const opts = multidimOptionsSelectorCreator(TEST_LAYER_ID)(
+                compose(
+                    set('timeline.settings.mapSync', true),
+                    set(`dimension.data.space.${TEST_LAYER_ID}.domain.CRS`, "EPSG:4326")
+                )(STATE_WITH_MAP));
+            // CRS may be ignored, bbox referred to tileMatrixSet
+            expect(opts).toEqual({ bbox: '-20,-20,20,20', crs: 'EPSG:4326' });
+        });
+        it('mapSync on v 1.2', () => {
+            const opts = multidimOptionsSelectorCreator(TEST_LAYER_ID)(
+                compose(
+                    set('timeline.settings.mapSync', true),
+                    set(`dimension.data.time.${TEST_LAYER_ID}.source.version`, "1.2")
+                )(STATE_WITH_MAP));
+            expect(opts).toEqual({ bbox: '-20,-20,20,20,EPSG:4326' });
+        });
+        it('mapSync off', () => {
+            const opts = multidimOptionsSelectorCreator(TEST_LAYER_ID)(STATE_WITH_MAP);
+            expect(opts).toEqual({});
+        });
+    });
+
+});

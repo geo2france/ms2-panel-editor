@@ -1,0 +1,29 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+    #mapstore-shapefile-upload {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+}
+
+// **************
+// Layout
+// **************
+#mapstore-shapefile-upload {
+    min-width: 360px;
+    z-index: 100;
+    position: absolute;
+    overflow: visible;
+    top: 100px;
+    width: 50%;
+    left: ~"calc(50% - 150px)";
+}

@@ -1,0 +1,132 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+    .mapstore-map-footer {
+        .color-var(@theme-vars[main-color]);
+        .background-color-var(@theme-vars[main-bg]);
+
+        .map-footer-btn {
+            span {
+                .color-var(@theme-vars[primary-contrast]);
+            }
+        }
+
+        .leaflet-control-attribution {
+            background-color: transparent;
+            .color-var(@theme-vars[main-color]);
+        }
+
+        .ol-attribution.ol-uncollapsible {
+            background-color: transparent;
+            .color-var(@theme-vars[main-color]);
+        }
+        .cesium-credit-textContainer,
+        .cesium-credit-expand-link {
+            .color-var(@theme-vars[main-color]);
+            text-shadow: none;
+        }
+    }
+}
+
+// **************
+// Layout
+// **************
+.mapstore-map-footer {
+
+    position: absolute;
+    bottom: 0;
+    height: 30px;
+    width: 100%;
+    z-index: 1031;
+    -webkit-box-shadow: 3px 0px 6px rgba(0, 0, 0, 0.12), 4px 0 8px rgba(0, 0, 0, 0.24);
+	-moz-box-shadow: 3px 0px 6px rgba(0, 0, 0, 0.12), 4px 0 8px rgba(0, 0, 0, 0.24);
+	box-shadow: 3px 0px 6px rgba(0, 0, 0, 0.12), 4px 0 8px rgba(0, 0, 0, 0.24);
+    & > div {
+        float: right;
+    }
+    #footer-attribution-container {
+        float: none;
+    }
+    .map-footer-btn {
+        height: 25px;
+        width: 25px !important;
+        padding: 0;
+        margin-right: 5px;
+        margin-top: 2px;
+    }
+
+    .leaflet-control-attribution {
+        display: flex;
+        max-height: 2.6em;
+        img {
+            max-height: 2.6em;
+        }
+        position: absolute;
+        width: 50%;
+        height: 30px;
+        font-size: 11px;
+        background-color: transparent;
+        overflow: hidden;
+        padding-right: 100px;
+   }
+
+   .ol-attribution.ol-uncollapsible {
+        ul {
+            display: flex;
+            li {
+                margin: auto 2px;
+            }
+        }
+       max-height: 2.6em;
+       img {
+           max-height: 2.6em;
+       }
+       display: block;
+       max-width: none;
+       position: absolute;
+       left: 0;
+       height: 30px;
+       text-align: left;
+       background-color: transparent;
+       width: 50%;
+       overflow: hidden;
+       font-size: 11px;
+   }
+
+   .dropup {
+        z-index: 1100;
+        .dropdown-menu {
+            margin-right: 5px;
+        }
+    }
+}
+
+.ms-prj-selector {
+    border: none;
+
+    .dropdown-toggle-primary {
+        box-shadow: none;
+        border-width: 1px;
+        border: transparent;
+    }
+
+    .ms-prj-header {
+        font-size: @font-size-small;
+        .shadow-soft;
+        font-weight: bold;
+        z-index: 10;
+    }
+    .dropdown-menu {
+        border: none;
+        .shadow;
+    }
+}

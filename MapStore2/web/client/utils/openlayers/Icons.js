@@ -1,0 +1,118 @@
+/*
+ * Copyright 2017, GeoSolutions Sas.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+import MarkerUtils from '../MarkerUtils';
+
+import isArray from 'lodash/isArray';
+import isNumber from 'lodash/isNumber';
+import isNil from 'lodash/isNil';
+
+import {Text, Fill, Style, Icon} from 'ol/style';
+import highlightIcon from './highlight.png';
+
+const markers = MarkerUtils.markers.extra;
+const extraMarker = markers.icons[0];
+const extraMarkerShadow = markers.icons[1];
+const anchorYSize = markers.size[1];
+
+const glyphs = MarkerUtils.getGlyphs('fontawesome');
+
+
+const getHighlightStyle = ({highlight, rotation = 0}, size) => (highlight ? [new Style({
+    image: new Icon({
+        anchor: [ 0.5, size ],
+        rotation,
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        src: highlightIcon,
+        scale: 0.5
+    })
+})] : []);
+
+const getText = (options, rotation) => {
+    let text = glyphs?.[options?.style?.iconGlyph];
+    let font = 'FontAwesome';
+    let offsetYMultiplier = 2;
+    if (options?.style?.iconText) { // iconText is used to specify number in place of glyph
+        text = options.style.iconText;
+        font = 'sans-serif';
+        offsetYMultiplier = 1.6;
+    }
+    return new Text({
+        rotation,
+        text,
+        font: `14px ${font}`,
+        offsetY: (-anchorYSize * offsetYMultiplier) / 3,
+        fill: new Fill({color: '#FFFFFF'})
+    });
+};
+
+export default {
+    extra: {
+        getIcon: (options = {}) => {
+            const rotation = !isNil(options.style && options.style.rotation) ? options.style.rotation : 0;
+            return [ new Style({
+                image: new Icon(({
+                    rotation,
+                    anchor: [0.5, 1],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'fraction',
+                    src: extraMarkerShadow,
+                    size: markers.shadowSize
+                }))
+            }), new Style({
+                image: new Icon({
+                    rotation,
+                    src: extraMarker,
+                    anchor: [0.5, 1],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'fraction',
+                    size: markers.size,
+                    offset: [markers.colors.indexOf(options.style.iconColor || 'blue') * markers.size[0], markers.shapes.indexOf(options.style.iconShape || 'circle') * markers.size[1]]
+                }),
+                text: getText(options, rotation)
+            })].concat(getHighlightStyle(options.style, (anchorYSize + 15) * 2));
+        }
+    },
+    standard: {
+        getIcon: ({style, iconAnchor }) => {
+            const rotation = !isNil(style && style.rotation) ? style.rotation : 0;
+            const anchor = style.iconAnchor || iconAnchor;
+            let markerStyle = [new Style({
+                image: new Icon(({
+                    anchor: anchor || [0.5, 1],
+                    anchorXUnits: style.anchorXUnits || (( anchor || anchor === 0) ? 'pixels' : 'fraction'),
+                    anchorYUnits: style.anchorYUnits || (( anchor || anchor === 0) ? 'pixels' : 'fraction'),
+                    size: isArray(style.size) ? style.size : isNumber(style.size) ? [style.size, style.size] : undefined,
+                    rotation,
+                    anchorOrigin: style.anchorOrigin || "top-left",
+                    src: style.iconUrl || style.symbolUrlCustomized || style.symbolUrl
+                }))
+            })];
+            if (style.shadowUrl) {
+                markerStyle = [new Style({
+                    image: new Icon({
+                        anchor: [12, 41],
+                        anchorXUnits: 'pixels',
+                        anchorYUnits: 'pixels',
+                        src: style.shadowUrl
+                    })
+                }), markerStyle[0]];
+            }
+            let size = isArray(style.size) ? style.size[1] : isNumber(style.size) ? style.size : 0;
+            size = size > 32 ? size + (size * 0.75) : (anchorYSize + 10);
+            return markerStyle.concat(getHighlightStyle(style, size));
+        }
+    },
+    html: {
+        getIcon: () => {
+            // NOT implemented yet
+            return null;
+        }
+    }
+};

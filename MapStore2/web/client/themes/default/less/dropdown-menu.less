@@ -1,0 +1,76 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+
+// #ms-components-theme(@theme-vars) {}
+
+// **************
+// Layout
+// **************
+
+.first-selectize {
+    padding-right: 10px;
+    padding-left: 0px;
+}
+
+.second-selectize {
+    padding: 0;
+}
+
+.dropdown-menu .glyphicon {
+    font-size: @icon-size-md;
+    margin-right: 15px;
+    vertical-align: middle;
+}
+
+.navbar-dx .dropdown-menu,
+.navbar-home .dropdown-menu,
+#mapstore-sidebar-menu .dropdown-menu {
+    text-transform: uppercase;
+}
+
+.navbar-dx .dropdown-menu li a,
+.navbar-home .dropdown-menu li a {
+    max-height: @square-btn-size;
+    outline: none;
+}
+
+.navbar-dx .dropdown-menu li a span {
+    position: relative;
+}
+
+#mapstore-navbar-container .dropdown-menu {
+    >.btn-group {
+        width: 100%;
+
+        >.btn {
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            width: 100%;
+
+            a {
+                width: 100%;
+                display: block;
+                text-align: left;
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+#mapstore-burger-menu {
+    .dropdown-menu {
+        z-index: 1040;
+        overflow-y: auto;
+        max-height: 80vh;
+    }
+}

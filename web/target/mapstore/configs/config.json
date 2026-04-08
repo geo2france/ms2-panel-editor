@@ -1,0 +1,165 @@
+{
+  "version": 2,
+  "map": {
+    "center": {
+      "x": 2.3026713910158825,
+      "y": 48.86684655591257,
+      "crs": "EPSG:4326"
+    },
+    "maxExtent": [
+      -20037508.34,
+      -20037508.34,
+      20037508.34,
+      20037508.34
+    ],
+    "projection": "EPSG:900913",
+    "units": "m",
+    "zoom": 14,
+    "mapOptions": {},
+    "layers": [
+      {
+        "id": "mapnik__0",
+        "group": "background",
+        "source": "osm",
+        "name": "mapnik",
+        "title": "Open Street Map",
+        "type": "osm",
+        "visibility": true,
+        "singleTile": false,
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "useForElevation": false,
+        "hidden": false,
+        "expanded": false
+      },
+      {
+        "id": "test:avisee_projets__e3201940-123e-11f1-aaae-0945f3b71d80",
+        "format": "image/png",
+        "search": {
+          "url": "http://localhost/geoserver/wfs",
+          "type": "wfs"
+        },
+        "name": "test:avisee_projets",
+        "description": "avisee_projets",
+        "title": "avisee_projets",
+        "type": "wms",
+        "url": "http://localhost/geoserver/wms",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "2.2298046870725514",
+            "miny": "48.8369125364533",
+            "maxx": "2.359516168563612",
+            "maxy": "48.872256421070354"
+          }
+        },
+        "visibility": true,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:3785": true,
+          "EPSG:3857": true,
+          "EPSG:4269": true,
+          "EPSG:4326": true,
+          "EPSG:102113": true,
+          "EPSG:900913": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "featureInfo": null,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "version": "1.3.0",
+        "expanded": false,
+        "params": {}
+      },
+      {
+        "id": "test:avis_urbanisme__381c62d0-285d-11f1-8b16-1f9cee0e9475",
+        "format": "image/png",
+        "search": {
+          "url": "http://localhost/geoserver/wfs",
+          "type": "wfs"
+        },
+        "name": "test:avis_urbanisme",
+        "description": "avis_urbanisme",
+        "title": "avis_urbanisme",
+        "type": "wms",
+        "url": "http://localhost/geoserver/csw",
+        "bbox": {
+          "crs": "EPSG:4326",
+          "bounds": {
+            "minx": "-6.514504900966801",
+            "miny": "-5.983856309384572",
+            "maxx": "2.80817547230522",
+            "maxy": "48.96824920767815"
+          }
+        },
+        "visibility": true,
+        "singleTile": false,
+        "allowedSRS": {
+          "EPSG:3785": true,
+          "EPSG:3857": true,
+          "EPSG:4269": true,
+          "EPSG:4326": true,
+          "EPSG:102113": true,
+          "EPSG:900913": true
+        },
+        "dimensions": [],
+        "hideLoading": false,
+        "handleClickOnLayer": false,
+        "featureInfo": null,
+        "catalogURL": null,
+        "useForElevation": false,
+        "hidden": false,
+        "version": "1.3.0",
+        "expanded": false,
+        "params": {}
+      }
+    ],
+    "groups": [
+      {
+        "id": "Default",
+        "title": "Default",
+        "expanded": true,
+        "visibility": true
+      }
+    ],
+    "backgrounds": [],
+    "bookmark_search_config": {}
+  },
+  "catalogServices": {
+    "services": {
+      "gs_local": {
+        "url": "http://localhost/geoserver/csw",
+        "type": "wms",
+        "title": "local gs",
+        "autoload": true
+      }
+    },
+    "selectedService": "gs_local"
+  },
+  "widgetsConfig": {
+    "layouts": {
+      "md": []
+    }
+  },
+  "mapInfoConfiguration": {
+    "trigger": "click"
+  },
+  "dimensionData": {},
+  "timelineData": {
+    "snapRadioButtonEnabled": false
+  },
+  "featureGrid": {},
+  "toc": {},
+  "playback": {
+    "settings": {
+      "timeStep": 1,
+      "stepUnit": "days",
+      "frameDuration": 2,
+      "following": true
+    }
+  }
+}

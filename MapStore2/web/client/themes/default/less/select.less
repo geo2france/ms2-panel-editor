@@ -1,0 +1,187 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+
+#ms-components-theme(@theme-vars) {
+    .rw-widget {
+        .color-var(@theme-vars[primary], true);
+        .background-color-var(@theme-vars[main-bg], true);
+        .border-color-var(@theme-vars[main-border-color], true);
+        &.rw-state-disabled {
+            .color-var(@theme-vars[disabled-color], true);
+            .background-color-var(@theme-vars[disabled-bg], true);
+            .border-color-var(@theme-vars[main-border-color], true);
+        }
+    }
+
+    .rw-list-option:hover {
+        .color-var(@theme-vars[primary-contrast], true);
+        .background-color-var(@theme-vars[primary], true);
+    }
+    .rw-list-option.is-selected{
+        .background-color-var(@theme-vars[primary], true);
+        .color-var(@theme-vars[primary-contrast], true);
+    }
+    .rw-state-focus {
+        .color-var(@theme-vars[primary], true);
+        .border-color-var(@theme-vars[focus-color], true);
+    }
+
+    .rw-i {
+        .color-var(@theme-vars[primary], true);
+    }
+
+    .rw-placeholder {
+        .color-var(@theme-vars[main-color], true);
+        .background-color-var(@theme-vars[main-bg], true);
+    }
+
+    .rw-input {
+        .color-var(@theme-vars[main-color]);
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    .rw-filter-input {
+        .border-color-var(@theme-vars[primary], true);
+    }
+
+    .rw-select {
+        .border-left-color-var(@theme-vars[main-border-color], true);
+    }
+
+    .rw-combo-clearable {
+        .background-color-var(@theme-vars[main-bg], true);
+    }
+
+    .rw-combo-clear {
+        .color-var(@theme-vars[primary], true);
+    }
+
+    .rw-combo-clearable.disabled .rw-combo-clear {
+        color: fadeout(@ms-primary, 30) !important;
+    }
+
+    select.form-control {
+        .border-color-var(@theme-vars[main-border-color]);
+
+        option {
+            .color-var(@theme-vars[main-variant-color]);
+            .background-color-var(@theme-vars[main-variant-bg]);
+        }
+    }
+
+    select {
+        .background-color-var(@theme-vars[main-bg]);
+        .border-left-color-var(@theme-vars[main-border-color]);
+
+        option {
+            .color-var(@theme-vars[main-variant-color]);
+            .background-color-var(@theme-vars[main-variant-bg]);
+        }
+    }
+
+    #mapstore-scalebox {
+        select {
+            .color-var(@theme-vars[main-variant-color]);
+            .background-color-var(@theme-vars[main-variant-bg]);
+        }
+
+        option {
+            .color-var(@theme-vars[main-color]);
+            .background-color-var(@theme-vars[main-bg]);
+        }
+    }
+}
+
+// **************
+// Layout
+// **************
+.rw-widget {
+    border-width: 1px  !important;
+    border-style: solid !important;
+}
+
+.rw-list-option:focus {
+    outline: none;
+}
+
+.rw-state-focus {
+    background-color: transparent !important;
+    border-width: 1px  !important;
+    border-style: solid !important;
+    outline: none;
+}
+
+.rw-filter-input {
+    border-width: 1px  !important;
+    border-style: solid !important;
+}
+
+.rw-select {
+    border-left-width: 1px  !important;
+    border-left-style: solid !important;
+}
+
+.rw-combo-clearable input.rw-input {
+    -webkit-box-shadow: inset 0 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.075);
+}
+
+.rw-combo-clearable button {
+    border: none !important;
+    -webkit-box-shadow: inset 0 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.075);
+}
+
+.rw-combo-clear .hidden {
+    display: none;
+}
+
+.rw-combo-clear {
+    position: relative;
+    float: right;
+    bottom: 2em;
+    right: 2.3em;
+    cursor: pointer;
+}
+
+.rw-combo-clearable.disabled .rw-combo-clear {
+    cursor: not-allowed;
+}
+
+select.form-control {
+    border-width: 1px !important;
+    border-style: solid !important;
+}
+
+select {
+    border-width: 1px  !important;
+    border-style: solid !important;
+}
+
+#mapstore-scalebox {
+    select {
+        margin-top: 2px;
+        border: none;
+    }
+
+    label {
+        height: 30px;
+        font-weight: normal;
+        font-size: @font-size-small;
+        margin-right: 5px;
+    }
+    .form-control {
+        height: 25px;
+        padding: 0 0 0 4px;
+        margin-bottom: 17px;
+    }
+}

@@ -1,0 +1,73 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+    .ms2-loading-mask {
+        .ms2-mask {
+            .background-color-var(@theme-vars[main-bg]);
+        }
+
+        .empty-state-container {
+            .color-var(@theme-vars[main-color]);
+        }
+    }
+}
+
+// **************
+// Layout
+// **************
+.ms2-loading-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    &.ms2-mask-empty {
+        display: none;
+    }
+    .ms2-mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .empty-state-container {
+        display: flex;
+        flex-direction: column;
+        font-size: @font-size-large * 0.9;
+        .empty-state-main-view {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            .empty-state-image {
+                width: 128px;
+                margin: 0 auto;
+            }
+            .empty-state-description {
+                ul {
+                    display: block;
+                    width: 400px;
+                    text-align: left;
+                    margin: 0 auto;
+                }
+                @media (max-width: 410px) {
+                    ul {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+        .empty-state-content {
+            margin-bottom: auto;
+        }
+    }
+}

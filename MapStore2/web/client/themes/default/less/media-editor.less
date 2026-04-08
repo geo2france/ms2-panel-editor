@@ -1,0 +1,172 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+    .ms-mediaEditor {
+        .ms2-border-layout-body {
+            .ms-mediaSelector {
+                .background-color-var(@theme-vars[main-bg]);
+            }
+        }
+    }
+}
+
+// **************
+// Layout
+// **************
+.media-editor-modal {
+    z-index: 2900 !important;
+}
+.ms-mediaEditor {
+    .empty-state-container {
+        position: relative;
+        .empty-state-main-view .empty-state-description {
+            text-align: center;
+        }
+    }
+    .ms-media-preview > div {
+        z-index: 0;
+    }
+    /* render the scrollbar on the list */
+    .ms-media-list {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        .ms-media-toolbar {
+            padding: 8px;
+            padding-bottom: 0px;
+            text-align: center;
+        }
+        .mapstore-filter.form-group {
+            margin: 0;
+            padding: 8px;
+        }
+        .ms-media-list-pagination {
+            display: flex;
+            padding: 8px;
+            & > div:first-child {
+                flex: 1;
+            }
+        }
+        .ms-media-list-loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 2;
+        }
+        .msSideGrid {
+            position: relative;
+            overflow: auto;
+            margin: 0;
+            width: 100%;
+            flex: 1;
+            .items-list {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+                padding: 0 8px;
+                padding-bottom: 16px;
+            }
+            .row {
+                margin: 0;
+            }
+            .col-xs-12 {
+                padding: 0;
+            }
+            .col-xs-12:last-child {
+                margin-bottom: 15px;
+            }
+        }
+        .msEmptyListMessage {
+            position: relative;
+            overflow: auto;
+            margin: 0;
+            width: 100%;
+            flex: 1;
+            padding: 2px 5px;
+            text-align: center;
+        }
+        .map-catalog {
+            .catalog-form {
+                padding-top: 15px;
+            }
+            .ms2-border-layout-body {
+                .ms2-border-layout-content {
+                    width: 100%;
+                }
+            }
+            .msSideGrid {
+                .items-list {
+                    position: relative;
+                }
+            }
+        }
+    }
+    .ms2-border-layout-body {
+        .ms-mediaSelector {
+            z-index: 1;
+            order: -1;
+            width: 300px;
+        }
+    }
+    // move service selector in top right corner
+    .ms-border-layout-header {
+        .shadow-soft();
+        .ms-mediaEditor-services {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 240px; // todo think about this
+            display: flex;
+            align-items: center;
+
+            .Select.Select--single {
+                flex: 5;
+            }
+            .ms-mediaEditor-label {
+                flex: 1;
+                padding-right: 4px;
+            }
+        }
+    }
+    .ms-mapForm {
+        .dropzone:hover .dropzone-content-image-added {
+            visibility: visible;
+            z-index: 2;
+            transition: none;
+            background: rgba(0,0,0,.7);
+        }
+
+        .dropzone .dropzone-content-image {
+            padding-top: 40px;
+            font-size: unset;
+            transition: none;
+            text-align: center;
+            display: flex;
+            justify-content: flex-end;
+            flex-direction: column;
+        }
+    }
+    .catalog-footer {
+        display: flex;
+        text-align: center;
+        padding-top: 5px;
+        justify-content: center;
+        align-items: center;
+        height: 42px;
+    }
+}

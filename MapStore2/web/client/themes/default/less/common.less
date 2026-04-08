@@ -1,0 +1,447 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+
+// **************
+// Theme
+// **************
+#ms-components-theme(@theme-vars) {
+
+    .option-icon {
+        .color-var(@theme-vars[primary]);
+    }
+
+    .viewer {
+        .background-color-var(@theme-vars[main-bg], true);
+    }
+
+    textarea {
+        .color-var(@theme-vars[main-variant-color]);
+        .background-color-var(@theme-vars[main-variant-bg]);
+        .border-color-var(@theme-vars[main-border-color]);
+    }
+
+    .portal-dialog {
+        .background-color-var(@theme-vars[main-bg], true);
+    }
+
+    .sidepanel-content {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    .m-header {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    .ms2-border-layout-content {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+
+    div#sync-popover.popover {
+        h3 {
+            .color-var(@theme-vars[primary-contrast]);
+            .background-color-var(@theme-vars[primary]);
+        }
+    }
+
+    .error-container {
+        .runtime-error-message {
+            .color-var(@theme-vars[main-variant-color]);
+            .background-color-var(@theme-vars[main-variant-bg]);
+
+            &.inverse {
+                .color-var(@theme-vars[main-variant-bg]);
+                .background-color-var(@theme-vars[main-variant-color]);
+            }
+
+            .refresh-icon:hover {
+                .color-var(@theme-vars[primary]);
+            }
+        }
+    }
+    .input-group-addon-success {
+        .background-color-var(@theme-vars[success]);
+        .color-var(@theme-vars[primary-contrast]);
+    }
+    .DraftEditor-editorContainer,
+    .template-html-renderer,
+    .ms-template-viewer
+    {
+        img::before {
+            .background-color-var(@theme-vars[main-bg]);
+        }
+    }
+    .form-group-flex {
+        &.has-success {
+            .Select-control {
+                .border-color-var(@theme-vars[success], true);
+            }
+        }
+        &.has-error {
+            .Select-control {
+                .border-color-var(@theme-vars[danger], true);
+            }
+        }
+        &.has-warning {
+            .Select-control {
+                .border-color-var(@theme-vars[warning], true);
+            }
+        }
+    }
+
+}
+
+// **************
+// Layout
+// **************
+.shadow {
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.24);
+}
+
+.shadow-inset {
+    -webkit-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.12), inset 0 4px 8px rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.12), inset 0 4px 8px rgba(0, 0, 0, 0.24);
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.12), inset 0 4px 8px rgba(0, 0, 0, 0.24);
+}
+
+.shadow-soft {
+    -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.shadow-soft-inset {
+    -webkit-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.06), inset 0 4px 8px rgba(0, 0, 0, 0.12);
+    -moz-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.06), inset 0 4px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.06), inset 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.shadow-far {
+    -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    -moz-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.no-border {
+    border: none !important;
+    border-top: none !important;
+}
+
+.no-border:active,
+.no-border:active:focus,
+.no-border:focus,
+.no-border:hover {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    outline: none;
+}
+
+.option-icon {
+    font-size: @font-size-base;
+    margin-right: @padding-left-square;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+}
+
+.text-border (@color: #fff) {
+    text-shadow: 2px 0 0 @color, -2px 0 0 @color, 0 2px 0 @color, 0 -2px 0 @color, 1px 1px @color, -1px -1px 0 @color, 1px -1px 0 @color, -1px 1px 0 @color;
+}
+
+.btn {
+    outline: none !important;
+}
+
+textarea {
+    outline: none !important;
+}
+
+.sidepanel-content {
+    .sidebar-title {
+        font-size: 20px;
+        margin: 11px 11px 11px 20px;
+    }
+}
+
+.toolbar-btn-transition-enter {
+    width: 0;
+    padding-left: 0;
+    padding-right: 0;
+    overflow: hidden;
+
+    &.toolbar-btn-transition-enter-active {
+        .square-btn-size {
+            width: @square-btn-medium-size;
+        }
+
+        transition: all 0.3s;
+        padding-left: @padding-left-square-md;
+        padding-right: @padding-left-square-md;
+        overflow: hidden;
+    }
+}
+
+.toolbar-btn-transition-leave {
+    .square-btn-size {
+        width: @square-btn-medium-size;
+    }
+
+    transition: all 0.3s;
+    padding-left: @padding-left-square-md;
+    padding-right: @padding-left-square-md;
+    overflow: hidden;
+
+    &.toolbar-btn-transition-leave-active {
+        width: 0;
+        padding-left: 0;
+        padding-right: 0;
+        overflow: hidden;
+    }
+}
+
+.empty-state-container {
+    text-align: center;
+    width: 100%;
+
+    .empty-state-main-view {
+        opacity: 0.7;
+
+        .empty-state-image {
+            opacity: 0.3;
+            width: 40%;
+            margin-left: 30%;
+            text-align: center;
+        }
+
+        .empty-state-description {
+            text-align: justify;
+            text-justify: inter-word;
+            padding: 10px;
+        }
+    }
+}
+
+.mapstore-filter {
+    &.form-group {
+        margin: ((@square-btn-size - @square-btn-medium-size)/2) 0 0 0;
+
+        .input-group {
+            height: @square-btn-medium-size;
+            width: 100%;
+
+            input {
+                height: @square-btn-medium-size;
+            }
+
+            .input-group-addon {
+                position: absolute;
+                z-index: 2;
+                right: 0;
+                border-color: transparent;
+                background-color: transparent;
+            }
+
+            .close-filter {
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.ms2-mask-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    .ms2-mask {
+        background-color: rgba(0, 0, 0, 0.7);
+        color: #fff;
+
+        &.white-mask {
+            background-color: rgba(255, 255, 255, 0.6);
+            color: #000;
+        }
+
+        display: flex;
+        z-index: 100000;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+
+    }
+}
+
+div#sync-popover.popover {
+    top: auto !important;
+    padding: 0;
+
+    .mapstore-switch-btn {
+        margin-bottom: -5px;
+    }
+
+    .glyphicon-1-close:before {
+        font-size: @small-icon-size;
+    }
+
+    button.close {
+        font-size: inherit;
+    }
+
+    button.close:first-child:before {
+        font-size: 0px;
+    }
+
+}
+
+.mapstore-filter .input-group {
+    height: 32px;
+    width: 100%;
+}
+
+.mapstore-filter .input-group .input-group-addon {
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    border-color: transparent;
+    background-color: transparent;
+}
+
+.ms-svg-glyph {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    font-size: 100px;
+
+    &>.glyphicon {
+        margin: auto;
+        display: block;
+    }
+}
+
+.error-container {
+    height: 100%;
+    width: 100%;
+
+    .runtime-error-message {
+        height: 100%;
+        width: 100%;
+        align-items: center;
+        text-align: center;
+        cursor: help;
+        display: grid;
+
+        p {
+            margin: 20px 0 20px;
+        }
+
+        .exclamation-sign-icon {
+            font-size: 60px
+        }
+
+        .refresh-icon {
+            font-size: 20px
+        }
+
+        .refresh-icon:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+
+.ms-feature-info-editor {
+    .rdw-image-modal-url-section {
+        display: block;
+    }
+    .guide-text {
+        font-size: @font-size-small;
+        font-style: italic;
+    }
+}
+
+
+.DraftEditor-editorContainer, // selector editor
+.template-html-renderer, // selector preview sx
+.ms-template-viewer // selector fi panel
+{
+    img {
+        display: inline-block;
+        min-height: 145px;
+        position: relative;
+        text-align: center;
+        min-width: 460px;
+        max-width: 100%;
+        font-size: @font-size-small;
+    }
+    img::before {
+        content: ' ';
+        width: 101%;
+        height: calc(100% - 36px);
+        border-radius: 10px;
+        position: absolute;
+        top: -2px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        left: -2px;
+        background-image: url("../img/image-not-found.jpg");
+    }
+
+    img::after {
+        font-size: @font-size-small;
+        display: block;
+        bottom: 0;
+        left: 50%;
+        font-style: italic;
+        position: absolute;
+        transform: translate(-50%, 0px);
+    }
+}
+
+// forced to avoid conflicts with no-image display for not found at link
+.rdw-link-decorator-icon
+{
+    width: 15px !important;
+    min-width: 10px !important;
+    min-height: 15px !important;
+    position: static !important;
+    vertical-align: text-top;
+}
+
+.form-control.intl-numeric {
+    float: unset;
+
+}
+
+.form-group-flex {
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    .checkbox,
+    .control-label {
+        flex: 1;
+        font-weight: normal;
+        &.strong{
+            font-weight: bold;
+        }
+    }
+    .input-group {
+        flex: 1;
+    }
+    input {
+        z-index: 0;
+    }
+    margin-bottom: 8px;
+}

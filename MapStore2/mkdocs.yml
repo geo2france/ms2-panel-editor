@@ -1,0 +1,196 @@
+site_name: MapStore
+site_url: 'https://mapstore.geosolutionsgroup.com'
+copyright: <b><a href="https://mapstore.geosolutionsgroup.com" target="_blank">MapStore&copy;</a></b> is Free and Open Source software and is licensed under the Simplified BSD License.
+use_directory_urls: true
+theme:
+  name: 'material'
+  highlightjs: true
+  icon:
+    logo: 'img/mapstore2-logo.png'
+    repo: 'fontawesome/brands/github-alt'
+  favicon: 'img/favicon.ico'
+  custom_dir: 'docs/theme'
+  language: 'en'
+  features:
+    - header.autohide
+    - navigation.instant
+    - navigation.top
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.path
+    - navigation.indexes
+    - navigation.footer
+    - content.code.copy
+  logo: 'img/mapstore2-logo.png'
+  company_url: 'http://www.geo-solutions.it'
+  company_logo: 'img/geosolutions-brand.png'
+  company_contacts: 'GeoSolutions | sales@geosolutionsgroup.com '
+  palette:
+    primary: 'teal'
+    accent: 'teal'
+extra:
+  repo_icon: 'github'
+  social:
+    - type: 'github'
+      icon: 'fontawesome/brands/github'
+      link: 'https://github.com/geosolutions-it'
+    - type: 'twitter'
+      icon: 'fontawesome/brands/x-twitter'
+      link: 'https://twitter.com/geosolutions_it'
+    - type: 'linkedin'
+      icon: 'fontawesome/brands/linkedin'
+      link: 'https://it.linkedin.com/company/geosolutions-s-a-s-'
+extra_javascript:
+  - 'https://code.jquery.com/jquery-3.3.1.min.js'
+  - 'https://unpkg.com/mermaid@10.6.0/dist/mermaid.min.js'
+extra_css:
+  - 'theme/css/extra.css'
+repo_name: 'geosolutions-it/MapStore2'
+repo_url: 'https://github.com/geosolutions-it/MapStore2/'
+edit_uri: ''
+docs_dir: 'docs'
+markdown_extensions:
+  - admonition
+  - markdown.extensions.attr_list
+  - codehilite:
+      linenums: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format
+nav:
+  - Home:
+    - Home: 'index.md' # To include in pdf
+    - Quick Start: 'quick-start.md'
+  - User Guide:
+    - Home Page Overview: 'user-guide/home-page.md'
+    - Managing Users and Groups:
+      - Overview: 'user-guide/managing-users-and-groups.md'
+      - Managing Users: 'user-guide/managing-users.md'
+      - Managing Groups: 'user-guide/managing-groups.md'
+    - Managing Contexts:
+      - Overview: 'user-guide/managing-contexts.md'
+      - Application Context: 'user-guide/application-context.md'
+      - Extension Library: 'user-guide/extension-library.md'
+      - Map Catalog: 'user-guide/map-catalog.md'
+      - Map Templates: 'user-guide/map-templates.md'
+    - Resources Properties: 'user-guide/resources-properties.md'
+    - Sharing Resources: 'user-guide/share.md'
+    - Exploring Maps:
+      - Overview: 'user-guide/exploring-maps.md'
+      - Table of Contents: 'user-guide/toc.md'
+      - Managing Layer Settings: 'user-guide/layer-settings.md'
+      - Filtering Layers: 'user-guide/filtering-layers.md'
+      - Attribute Table: 'user-guide/attributes-table.md'
+      - Widgets: 'user-guide/widgets.md'
+      - Export Layer Data: 'user-guide/export-data.md'
+      - MapStore Toolbars: 'user-guide/mapstore-toolbars.md'
+      - Printing a Map: 'user-guide/print.md'
+      - Importing and Exporting Files: 'user-guide/import.md'
+      - Catalog Services: 'user-guide/catalog.md'
+      - Performing Measurments: 'user-guide/measure.md'
+      - Annotations: 'user-guide/annotations.md'
+      - Map Views: 'user-guide/map-views.md'
+      - Street View: 'user-guide/street-view.md'
+      - Longitudinal Profile: 'user-guide/longitudinal-profile.md'
+      - GeoProcessing Tool: 'user-guide/geoprocessing-tool.md'
+      - Navigation Toolbar: 'user-guide/navigation-toolbar.md'
+      - Background Selector: 'user-guide/background.md'
+      - Timeline: 'user-guide/timeline.md'
+      - Footer: 'user-guide/footer.md'
+    - Exploring Dashboards:
+      - Overview: 'user-guide/exploring-dashboards.md'
+      - Adding widgets: 'user-guide/adding-widgets.md'
+      - Connecting widgets: 'user-guide/connecting-widgets.md'
+    - Exploring Stories:
+      - Overview: 'user-guide/exploring-stories.md'
+      - Story Settings: 'user-guide/story-setting.md'
+      - Title Section: 'user-guide/title-section.md'
+      - Banner Section: 'user-guide/banner-section.md'
+      - Paragraph Section: 'user-guide/paragraph-section.md'
+      - Immersive Section: 'user-guide/immersive-section.md'
+      - GeoCarousel Section: 'user-guide/geocarousel-section.md'
+      - Media Section: 'user-guide/media-section.md'
+      - Web Page section: 'user-guide/web-section.md'
+      - Text Editor Toolbar: 'user-guide/text-editor-toolbar.md'
+      - Image Toolbar: 'user-guide/content-image-toolbar.md'
+      - Video Toolbar: 'user-guide/content-video-toolbar.md'
+      - Map Toolbar: 'user-guide/content-map-toolbar.md'
+      - Web Page Toolbar: 'user-guide/content-web-toolbar.md'
+      - Media Editor: 'user-guide/media-editor-window.md'
+      - Configue the map: 'user-guide/configure-map.md'
+
+  - Developer Guide:
+    - Requirements: 'developer-guide/requirements.md'
+    - Quick Setup and Run: 'developer-guide/index.md'
+    - Main Scripts: 'developer-guide/main-scripts.md'
+    - Infrastructure: 'developer-guide/infrastructure-and-general-architecture.md'
+    - Developing with MapStore:
+      - Introduction: 'developer-guide/developing-with-mapstore-2-intro.md'
+      - Folders Structure: 'developer-guide/project-structure.md'
+      - Developing and Debugging: 'developer-guide/developing.md'
+      - Building and Deploying: 'developer-guide/building-and-deploying.md'
+      - Front End Technologies: 'developer-guide/reactjs-and-redux-introduction.md'
+      - Plugins architecture: 'developer-guide/plugins-architecture.md'
+      - Internationalization: 'developer-guide/internationalization.md'
+      - Custom dependencies: 'developer-guide/custom-dependencies.md'
+      - Styling and theming: 'developer-guide/customize-theme.md'
+      - Working with Extensions: 'developer-guide/extensions.md'
+      - Printing Module: 'developer-guide/printing-module.md'
+      - How to use CDN: 'developer-guide/how-to-use-a-cdn.md'
+      - FAQ: 'developer-guide/dev-faq.md'
+    - Guidelines:
+      - Code Conventions: 'developer-guide/code-conventions.md'
+      - Documentation: 'developer-guide/documentation-guidelines.md'
+      - Migration: 'developer-guide/mapstore-migration-guide.md'
+      - Release: 'developer-guide/release.md'
+    - How to:
+      - Dev How To: 'developer-guide/dev-how-to.md'
+      - Writing Plugins: 'developer-guide/plugins-howto.md'
+      - Writing Epics: 'developer-guide/writing-epics.md'
+      - Writing Actions and Reducers: 'developer-guide/writing-actions-reducers.md'
+    - Configuration:
+      - Configuration Files: 'developer-guide/configuration-files.md'
+      - Application Configuration: 'developer-guide/local-config.md'
+      - Configuring plugins: 'developer-guide/plugins-documentation.md'
+      - Map Configuration: 'developer-guide/maps-configuration.md'
+      - Externalize Configuration: 'developer-guide/externalized-configuration.md'
+      - Configuration of Application Context Manager: 'developer-guide/context-editor-config.md'
+      - Filters: 'developer-guide/LayerFilter.md'
+      - Styles: 'developer-guide/vector-style.md'
+    - Database Setup: 'developer-guide/database-setup.md'
+    - Integrations:
+      - Users:
+        - LDAP: 'developer-guide/integrations/users/ldap.md'
+        - OpenID Connect: 'developer-guide/integrations/users/openId.md'
+        - Keycloak: 'developer-guide/integrations/users/keycloak.md'
+        - Keycloak-SSO: 'developer-guide/integrations/users/keycloak-sso-impl.md'
+      - General:
+        - GeoServer: 'developer-guide/integrations/geoserver.md'
+        - Authentication: 'developer-guide/integrations/auth.md'
+        - Infrastructure: 'developer-guide/integrations/infrastructure-setups.md'
+    - Projects:
+      - MapStore Projects: 'developer-guide/mapstore-projects.md'
+      - Project Creation Script: 'developer-guide/project-creation-script.md'
+      - Advanced Project Customization: 'developer-guide/advanced-project-customization.md'
+    - Communicating with MapStore:
+      - API usage: 'developer-guide/API-usage.md'
+      - MapViewer query paramaters: 'developer-guide/map-query-parameters.md'
+plugins:
+  - search
+  - with-pdf:
+      author: GeoSolutionsGroup
+      copyright: 'MapStore©'
+      #
+      #cover: false
+      #back_cover: true
+      cover_logo: 'img/mapstore2-logo.png'
+      cover_title: MapStore Documentation
+      cover_subtitle: User Guide and Developer Guide
+      toc_level: 3
+      output_path: pdf/mapstore_documentation.pdf
+      enabled_if_env: ENABLE_PDF_EXPORT
+      debug_html: true
+      show_anchors: true
+      verbose: true

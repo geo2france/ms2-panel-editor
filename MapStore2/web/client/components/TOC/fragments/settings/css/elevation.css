@@ -1,0 +1,25 @@
+#mapstore-elevation {
+    width: 100%;
+    /*margin-top: -46px;*/
+    height: 80px;
+    padding: 0 5px;
+}
+
+label#mapstore-elevation-label {
+    margin-top: 10px;
+}
+
+.custom-tooltip {
+    width: auto;
+    margin: 0;
+    line-height: 24px;
+    border: 1px solid #C1C1C1;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px;
+}
+.custom-tooltip  .label {
+  margin: 0;
+  color: #82CA9D;
+  font-weight: bold;
+  font-size: 16px;
+}

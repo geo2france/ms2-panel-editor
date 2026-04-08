@@ -1,0 +1,151 @@
+/*
+ * Copyright 2017, GeoSolutions Sas.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+import expect from 'expect';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import QueryToolbar from '../QueryToolbar';
+
+describe('QueryToolbar component', () => {
+    beforeEach((done) => {
+        document.body.innerHTML = '<div id="container"></div>';
+        setTimeout(done);
+    });
+    afterEach((done) => {
+        ReactDOM.unmountComponentAtNode(document.getElementById("container"));
+        document.body.innerHTML = '';
+        setTimeout(done);
+    });
+    it('QueryToolbar rendering with defaults', () => {
+        ReactDOM.render(<QueryToolbar />, document.getElementById("container"));
+        const container = document.getElementById('container');
+        const el = container.querySelector('.query-toolbar');
+        expect(el).toExist();
+    });
+    it('QueryToolbar check empty filter warning', () => {
+        ReactDOM.render(<QueryToolbar emptyFilterWarning allowEmptyFilter spatialField={{}} crossLayerFilter={{attribute: "ATTR", operation: undefined}}/>, document.getElementById("container"));
+        const container = document.getElementById('container');
+        const el = container.querySelector('#query-toolbar-query.showWarning');
+        expect(el).toExist();
+        ReactDOM.render(<QueryToolbar emptyFilterWarning allowEmptyFilter spatialField={{}} crossLayerFilter={{attribute: "ATTR", operation: "INTERSECT"}}/>, document.getElementById("container"));
+        expect(container.querySelector('#query-toolbar-query.showWarning')).toNotExist();
+        expect(container.querySelector('#query-toolbar-query')).toExist();
+        ReactDOM.render(<QueryToolbar emptyFilterWarning allowEmptyFilter spatialField={{geometry: {}}} crossLayerFilter={{attribute: "ATTR", operation: undefined}}/>, document.getElementById("container"));
+        expect(container.querySelector('#query-toolbar-query.showWarning')).toNotExist();
+        // if filters attribute contains valid filters, the warning is not shown
+        ReactDOM.render(<QueryToolbar emptyFilterWarning allowEmptyFilter spatialField={{}} crossLayerFilter={{attribute: "ATTR", operation: undefined}} filters={[{id: "ATTR", format: 'cql', body: 'prop = 1'}]}/>, document.getElementById("container"));
+        expect(container.querySelector('#query-toolbar-query.showWarning')).toNotExist();
+    });
+
+    describe('advancedToolbar', () => {
+        const VALID_FILTERS = [
+            // spatial only
+            {
+                groupFields: [],
+                spatialPanelExpanded: true,
+                spatialField: {
+                    attribute: "the_geom",
+                    geometry: {
+                        "some": "geometry"
+                    }
+                }
+            },
+            // spatial different
+            {
+                groupFields: [],
+                spatialPanelExpanded: true,
+                spatialField: {
+                    attribute: "the_geom",
+                    geometry: {
+                        "some": "OTHER_geometry"
+                    }
+                }
+            }];
+        const checkButtonsEnabledCondition = (container) => (apply, save, discard, reset) => {
+            return expect(!container.querySelector("button#query-toolbar-query").classList.contains('disabled')).toBe(!!apply, `expected apply to be ${apply ? 'enabled' : 'disabled'}`)
+                && expect(!container.querySelector("button#query-toolbar-save").classList.contains('disabled')).toBe(!!save, `expected save to be ${save ? 'enabled' : 'disabled'}`)
+                && expect(!container.querySelector("button#query-toolbar-discard").classList.contains('disabled')).toBe(!!discard, `expected discard to be ${discard ? 'enabled' : 'disabled'}`)
+                && expect(!container.querySelector("button#reset").classList.contains('disabled')).toBe(!!reset, `expected reset to be ${reset ? 'enabled' : 'disabled'}`);
+        };
+        it('defaults', () => {
+            ReactDOM.render(<QueryToolbar />, document.getElementById("container"));
+            const container = document.getElementById('container');
+            expect(container.querySelectorAll('button').length).toBe(2);
+            ReactDOM.render(<QueryToolbar advancedToolbar />, document.getElementById("container"));
+            const buttons = [...container.querySelectorAll('button')];
+            expect(buttons.length).toBe(4);
+            expect(buttons.filter(({ classList }) => classList.contains('disabled')).length).toBe(4);
+        });
+        it('apply button is enabled when valid', () => {
+            const container = document.getElementById('container');
+            ReactDOM.render(<QueryToolbar advancedToolbar {...VALID_FILTERS[0]} />, document.getElementById("container"));
+            checkButtonsEnabledCondition(container)(true, false, false, false);
+        });
+        it('save and reset enabled when the current filter is applied', () => {
+            const container = document.getElementById('container');
+            ReactDOM.render(<QueryToolbar advancedToolbar {...VALID_FILTERS[0]} appliedFilter={VALID_FILTERS[0]} />, document.getElementById("container"));
+            const buttons = [...container.querySelectorAll('button')];
+            expect(buttons.length).toBe(4);
+            checkButtonsEnabledCondition(container)(false, true, false, true);
+        });
+        it('apply and reset enabled when the current filter is different from applied', () => {
+            const container = document.getElementById('container');
+            ReactDOM.render(<QueryToolbar advancedToolbar {...VALID_FILTERS[1]} appliedFilter={VALID_FILTERS[0]} />, document.getElementById("container"));
+            const buttons = [...container.querySelectorAll('button')];
+            expect(buttons.length).toBe(4);
+            checkButtonsEnabledCondition(container)(true, false, false, true);
+        });
+        it('restore enabled when applied a filter different from saved one, not yet saved', () => {
+            const container = document.getElementById('container');
+            ReactDOM.render(<QueryToolbar advancedToolbar
+                {...VALID_FILTERS[0]}
+                appliedFilter={VALID_FILTERS[0]}
+                storedFilter={VALID_FILTERS[1]}
+            />, document.getElementById("container"));
+            const buttons = [...container.querySelectorAll('button')];
+            expect(buttons.length).toBe(4);
+            checkButtonsEnabledCondition(container)(false, true, true, true);
+        });
+        it('saved filter with no changes has only reset enabled', () => {
+            const container = document.getElementById('container');
+            ReactDOM.render(<QueryToolbar advancedToolbar
+                {...VALID_FILTERS[0]}
+                appliedFilter={VALID_FILTERS[0]}
+                storedFilter={VALID_FILTERS[0]}
+            />, document.getElementById("container"));
+            const buttons = [...container.querySelectorAll('button')];
+            expect(buttons.length).toBe(4);
+            checkButtonsEnabledCondition(container)(false, false, false, true);
+        });
+        it('if some of the filters in the filters array valid, apply button is enabled', () => {
+            const container = document.getElementById('container');
+            ReactDOM.render(<QueryToolbar advancedToolbar
+                filters={[
+                    {id: "ATTR", format: 'cql', body: 'prop = 1'},
+                    {id: "ATTR", format: 'cql', body: 'prop = 1'}
+                ]}
+            />, document.getElementById("container"));
+            const buttons = [...container.querySelectorAll('button')];
+            expect(buttons.length).toBe(4);
+            checkButtonsEnabledCondition(container)(true, false, false, false);
+        });
+        it('if some of the filters in the filters array is not valid, apply button is disabled', () => {
+            const container = document.getElementById('container');
+            ReactDOM.render(<QueryToolbar advancedToolbar
+                filters={[
+                    {id: "ATTR", format: 'cql', body: 'prop = 1'},
+                    {id: "ATTR", invalid: true, format: 'cql', body: 'prop = 1'}
+                ]}
+            />, document.getElementById("container"));
+            const buttons = [...container.querySelectorAll('button')];
+            expect(buttons.length).toBe(4);
+            checkButtonsEnabledCondition(container)(false, false, false, false);
+        });
+    });
+});

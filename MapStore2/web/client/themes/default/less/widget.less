@@ -1,0 +1,547 @@
+//
+// Copyright 2021, GeoSolutions Sas.
+// All rights reserved.
+//
+// This source code is licensed under the BSD-style license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// **************
+// Theme
+// **************
+.setFontSize (@val){
+    @fSize: @val
+};
+.em (@prop, @val) {
+    @{prop}: (@val/(@fSize*1em));
+};
+#ms-components-theme(@theme-vars) {
+    .widget-container {
+        &.selection-active {
+            .background-color-var(@theme-vars[main-variant-bg]);
+        }
+
+        .mapstore-widget-card {
+            .background-color-var(@theme-vars[main-bg]);
+
+            .mapstore-widget-header {
+                .border-bottom-color-var(@theme-vars[main-border-color]);
+                .color-var(@theme-vars[primary]);
+
+                .mapstore-info-popover .glyphicon {
+                    .color-var(@theme-vars[primary]);
+                }
+
+                .widget-icons {
+                    .btn-group {
+                        button {
+                            .glyphicon.active::before {
+                                .color-var(@theme-vars[primary]);
+                            }
+
+                            .glyphicon:not(.active) {
+                                .color-var(@theme-vars[main-color]);
+                                .background-color-var(@theme-vars[main-bg]);
+                            }
+                        }
+                    }
+                }
+            }
+
+            .mapstore-widget-options {
+                .color-var(@theme-vars[primary]);
+            }
+        }
+    }
+
+    .mapstore-widget-remove {
+        .color-var(@theme-vars[primary]);
+    }
+
+    .mapstore-widget-loader {
+        .border-top-color-var(@theme-vars[loader-primary-fade-color]);
+        .border-right-color-var(@theme-vars[loader-primary-fade-color]);
+        .border-bottom-color-var(@theme-vars[loader-primary-fade-color]);
+        .border-left-color-var(@theme-vars[loader-primary-color]);
+    }
+
+    .widgets-tray {
+        .background-color-var(@theme-vars[main-bg]);
+
+        .widgets-bar {
+            >span {
+                .border-right-color-var(@theme-vars[main-border-color]);
+            }
+        }
+    }
+
+    .mapstore-chart-advance-options {
+        .background-color-var(@theme-vars[main-bg]);
+
+        .ms2-border-layout-body {
+            .background-color-var(@theme-vars[main-bg]);
+        }
+    }
+
+    .ms-widget-empty-message {
+        .background-color-var(@theme-vars[main-bg]);
+    }
+}
+
+// **************
+// Layout
+// **************
+.draggableHandle {
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+    cursor: -o-grab;
+    cursor: -ms-grab;
+    cursor: grab;
+}
+.no-drag .draggableHandle, .static .draggableHandle {
+    cursor: inherit;
+}
+.widget-container {
+    &.react-grid-layout.on-map {
+        pointer-events: none;
+    }
+    &.react-grid-layout.on-map > * {
+        pointer-events: auto;
+    }
+    /* selection */
+    &.selection-active {
+        .disabled {
+            opacity: 0.2;
+            pointer-events: none;
+        }
+        .mapstore-widget-card:not(.disabled) {
+            transition: all 200ms ease-in-out;
+            &:hover {
+                transform: scale(1.03);
+                cursor: pointer;
+            }
+        }
+    }
+    &.no-drag .mapstore-widget-card {
+        -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    .mapstore-widget-card {
+        overflow: visible;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        .setFontSize(@font-size-medium);
+        font-size: @fSize;
+        .shadow-far;
+        .mapstore-widget-layer {
+            text-align: center;
+            .em(margin-top, 10);
+            .em(margin-right, 10);
+            margin-bottom: 5%;
+            margin-left: 5%;
+            font-style: italic;
+        }
+
+        .widget-selector {
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+
+            .Select {
+                flex-grow: 1;
+                .Select-control {
+                    .Select-value {
+                        padding-right: 22px;
+                    }
+                }
+            }
+        }
+
+        .mapstore-widget-header {
+            font-size: @fSize;
+            .em(height, 28);
+            font-weight: bold;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .widget-title {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: calc(100% - 30px);
+                .setFontSize(@font-size-base);
+                font-size: @fSize;
+                .em(margin-left, 6);
+            }
+            .mapstore-info-popover .glyphicon {
+                .setFontSize(@font-size-base);
+                font-size: @fSize;
+                .em(margin-top, 7);
+                position: absolute;
+                .em(left, 22);
+            }
+            .widget-icons {
+                .em(height, 10);
+                .em(margin-left, 4);
+                .btn-group {
+                    left: 0;
+                    span {
+                        display: flex;
+                    }
+                    button {
+                        background: transparent;
+                        .em(top, -8);
+                        position: relative;
+                        .em(padding-left, 4);
+                        .em(padding-right, 4);
+                        // rotate pin icon
+                        .glyphicon.active::before {
+                            transform: rotate(45deg);
+                            display: inline-block;
+                        }
+                        .glyphicon:not(.active)  {
+                            opacity: .5;
+                        }
+                    }
+                }
+            }
+            .glyphicon {
+                cursor: pointer;
+            }
+        }
+        .react-grid-Grid {
+            .react-grid-Header {
+                .react-grid-HeaderCell {
+                    .setFontSize(@font-size-small);
+                    font-size: @fSize;
+                    .em(padding, 4);
+                    line-height: 1.6;
+                    input {
+                        .setFontSize(11px);
+                        font-size: @fSize;
+                        .em(height, 20);
+                        .em(padding-top, 5);
+                        .em(padding-right, 10);
+                        .em(padding-bottom, 5);
+                        .em(padding-left, 10);
+                    }
+                }
+            }
+            .react-grid-Viewport {
+                .react-grid-Cell {
+                    font-size: @font-size-small;
+                }
+            }
+            .rw-select {
+                .ms-popover {
+                    &,
+                    & > button {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+        .mapstore-widget-default-content {
+            // avoid editor defaults for text-widget
+            &.ql-editor {
+                .setFontSize(@font-size-small);
+                font-size: @fSize;
+                height: auto;
+                padding: 0;
+                .em(margin-top, 10);
+                .em(margin-right, 10);
+                margin-bottom: 5%;
+                margin-left: 5%;
+            }
+            // avoid images to be wider than their container
+            img {
+                max-width: 100%;
+            }
+        }
+        .mapstore-widget-description {
+            font-size: @fSize;
+            text-align: center;
+            width: 90%;
+            .em(margin-top, 5);
+            .em(margin-right, 5);
+            margin-bottom: 5%;
+            margin-left: 5%;
+        }
+        .mapstore-widget-options {
+            .setFontSize(@font-size-large);
+            font-size: @fSize;
+            display: flex;
+            .em(margin-top, 4);
+            .em(margin-right, 10);
+            margin-bottom: 0;
+            margin-left: 0;
+        }
+        .widget-menu {
+            border: none;
+            display: flex;
+            .em(margin-top, -4);
+            .em(margin-right, -8);
+        }
+        .widget-footer {
+            .em(height, 30);
+            overflow: hidden;
+            .result-info {
+                font-size: @font-size-small;
+                float: left;
+                .em(margin, 5);
+            }
+        }
+        .mapstore-widget-chart {
+            height: 100%;
+            width: 90%;
+            margin: 0 5%;
+            overflow: hidden;
+        }
+        .loader-container {
+            height: 100%;
+            width: 90%;
+            margin: 0 5%;
+            overflow: hidden;
+        }
+        .mapstore-widget-table {
+            font-size: @font-size-small;
+            height: 100%;
+            width: 90%;
+            margin: 0 5%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .counter-widget-view > div > div {
+            transform: translate(-50%, -50%);
+            position: absolute;
+            top: 38%;
+            left: 50%;
+        }
+        .counter-widget .ms2-border-layout-body {
+            position: relative;
+        }
+        .map-widget-view, .chart-widget-view {
+            .widget-icons, .widget-title {
+                .em(margin-bottom, 6);
+            }
+            .mapstore-widget-header {
+                height: max-content;
+                .mapstore-widget-options {
+                    align-items: center;
+                    .em(margin-top, 4);
+                    .em(margin-bottom, 4);
+                    .map-switcher, .chart-switcher {
+                        text-align: left;
+                        font-weight: normal;
+                        .em(width, 200);
+                        .Select-option {
+                            word-break: break-all;
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+
+    .mapstore-widget-card.single-widget {
+        .mapstore-widget-options {
+            width: 24px;
+        }
+        .mapstore-widget-header {
+            height: auto;
+        }
+    }
+}
+
+.ms-wizard.map-options,
+.map-widget-view {
+    .cesium-widget-cesiumNavigationContainer {
+        position: absolute;
+        right: 0;
+        top: -90px;
+    }
+}
+
+.mapstore-widget-remove {
+    height: 32px;
+    font-size: 18px;
+    width: 100%;
+    padding: 5px 5%;
+    margin-top: 5px;
+}
+
+.mapstore-widget-remove span {
+    float: right;
+}
+
+
+.mapstore-widget-loader/*(@border: 1.1em, @size: 10em, @color: #fff)*/ {
+    margin-top: 5px;
+    position: absolute;
+    left: 20px;
+    text-indent: -9999em;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: mapstore-circle-load8 1.1s infinite linear;
+    animation: mapstore-circle-load8 1.1s infinite linear;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+}
+
+.mapstore-widget-loader::after {
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+}
+/* BUILDER */
+.widgets-builder-header {
+    .mapstore-info-popover {
+        position: absolute;
+        right: 0;
+        padding: 7px;
+        margin-right: 13px;
+    }
+}
+.dashboard-editor {
+    /*
+     * this makes the shadow of upper header disappear
+     * to have the optical illusion of the search input and title
+     * inside the global dashboard editor
+     */
+     position: relative;
+    .layer-selector, .map-selector {
+        .ms2-border-layout-body {
+            position: relative;
+            .compat-catalog, .map-catalog {
+                // TODO: put in common to every map-catalog and compact-catalog (e.g. map catalog in file editor and for the map catalog plugin)
+                .catalog-footer {
+                    .mapstore-inline-loader {
+                        float: right;
+                    }
+                    .res-info {
+                        position: relative;
+                        top: 5px;
+                        left: 5px;
+                    }
+                    height: 30px;
+                    z-index: 100;
+                    .shadow-soft-up;
+                }
+                .catalog-form {
+                    width: 100%;
+                    padding: 0 auto;
+                    z-index: 100;
+                    .shadow-soft;
+                }
+            }
+        }
+    }
+    /*
+     * fix for google map layer in preview
+     */
+    .map-selector {
+        .ms2-border-layout-body {
+            overflow: hidden;
+        }
+        #__base_map__ {
+            position: relative;
+        }
+    }
+    /*
+     * end - fix for google map layer in preview
+     */
+}
+
+.m-padding-md {
+    padding-bottom: 15px;
+}
+
+/* chart advance options  */
+
+.shadow-soft-up {
+    -webkit-box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.06), 0 -4px 8px rgba(0, 0, 0, 0.12);
+	-moz-box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.06), 0 -4px 8px rgba(0, 0, 0, 0.12);
+	box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.06), 0 -4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.widgets-tray {
+    .shadow-soft;
+    padding: 4px;
+    z-index: 1000;
+    .widgets-bar {
+        > span {
+            button.btn {
+                + button.btn {
+                    margin-left: 4px;
+                }
+            }
+            padding-right: 8px;
+            margin-right: 6px;
+            border-right: 1px solid @ms-main-border-color;
+        }
+    }
+}
+
+.mapstore-chart-advance-options {
+    z-index: 20;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    .shadow-soft;
+    .Select-menu-outer {
+        // fix select options z-index that
+        // conflicts with slider in advanced options menu
+        // TODO: several changes of this kind in application.
+        // need to be unified.
+        z-index: 2 !important;
+    }
+    // makes the body scrollable
+    .ms2-border-layout-content{
+        position: relative;
+        overflow: auto;
+    }
+    .ms2-border-layout-body {
+        padding: 0;
+
+        .mapstore-switch-panel {
+            margin-bottom: @square-btn-small-size;
+            padding: 0 @square-btn-small-size / 2;
+            border: none;
+            .shadow-soft;
+            .panel-title {
+                font-weight: bold;
+            }
+        }
+    }
+
+}
+
+.ms-widget-empty-message {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.react-grid-Empty {
+    margin-top: 20px;
+}
+.mapstore-widget-card .ms2-border-layout-body {
+    position: relative;
+}
