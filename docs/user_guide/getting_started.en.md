@@ -11,8 +11,8 @@ Configuration is defined in `localConfig.json` under the `panel_editor` plugin.
 | `icon` | `string` | no | Default MapStore icon (`Glyphicon`). |
 | `iconByContext` | `object` | no | Icon override based on the current context. Keys can be the context id or context name, with an optional `default` key. |
 | `size` | `number` | no | Base panel width (plugin adds +100 px). |
-| `serverUrl` | `string` | no | Base GeoServer URL (WFS fallback). |
-| `wfsUrl` | `string` | no | Global WFS URL (higher priority than `serverUrl`). |
+| `serverUrl` | `string` | no | Base GeoServer URL used to build the WFS endpoint when `wfsUrl` is not set. |
+| `wfsUrl` | `string` | no | Explicit global WFS URL, higher priority than `serverUrl`. |
 | `layers` | `object` | yes | Per-layer rules (`workspace:layer`). |
 
 ### Sidebar button icon by context
@@ -54,9 +54,23 @@ Example:
 | `edit` / `editingRoles` | `string[]` | no | Roles allowed to edit the layer. |
 | `allowDelete` | `boolean` | no | Shows the delete button only when set to `true`. |
 | `delete` / `deletionRoles` | `string[]` | no | Roles allowed to delete. |
-| `wfsUrl` | `string` | no | Layer-specific WFS URL. |
+| `serverUrl` | `string` | no | Layer-specific base GeoServer URL, used only if no layer or global `wfsUrl` is defined. |
+| `wfsUrl` | `string` | no | Layer-specific WFS URL, higher priority than layer `serverUrl` and global settings. |
 | `idField` | `string` | no | Identifier field name (default: `id`). |
 | `restrictedArea` | `object` | no | Spatial edit restriction (area of competence) based on either a `wkt` or the JSON returned by a `url`. |
+
+WFS URL resolution order:
+
+1. `cfg.layers["workspace:layer"].wfsUrl`
+2. `cfg.wfsUrl`
+3. `cfg.layers["workspace:layer"].serverUrl`
+4. `cfg.serverUrl`
+
+Implication:
+
+- `wfsUrl` and `serverUrl` are not complementary at the same configuration scope; `wfsUrl` overrides `serverUrl`.
+- If `wfsUrl` is set, `serverUrl` is ignored for that scope.
+- `serverUrl` is only a fallback used to derive a WFS URL from a base GeoServer URL.
 
 ## 3) Field configuration (`fields`)
 

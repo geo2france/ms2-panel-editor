@@ -11,8 +11,8 @@ La configuration se fait dans `localConfig.json` sous le plugin `panel_editor`.
 | `icon` | `string` | non | Icône MapStore (`Glyphicon`) par défaut. |
 | `iconByContext` | `object` | non | Surcharge de l’icône selon le contexte courant. Les clés peuvent être l’identifiant ou le nom du contexte, avec une clé optionnelle `default`. |
 | `size` | `number` | non | Largeur de base du panneau (le plugin ajoute +100 px). |
-| `serverUrl` | `string` | non | URL GeoServer de base (fallback pour WFS). |
-| `wfsUrl` | `string` | non | URL WFS globale (prioritaire sur `serverUrl`). |
+| `serverUrl` | `string` | non | URL GeoServer de base utilisée pour construire l'endpoint WFS si `wfsUrl` n'est pas défini. |
+| `wfsUrl` | `string` | non | URL WFS globale explicite, prioritaire sur `serverUrl`. |
 | `layers` | `object` | oui | Dictionnaire des règles par couche (`workspace:layer`). |
 
 ### Icône du bouton par contexte
@@ -54,9 +54,23 @@ Exemple :
 | `edit` / `editingRoles` | `string[]` | non | Rôles autorisés à éditer la couche. |
 | `allowDelete` | `boolean` | non | Affiche le bouton de suppression uniquement si la valeur est `true`. |
 | `delete` / `deletionRoles` | `string[]` | non | Rôles autorisés à supprimer. |
-| `wfsUrl` | `string` | non | URL WFS spécifique à la couche. |
+| `serverUrl` | `string` | non | URL GeoServer de base spécifique à la couche, utilisée seulement si `wfsUrl` n'est pas défini pour la couche ni globalement. |
+| `wfsUrl` | `string` | non | URL WFS spécifique à la couche, prioritaire sur `serverUrl` de la couche et sur la configuration globale. |
 | `idField` | `string` | non | Nom du champ identifiant (défaut: `id`). |
 | `restrictedArea` | `object` | non | Restriction spatiale d’édition (zone de compétence) basée sur un `wkt` ou sur le JSON retourné par une `url`. |
+
+Règles de résolution de l'URL WFS :
+
+1. `cfg.layers["workspace:layer"].wfsUrl`
+2. `cfg.wfsUrl`
+3. `cfg.layers["workspace:layer"].serverUrl`
+4. `cfg.serverUrl`
+
+Conséquence :
+
+- `wfsUrl` et `serverUrl` ne sont pas complémentaires pour une même portée de configuration ; `wfsUrl` surcharge `serverUrl`.
+- Si `wfsUrl` est renseigné, `serverUrl` est ignoré pour cette portée.
+- `serverUrl` sert uniquement de fallback pour construire automatiquement une URL WFS à partir d'une URL GeoServer de base.
 
 ## 3) Configuration par champ (`fields`)
 
