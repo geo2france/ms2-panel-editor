@@ -438,7 +438,110 @@
       }
     ],
     "desktop": [
-      "SampleExtension",
+      {
+        "name": "panelEditor",
+        "cfg": {
+          "tooltip": "Attributs / édition",
+          "icon": "list-alt",
+          "iconByContext": {},
+          "title": "Attributs",
+          "geoserver": "http://localhost/geoserver",
+          "layers": {
+            "test:avis_urbanisme": {
+              "allowDelete": false,
+              "featureFieldLabel": "libelle"
+            },
+            "test:avisee_projets": {
+              "geoserver": "",
+              "allowDelete": false,
+              "allowEdit": true,
+              "featureFieldLabel": "nom",
+              "restrictedArea": {
+                "urlKo": "/console/account/areaofcompetence",
+                "operation": "INTERSECTS",
+                "wkt": "POLYGON ((2.210655 48.823367, 2.26696 48.823367, 2.26696 48.852065, 2.210655 48.852065, 2.210655 48.823367))"
+              },
+              "hidden": [
+                "id2",
+                "geom",
+                "log_date_crea",
+                "log_date_modi",
+                "log_user_crea",
+                "id_avis"
+              ],
+              "auto": [
+                [
+                  "nom_creation",
+                  "value",
+                  "test"
+                ],
+                [
+                  "log_user_modi",
+                  "header",
+                  "sec-username"
+                ],
+                [
+                  "log_user_crea",
+                  "header",
+                  "sec-username"
+                ],
+                [
+                  "log_date_crea",
+                  "date",
+                  "DD/MM/YYYY"
+                ],
+                [
+                  "log_date_modi",
+                  "date",
+                  "DD/MM/YYYY"
+                ],
+                [
+                  "surface_carto",
+                  "area"
+                ],
+                [
+                  "longueur_carto",
+                  "length"
+                ]
+              ],
+              "delete": [
+                "ADMIN"
+              ],
+              "fields": [
+                [
+                  "numero_identifiant",
+                  "Identifiant",
+                  "string",
+                  true,
+                  true
+                ],
+                [
+                  "nom",
+                  "Nom",
+                  "string",
+                  false,
+                  true,
+                  [
+                    "AVISEE"
+                  ]
+                ],
+                [
+                  "dpt",
+                  "Département",
+                  "list",
+                  true,
+                  false,
+                  [],
+                  {
+                    "url": "https://gis.jdev.fr/geoserver/ogc/features/v1/collections/idf:admin_dpt_idf/items?f=application/json&properties=DPT",
+                    "field": "DEPART"
+                  }
+                ]
+              ]
+            }
+          }
+        }
+      },
       "Details",
       {
         "name": "BrandNavbar",

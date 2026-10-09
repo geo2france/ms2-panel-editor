@@ -1,0 +1,132 @@
+.panel-editor-container {
+    z-index: 1029;
+}
+
+.panel-editor-panel {
+    margin-bottom: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.panel-editor-container .ms-header {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.panel-editor-container .ms-header > .ms-flex-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-width: 0;
+}
+
+.panel-editor-container .ms-header .ms-flex-fill {
+    display: block;
+    min-width: 0;
+}
+
+.panel-editor-container .ms-header .ms-close,
+.panel-editor-container .ms-header .square-button-md {
+    flex: 0 0 auto;
+}
+
+.panel-editor-panel-title {
+    display: block;
+    line-height: 1.2;
+    color: #4c4c4c;
+}
+
+.panel-editor-panel .panel-body {
+    padding: 0;
+    height: 100%;
+}
+
+.panel-editor-body {
+    padding: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.panel-editor-empty-state {
+    color: #6b6b6b;
+    font-style: italic;
+}
+
+.panel-editor-content {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-editor-layout {
+    width: 100%;
+    padding: 0;
+}
+
+.panel-editor-static-header {
+    flex-shrink: 0;
+}
+
+.panel-editor-header-option {
+    background-color: white !important;
+}
+
+.panel-editor-mode-title {
+    margin: 0;
+}
+
+.panel-editor-mode-title .label {
+    font-size: 15px;
+}
+
+.panel-editor-mode-title-placeholder {
+    min-height: 24px;
+}
+
+.panel-editor-header-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 12px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+}
+
+.panel-editor-header-status {
+    display: flex;
+    align-items: center;
+    min-height: 34px;
+}
+
+.panel-editor-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.panel-editor-toolbar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+    .panel-editor-toolbar {
+        justify-content: flex-end;
+    }
+}
+
+.panel-editor-actions {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    gap: 8px;
+}
+
+.panel-editor-attributes-table th {
+    width: 45%;
+}

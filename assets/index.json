@@ -1,7 +1,7 @@
 {
   "plugins": [
     {
-      "name": "SampleExtension",
+      "name": "panelEditor",
       "dependencies": [
         "Toolbar"
       ]
