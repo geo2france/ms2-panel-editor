@@ -11,6 +11,7 @@ import {
     getFeatureOptionLabel,
     getVisibleFieldNames,
     normalizeSelectOptions,
+    resolveAttributeName,
     resolveFieldDefinition
 } from "../utiles/attributes";
 import renderInputByType from "./formControls/renderInputByType";
@@ -48,6 +49,9 @@ const ToolbarButton = ({ message, onClick, children }) => (
  * @returns {React.ReactElement} Panel editor markup.
  */
 const PanelEditor = ({
+    geocodingPickField,
+    geocodingPoint,
+    onGeocodingPick,
     layerConfig,
     describeFeatureType,
     enabled,
@@ -265,6 +269,28 @@ const PanelEditor = ({
                                         const fieldOptions = Array.isArray(resolvedListFieldOptions[fieldName])
                                             ? resolvedListFieldOptions[fieldName]
                                             : normalizeSelectOptions(fieldDefinition.options);
+                                        const coordinateFields = {
+                                            x: resolveAttributeName(fieldDefinition.options?.xField, selectedAttributes),
+                                            y: resolveAttributeName(fieldDefinition.options?.yField, selectedAttributes)
+                                        };
+                                        const geocodingProps = {
+                                            pickActive: geocodingPickField === fieldName,
+                                            mapPoint: geocodingPoint?.field === fieldName ? geocodingPoint : null,
+                                            onMapPickToggle: () => onGeocodingPick(geocodingPickField === fieldName ? "" : fieldName),
+                                            locale,
+                                            onCoordinatesChange: (coordinates) => {
+                                                Object.keys(coordinateFields).forEach((axis) => {
+                                                    const target = coordinateFields[axis];
+                                                    if (!target || target === fieldName || !Object.prototype.hasOwnProperty.call(selectedAttributes, target)) {
+                                                        return;
+                                                    }
+                                                    const definition = resolveFieldDefinition(target, selectedAttributes[target], layerConfig, describeFeatureType);
+                                                    if (canEditField(userRoles, definition, selectedAttributes[target])) {
+                                                        onUpdateField(target, coordinates[axis]);
+                                                    }
+                                                });
+                                            }
+                                        };
                                         return (
                                             <FormGroup key={fieldName} validationState={fieldError ? "error" : null}>
                                                 <ControlLabel>
@@ -273,12 +299,14 @@ const PanelEditor = ({
                                                 </ControlLabel>
                                                 {fieldEditable
                                                     ? renderInputByType({
+                                                        ...geocodingProps,
                                                         type: fieldDefinition.type,
                                                         value: formValues[fieldName],
                                                         options: fieldOptions,
                                                         onChange: (value) => onUpdateField(fieldName, value)
                                                     })
                                                     : renderInputByType({
+                                                        ...geocodingProps,
                                                         type: fieldDefinition.type,
                                                         value: formValues[fieldName] ?? selectedAttributes[fieldName] ?? "",
                                                         options: fieldOptions,
@@ -300,6 +328,9 @@ const PanelEditor = ({
 };
 
 PanelEditor.propTypes = {
+    geocodingPickField: PropTypes.string,
+    geocodingPoint: PropTypes.object,
+    onGeocodingPick: PropTypes.func,
     layerConfig: PropTypes.object,
     describeFeatureType: PropTypes.object,
     enabled: PropTypes.bool,
@@ -333,6 +364,9 @@ PanelEditor.propTypes = {
 };
 
 PanelEditor.defaultProps = {
+    geocodingPickField: "",
+    geocodingPoint: null,
+    onGeocodingPick: () => {},
     layerConfig: {},
     describeFeatureType: null,
     enabled: false,

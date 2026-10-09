@@ -130,3 +130,22 @@
 .panel-editor-attributes-table th {
     width: 45%;
 }
+
+.panel-editor-geocoding-input {
+    display: flex;
+    gap: 8px;
+}
+
+.panel-editor-geocoding-input .rw-widget {
+    flex: 1;
+    min-width: 0;
+}
+
+.panel-editor-geocoding-input .btn {
+    flex-shrink: 0;
+}
+
+.panel-editor-geocoding-input .rw-list-option {
+    white-space: normal;
+    text-align: left;
+}

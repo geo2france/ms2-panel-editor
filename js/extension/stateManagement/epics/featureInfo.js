@@ -10,7 +10,7 @@ export const requestFeatureInfoOnMapClickEpic = (action$, store) =>
         .ofType(CLICK_ON_MAP)
         .filter(({ point }) => {
             const state = store.getState();
-            return !!point && isActive(state) && state?.mapInfo?.enabled === false;
+            return !!point && isActive(state) && !state?.panelEditor?.editMode && state?.mapInfo?.enabled === false;
         })
         .switchMap(({ point, layer }) => {
             const pluginCfg = pluginCfgSelector(store.getState());
