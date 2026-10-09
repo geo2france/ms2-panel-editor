@@ -13,6 +13,7 @@ La configuration se fait dans `localConfig.json` sous le plugin `panel_editor`.
 | `size` | `number` | non | Largeur de base du panneau (le plugin ajoute +100 px). |
 | `serverUrl` | `string` | non | URL GeoServer de base utilisée pour construire l'endpoint WFS si `wfsUrl` n'est pas défini. |
 | `wfsUrl` | `string` | non | URL WFS globale explicite, prioritaire sur `serverUrl`. |
+| `geocodingService` | `string` | non | URL de base du service de géocodage, commune aux champs `geocoding` et `reverse-geocoding`. Défaut si absente ou vide : `https://data.geopf.fr/geocodage`. |
 | `layers` | `object` | oui | Dictionnaire des règles par couche (`workspace:layer`). |
 
 ### Icône du bouton par contexte
@@ -81,11 +82,11 @@ Chaque entrée de `fields` accepte le format compact:
 |---:|---|---|---|
 | `0` | `name` | `string` | Nom du champ (clé attribut). |
 | `1` | `label` | `string` | Libellé affiché. |
-| `2` | `type` | `string` | Type UI (`string`, `number`, `date`, `list`, etc.). |
+| `2` | `type` | `string` | Type UI (`string`, `number`, `date`, `list`, `geocoding`, `reverse-geocoding`, etc.). |
 | `3` | `editable` | `boolean` | Champ éditable ou non. |
 | `4` | `required` | `boolean` | Champ obligatoire. |
 | `5` | `roles` | `string[]` | Rôles autorisés à éditer ce champ. En mode édition, si l’utilisateur n’a pas l’un de ces rôles, le champ reste affiché mais en lecture seule. |
-| `6` | `options` | `array \| object` | Valeurs pour listes (`list`) via tableau statique, URL JSON distante, ou tableau vide pour auto-détection depuis la couche. |
+| `6` | `options` | `array \| object` | Valeurs pour listes (`list`) via tableau statique, URL JSON distante, ou tableau vide pour auto-détection depuis la couche ; champs de coordonnées pour le géocodage (`xField`, `yField`). |
 
 ### Cas supportés pour `type: "list"`
 
@@ -125,6 +126,86 @@ Règles :
 - Si `options` est vide ou absent pour un champ `list`, le plugin propose les valeurs uniques déjà présentes sur ce champ dans les entités de la couche chargée.
 - Les doublons et valeurs vides sont filtrés.
 - Un champ présent dans `hidden` peut être réaffiché en mode édition s’il est explicitement déclaré dans `fields`.
+
+### Champs `geocoding` et `reverse-geocoding`
+
+Ces types renseignent un attribut texte contenant une adresse avec le service de géocodage de la Géoplateforme :
+
+- `geocoding` permet de saisir une adresse, de choisir une suggestion ou de sélectionner un point sur la carte.
+- `reverse-geocoding` permet de retrouver une adresse depuis un point sur la carte. Le texte est en lecture seule, mais le bouton de sélection reste disponible si le champ est modifiable.
+
+Exemples dans `cfg.layers["workspace:layer"].fields` :
+
+```json
+["adresse", "Adresse", "geocoding", true, false, []]
+```
+
+```json
+["adresse", "Adresse", "reverse-geocoding", true, false, []]
+```
+
+Les booléens JSON `true`/`false` et les chaînes `"true"`/`"false"` sont acceptés dans le format compact. Les règles `editable`, `required` et `roles` s’appliquent comme pour les autres champs.
+
+#### Options de coordonnées
+
+L’objet `options` permet de renseigner des attributs de coordonnées en plus de l’adresse :
+
+| Option | Type | Description |
+|---|---|---|
+| `xField` | `string` | Nom de l’attribut recevant la longitude (X), en degrés WGS84 (`EPSG:4326`). |
+| `yField` | `string` | Nom de l’attribut recevant la latitude (Y), en degrés WGS84 (`EPSG:4326`). |
+
+Exemple compact :
+
+```json
+[
+  ["adresse", "Adresse", "geocoding", true, false, [], { "xField": "longitude", "yField": "latitude" }],
+  ["longitude", "Longitude", "number", true, false],
+  ["latitude", "Latitude", "number", true, false]
+]
+```
+
+Le format objet est également accepté :
+
+```json
+[
+  {
+    "name": "adresse",
+    "label": "Adresse",
+    "type": "geocoding",
+    "editable": true,
+    "options": { "xField": "longitude", "yField": "latitude" }
+  },
+  { "name": "longitude", "type": "number", "editable": true },
+  { "name": "latitude", "type": "number", "editable": true }
+]
+```
+
+Les mêmes options s’appliquent à `reverse-geocoding`.
+
+- Les attributs cibles doivent déjà exister sur l’entité, être différents du champ adresse et être modifiables selon leurs droits. Un attribut absent ou non modifiable est ignoré.
+- Si les attributs X/Y sont dans `hidden`, les déclarer aussi dans `fields` pour permettre leur enregistrement.
+- Sans `xField`/`yField`, seule l’adresse est renseignée. Ces options ne créent pas de nouveaux attributs.
+- La sélection d’une suggestion utilise les coordonnées retournées par le service. Une recherche inverse réussie conserve les coordonnées du point choisi, plutôt que celles de l’adresse retournée.
+- Saisir ou effacer du texte seul ne met pas à jour et n’efface pas les coordonnées X/Y.
+- L’adresse et les coordonnées sont enregistrées avec les autres attributs à la sauvegarde du formulaire. La géométrie de l’entité n’est pas modifiée. Les attributs X/Y reçoivent toujours des coordonnées WGS84, quel que soit le CRS de la couche.
+
+#### Initialisation et recherche
+
+À l’ouverture de l’édition, une adresse déjà renseignée est conservée sans recherche. Pour les deux types, si l’adresse est vide, le champ modifiable et la géométrie de l’entité de type `Point`, une recherche inverse utilise sa position pour renseigner une adresse par défaut. La position est reprojetée en WGS84 depuis le CRS de la réponse Identify (`EPSG:4326` par défaut). Une géométrie non ponctuelle ou une position invalide ne déclenche pas cette initialisation. Effacer ensuite l’adresse ne relance pas l’initialisation.
+
+L’URL de base du service est définie dans `localConfig.json`, sous `cfg.geocodingService` du plugin. Exemple dans `cfg` :
+
+```json
+{ "geocodingService": "https://data.geopf.fr/geocodage" }
+```
+
+Si la clé est absente ou vide, cette URL est utilisée par défaut. Une barre oblique finale est acceptée. Le contrôle appelle directement le service depuis le navigateur et ajoute les chemins suivants à l’URL de base. Un service alternatif doit accepter les mêmes paramètres et formats de réponse :
+
+- Autocomplétion : `/completion/`, paramètres `text`, `type=StreetAddress` et `maximumResponses=5`. La recherche démarre dès trois caractères, après une pause de 350 ms.
+- Recherche inverse : `/reverse`, paramètres `lon`, `lat`, `index=address` et `limit=1`.
+
+Le navigateur doit pouvoir accéder à ce service. En cas d’erreur ou d’absence de résultat exploitable, un message s’affiche sans renseigner l’adresse ni les coordonnées. Voir [l’utilisation du champ](tools.fr.md#utiliser-un-champ-de-geocodage).
 
 ## 4) Configuration des champs automatiques (`auto`)
 

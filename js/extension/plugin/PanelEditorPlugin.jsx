@@ -37,6 +37,7 @@ import {
     selectedLayerConfigSelector,
     selectedFeaturePropertiesSelector,
     selectedFeatureSelector,
+    selectedResponseFeaturesCrsSelector,
     selectedResponseIndexSelector,
     userRolesSelector,
     validationErrorsSelector
@@ -65,6 +66,7 @@ const mapStateToProps = (state, ownProps) => ({
     layerConfig: selectedLayerConfigSelector(state),
     describeFeatureType: selectedDescribeFeatureTypeSelector(state),
     selectedFeature: selectedFeatureSelector(state),
+    featureProjection: selectedResponseFeaturesCrsSelector(state) || "EPSG:4326",
     selectedAttributes: selectedFeaturePropertiesSelector(state),
     resolvedListFieldOptions: resolvedListFieldOptionsSelector(state),
     editMode: editModeSelector(state),

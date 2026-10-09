@@ -278,6 +278,7 @@ const PanelEditor = ({
                                             y: resolveAttributeName(fieldDefinition.options?.yField, selectedAttributes)
                                         };
                                         const geocodingProps = {
+                                            geocodingService: cfg?.geocodingService,
                                             initialPoint: initialGeocodingPoint,
                                             pickActive: geocodingPickField === fieldName,
                                             mapPoint: geocodingPoint?.field === fieldName ? geocodingPoint : null,

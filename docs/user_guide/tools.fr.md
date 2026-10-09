@@ -25,6 +25,26 @@ Le plugin applique les droits par couche et par champ.
 - Les actions restent visibles en haut du panneau (hors scroll).
 - En mode édition, il faut valider ou annuler avant de changer de couche ou d’entité.
 
+## Utiliser un champ de géocodage
+
+En mode édition, pour rechercher une adresse avec `geocoding` :
+
+1. Saisir au moins trois caractères et attendre les suggestions (jusqu’à cinq résultats).
+2. Sélectionner une suggestion pour renseigner l’adresse et les éventuels attributs de longitude/latitude configurés.
+3. Sauvegarder le formulaire pour enregistrer les valeurs.
+
+Pour rechercher une adresse depuis la carte, cliquer sur le bouton avec le marqueur à côté du champ, puis sur le point souhaité. Le mode de sélection s’arrête après ce clic et la recherche inverse renseigne l’adresse si elle aboutit. Le clic ne lance pas l’identification d’une autre entité. Un second clic sur le bouton annule la sélection ; la touche Échap dans le champ permet aussi de l’annuler.
+
+Avec `reverse-geocoding`, utiliser le bouton de sélection sur la carte : le texte de l’adresse est en lecture seule. A noter qu'un champ non modifiable désactive également le bouton.
+
+Aussi, une adresse vide peut être renseignée automatiquement à l’ouverture de l’édition depuis la position d’une entité ponctuelle (si le champ est modifiable). Une adresse existante restera inchangée. 
+
+Des messages indiquent la recherche en cours, l’absence de résultat ou une erreur du service.
+
+Le géocodage modifie les attributs du formulaire sans déplacer la géométrie de l’entité.
+
+Vous pouvez alors conserve les modifications via le bouton de sauvegarde ou les abandonner via le bouton "Annuler". Voir [la configuration des champs](getting_started.fr.md#champs-geocoding-et-reverse-geocoding).
+
 ## Gestion d’interface selon les droits
 
 - Si l’utilisateur ne peut pas éditer à cause des rôles, un bouton `lock` est affiché avec une tooltip.

@@ -6,12 +6,13 @@ import uniqueId from "lodash/uniqueId";
 import AutocompleteListItem from "@mapstore/components/data/query/AutocompleteListItem";
 import { t } from "../../utiles/i18n";
 
-const SERVICE_URL = "https://data.geopf.fr/geocodage";
+const DEFAULT_SERVICE_URL = "https://data.geopf.fr/geocodage";
 const isCoordinate = (value, max) => typeof value === "number" && Number.isFinite(value) && Math.abs(value) <= max;
 const GeocodingSuggestion = (props) => <AutocompleteListItem {...props} textField="label" valueField="label" />;
 
 const GeocodingInputControl = ({ value, onChange, onCoordinatesChange, disabled, locale,
-    reverseOnly, pickActive, mapPoint, onMapPickToggle, initialPoint }) => {
+    reverseOnly, pickActive, mapPoint, onMapPickToggle, initialPoint, geocodingService }) => {
+    const serviceUrl = (geocodingService?.trim() || DEFAULT_SERVICE_URL).replace(/\/+$/, "");
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
@@ -49,7 +50,7 @@ const GeocodingInputControl = ({ value, onChange, onCoordinatesChange, disabled,
             const params = new URLSearchParams(point
                 ? { index: "address", limit: "1", lon: point.x, lat: point.y }
                 : { text: text.trim(), type: "StreetAddress", maximumResponses: "5" });
-            const response = await fetch(`${SERVICE_URL}/${point ? "reverse" : "completion/"}?${params}`, {
+            const response = await fetch(`${serviceUrl}/${point ? "reverse" : "completion/"}?${params}`, {
                 signal: controller.current.signal
             });
             if (!response.ok) {
@@ -97,7 +98,7 @@ const GeocodingInputControl = ({ value, onChange, onCoordinatesChange, disabled,
             request.current += 1;
             controller.current?.abort();
         };
-    }, [value, disabled, reverseOnly, pickActive]);
+    }, [value, disabled, reverseOnly, pickActive, serviceUrl]);
 
     useEffect(() => {
         if (!disabled && !pickActive && mapPoint && isCoordinate(mapPoint.x, 180) && isCoordinate(mapPoint.y, 90)) {
@@ -171,6 +172,7 @@ GeocodingInputControl.propTypes = {
     onCoordinatesChange: PropTypes.func,
     disabled: PropTypes.bool,
     locale: PropTypes.string,
+    geocodingService: PropTypes.string,
     reverseOnly: PropTypes.bool,
     pickActive: PropTypes.bool,
     mapPoint: PropTypes.object,
@@ -180,7 +182,8 @@ GeocodingInputControl.propTypes = {
 
 GeocodingInputControl.defaultProps = {
     value: "", onChange: () => {}, onCoordinatesChange: () => {}, disabled: false, locale: "en-US",
-    reverseOnly: false, pickActive: false, mapPoint: null, initialPoint: null, onMapPickToggle: () => {}
+    reverseOnly: false, pickActive: false, mapPoint: null, initialPoint: null, onMapPickToggle: () => {},
+    geocodingService: DEFAULT_SERVICE_URL
 };
 
 export default GeocodingInputControl;

@@ -92,6 +92,30 @@ describe("GeocodingInputControl", () => {
         expect(view.getByText(label)).toExist();
     });
 
+    ["geocoding", "reverse-geocoding"].forEach((type) => {
+        it(`uses the configured service in the panel for ${type}`, async() => {
+            const store = createStore(reducer);
+            const Panel = connect((state) => ({ formValues: state.formValues }), {
+                onUpdateField: updateFormValue
+            })(PanelEditor);
+            const view = render(<Provider store={store}><Panel
+                enabled editMode locale="fr" selectedAttributes={{ adresse: "" }}
+                cfg={{ geocodingService: "https://example.org/custom/geocoding/" }}
+                selectedFeature={type === "reverse-geocoding" ? { geometry: { type: "Point", coordinates: [2.3, 48.8] } } : null}
+                responseOptions={[{ value: 0, label: "Couche" }]}
+                layerConfig={{ fields: [["adresse", "Adresse", type, true, false, []]] }}
+            /></Provider>);
+            if (type === "geocoding") {
+                await typeAddress(view);
+            } else {
+                await act(async() => {});
+            }
+            expect(requests.length).toBe(1);
+            expect(requests[0].origin).toBe("https://example.org");
+            expect(requests[0].pathname).toBe(`/custom/geocoding/${type === "geocoding" ? "completion/" : "reverse"}`);
+        });
+    });
+
     it("does not search an existing address when entering edit mode, then searches user changes", async() => {
         const store = createStore(reducer);
         store.dispatch(updateFormValue("adresse", label));

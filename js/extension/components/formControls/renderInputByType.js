@@ -15,6 +15,7 @@ import GeocodingInputControl from "./GeocodingInputControl";
  * @param {Array} [options.options=[]] Select options for list fields.
  * @param {boolean} [options.disabled=false] Whether the control is read-only in the UI.
  * @param {string} [options.locale] UI locale for geocoding labels.
+ * @param {string} [options.geocodingService] Base URL of the geocoding service.
  * @param {Function} [options.onCoordinatesChange] Handler receiving geocoded coordinates.
  * @param {boolean} [options.pickActive] Whether this field is listening for a map click.
  * @param {object} [options.mapPoint] Point selected on the map in WGS84.
@@ -23,12 +24,13 @@ import GeocodingInputControl from "./GeocodingInputControl";
  * @returns {React.ReactElement} Input component matching the requested type.
  */
 const renderInputByType = ({ type, value, onChange, options = [], disabled = false, locale,
-    onCoordinatesChange, pickActive, mapPoint, onMapPickToggle, initialPoint }) => {
+    onCoordinatesChange, pickActive, mapPoint, onMapPickToggle, initialPoint, geocodingService }) => {
     switch (type) {
     case "geocoding":
     case "reverse-geocoding":
         return (
             <GeocodingInputControl value={value} onChange={onChange}
+                geocodingService={geocodingService}
                 onCoordinatesChange={onCoordinatesChange} disabled={disabled} locale={locale}
                 reverseOnly={type === "reverse-geocoding"} pickActive={pickActive}
                 mapPoint={mapPoint} onMapPickToggle={onMapPickToggle} initialPoint={initialPoint} />
