@@ -18,11 +18,12 @@ import GeocodingInputControl from "./GeocodingInputControl";
  * @param {Function} [options.onCoordinatesChange] Handler receiving geocoded coordinates.
  * @param {boolean} [options.pickActive] Whether this field is listening for a map click.
  * @param {object} [options.mapPoint] Point selected on the map in WGS84.
+ * @param {object} [options.initialPoint] Feature position used when the address starts empty.
  * @param {Function} [options.onMapPickToggle] Toggle the map point picker.
  * @returns {React.ReactElement} Input component matching the requested type.
  */
 const renderInputByType = ({ type, value, onChange, options = [], disabled = false, locale,
-    onCoordinatesChange, pickActive, mapPoint, onMapPickToggle }) => {
+    onCoordinatesChange, pickActive, mapPoint, onMapPickToggle, initialPoint }) => {
     switch (type) {
     case "geocoding":
     case "reverse-geocoding":
@@ -30,7 +31,7 @@ const renderInputByType = ({ type, value, onChange, options = [], disabled = fal
             <GeocodingInputControl value={value} onChange={onChange}
                 onCoordinatesChange={onCoordinatesChange} disabled={disabled} locale={locale}
                 reverseOnly={type === "reverse-geocoding"} pickActive={pickActive}
-                mapPoint={mapPoint} onMapPickToggle={onMapPickToggle} />
+                mapPoint={mapPoint} onMapPickToggle={onMapPickToggle} initialPoint={initialPoint} />
         );
     case "textarea":
         return <TextAreaControl value={value} onChange={onChange} disabled={disabled} />;

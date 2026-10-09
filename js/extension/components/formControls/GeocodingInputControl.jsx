@@ -11,7 +11,7 @@ const isCoordinate = (value, max) => typeof value === "number" && Number.isFinit
 const GeocodingSuggestion = (props) => <AutocompleteListItem {...props} textField="label" valueField="label" />;
 
 const GeocodingInputControl = ({ value, onChange, onCoordinatesChange, disabled, locale,
-    reverseOnly, pickActive, mapPoint, onMapPickToggle }) => {
+    reverseOnly, pickActive, mapPoint, onMapPickToggle, initialPoint }) => {
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
@@ -105,6 +105,14 @@ const GeocodingInputControl = ({ value, onChange, onCoordinatesChange, disabled,
         }
     }, [mapPoint, pickActive]);
 
+    // Only initialize once: clearing an address later must not refill it automatically.
+    useEffect(() => {
+        if (!disabled && !pickActive && !mapPoint && !String(value ?? "").trim()
+            && initialPoint && isCoordinate(initialPoint.x, 180) && isCoordinate(initialPoint.y, 90)) {
+            search(null, initialPoint);
+        }
+    }, []);
+
     return (
         <div className="panel-editor-geocoding" aria-busy={loading}>
             <div className="panel-editor-geocoding-input">
@@ -166,12 +174,13 @@ GeocodingInputControl.propTypes = {
     reverseOnly: PropTypes.bool,
     pickActive: PropTypes.bool,
     mapPoint: PropTypes.object,
+    initialPoint: PropTypes.object,
     onMapPickToggle: PropTypes.func
 };
 
 GeocodingInputControl.defaultProps = {
     value: "", onChange: () => {}, onCoordinatesChange: () => {}, disabled: false, locale: "en-US",
-    reverseOnly: false, pickActive: false, mapPoint: null, onMapPickToggle: () => {}
+    reverseOnly: false, pickActive: false, mapPoint: null, initialPoint: null, onMapPickToggle: () => {}
 };
 
 export default GeocodingInputControl;

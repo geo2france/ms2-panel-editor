@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import ResponsivePanel from "@mapstore/components/misc/panels/ResponsivePanel";
 import OverlayTrigger from "@mapstore/components/misc/OverlayTrigger";
@@ -16,6 +16,7 @@ import {
 } from "../utiles/attributes";
 import renderInputByType from "./formControls/renderInputByType";
 import SelectInputControl from "./formControls/SelectInputControl";
+import { getFeatureGeocodingPoint } from "../utiles/geocoding";
 
 const PANEL_SIZE_EXTRA = 100;
 
@@ -67,6 +68,7 @@ const PanelEditor = ({
     selectedFeatureIndex,
     selectedFeatures,
     selectedFeature,
+    featureProjection,
     selectedAttributes,
     resolvedListFieldOptions,
     editMode,
@@ -83,6 +85,8 @@ const PanelEditor = ({
     onSave,
     onDelete
 }) => {
+    const initialGeocodingPoint = useMemo(() => getFeatureGeocodingPoint(selectedFeature?.geometry, featureProjection),
+        [selectedFeature?.geometry, featureProjection]);
     const visibleFields = editMode
         ? getEditableVisibleFieldNames(selectedAttributes, layerConfig)
         : getVisibleFieldNames(selectedAttributes, layerConfig);
@@ -274,6 +278,7 @@ const PanelEditor = ({
                                             y: resolveAttributeName(fieldDefinition.options?.yField, selectedAttributes)
                                         };
                                         const geocodingProps = {
+                                            initialPoint: initialGeocodingPoint,
                                             pickActive: geocodingPickField === fieldName,
                                             mapPoint: geocodingPoint?.field === fieldName ? geocodingPoint : null,
                                             onMapPickToggle: () => onGeocodingPick(geocodingPickField === fieldName ? "" : fieldName),
@@ -301,7 +306,7 @@ const PanelEditor = ({
                                                     ? renderInputByType({
                                                         ...geocodingProps,
                                                         type: fieldDefinition.type,
-                                                        value: formValues[fieldName],
+                                                        value: formValues[fieldName] ?? selectedAttributes[fieldName] ?? "",
                                                         options: fieldOptions,
                                                         onChange: (value) => onUpdateField(fieldName, value)
                                                     })
@@ -328,6 +333,7 @@ const PanelEditor = ({
 };
 
 PanelEditor.propTypes = {
+    featureProjection: PropTypes.string,
     geocodingPickField: PropTypes.string,
     geocodingPoint: PropTypes.object,
     onGeocodingPick: PropTypes.func,
@@ -364,6 +370,7 @@ PanelEditor.propTypes = {
 };
 
 PanelEditor.defaultProps = {
+    featureProjection: "EPSG:4326",
     geocodingPickField: "",
     geocodingPoint: null,
     onGeocodingPick: () => {},

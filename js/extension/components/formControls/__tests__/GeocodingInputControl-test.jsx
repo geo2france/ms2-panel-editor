@@ -9,6 +9,7 @@ import { createStore } from "redux";
 import reducer from "../../../stateManagement/reducer";
 import { updateFormValue } from "../../../stateManagement/actions";
 import PanelEditor from "../../PanelEditor";
+import { getFeatureGeocodingPoint } from "../../../utiles/geocoding";
 
 const label = "10 rue de la Paix 75002 Paris";
 const response = (features = [{
@@ -99,6 +100,7 @@ describe("GeocodingInputControl", () => {
         })(PanelEditor);
         const props = {
             enabled: true, locale: "fr", selectedAttributes: { adresse: label },
+            selectedFeature: { geometry: { type: "Point", coordinates: [2.3, 48.8] } },
             responseOptions: [{ value: 0, label: "Couche" }],
             layerConfig: { fields: [["adresse", "adresse", "geocoding", "true", "false", []]] }
         };
@@ -111,6 +113,57 @@ describe("GeocodingInputControl", () => {
         expect(requests.length).toBe(1);
         expect(requests[0].searchParams.get("text")).toBe("rue de la Paix");
         expect(view.getByText(label)).toExist();
+    });
+
+    ["geocoding", "reverse-geocoding"].forEach((type) => {
+        it(`initializes an empty ${type} address from the feature point in its source CRS`, async() => {
+            const store = createStore(reducer);
+            const Panel = connect((state) => ({ formValues: state.formValues }), {
+                onUpdateField: updateFormValue
+            })(PanelEditor);
+            const view = render(<Provider store={store}><Panel
+                enabled editMode locale="fr" featureProjection="EPSG:3857"
+                selectedFeature={{ geometry: { type: "Point", coordinates: [111319.49079327357, 111325.1428663851] } }}
+                selectedAttributes={{ adresse: "", longitude: null, latitude: null }}
+                responseOptions={[{ value: 0, label: "Couche" }]}
+                layerConfig={{ fields: [
+                    ["adresse", "adresse", type, true, false, [], { xField: "longitude", yField: "latitude" }],
+                    ["longitude", "longitude", "number"], ["latitude", "latitude", "number"]
+                ] }}
+            /></Provider>);
+            await act(async() => {});
+            expect(requests.length).toBe(1);
+            expect(requests[0].pathname).toBe("/geocodage/reverse");
+            expect(Math.abs(Number(requests[0].searchParams.get("lon")) - 1) < 0.000001).toBe(true);
+            expect(Math.abs(Number(requests[0].searchParams.get("lat")) - 1) < 0.000001).toBe(true);
+            expect(view.getByLabelText("Adresse").value).toBe(label);
+            expect(store.getState().formValues.adresse).toBe(label);
+            expect(Math.abs(store.getState().formValues.longitude - 1) < 0.000001).toBe(true);
+            if (type === "geocoding") {
+                fireEvent.change(view.getByLabelText("Adresse"), { target: { value: "" } });
+                await act(async() => { await pause(); });
+                expect(store.getState().formValues.adresse).toBe("");
+                expect(requests.length).toBe(1);
+            }
+        });
+    });
+
+    it("ignores unsupported geometries and does not initialize a disabled address", async() => {
+        expect(getFeatureGeocodingPoint({ type: "Polygon", coordinates: [] })).toBe(null);
+        expect(getFeatureGeocodingPoint({ type: "Point", coordinates: [null, 48] })).toBe(null);
+        expect(getFeatureGeocodingPoint({ type: "Point", coordinates: [2, 48] }, "unknown")).toBe(null);
+        render(<GeocodingInputControl disabled initialPoint={{ x: 2.3, y: 48.8 }} />);
+        await act(async() => {});
+        expect(requests.length).toBe(0);
+    });
+
+    it("does not overwrite user input with a late default address", async() => {
+        let resolveRequest;
+        window.fetch = () => new Promise((resolve) => { resolveRequest = resolve; });
+        const view = render(<ControlledInput locale="fr" initialPoint={{ x: 2.3, y: 48.8 }} />);
+        fireEvent.change(view.getByLabelText("Adresse"), { target: { value: "Ma" } });
+        await act(async() => { resolveRequest(response()); });
+        expect(view.getByLabelText("Adresse").value).toBe("Ma");
     });
 
     it("debounces input, shows suggestions and updates address and XY on selection", async() => {
