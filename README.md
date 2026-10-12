@@ -19,6 +19,10 @@ Les couches `test:avis_urbanisme` et `test:avisee_projets` et l’URL `http://lo
 
 ## Géocodage
 
+L’URL de base du service se configure dans `localConfig.json`, sous
+`panelEditor.cfg.geocodingService` (défaut si absente ou vide :
+`https://data.geopf.fr/geocodage`).
+
 Un champ de type `geocoding` permet de rechercher une adresse avec le service
 [Géoplateforme](https://cartes.gouv.fr/aide/fr/guides-utilisateur/utiliser-les-services-de-la-geoplateforme/geocodage/)
 et de sélectionner un résultat pour obtenir ses coordonnées. La saisie utilise le
@@ -28,6 +32,13 @@ après une pause de 350 ms dès trois caractères saisis. Le bouton avec le marq
 active la sélection d’un point sur la carte pour retrouver son adresse. Un second clic
 sur le bouton annule la sélection. Un clic sur la carte remplit l’adresse et désactive
 le bouton, sans lancer l’identification d’une autre entité.
+
+À l’ouverture du mode édition, une adresse déjà renseignée ne déclenche aucune
+recherche. Si elle est vide et que l’entité possède une géométrie `Point`, sa position
+est utilisée pour rechercher une adresse par défaut, pour les deux types de champ.
+La position est convertie en WGS84 selon le CRS fourni dans les métadonnées de la
+réponse (WGS84 par défaut). Cette initialisation ne se répète pas si l’adresse est
+effacée ensuite et ne s’applique pas aux champs non modifiables.
 
 Le type `reverse-geocoding` utilise le même bouton, avec un champ adresse en lecture
 seule et sans recherche pendant la saisie. Les deux types acceptent la configuration
@@ -70,7 +81,8 @@ avec les autres attributs lors de l’enregistrement du formulaire. Les attribut
 doivent exister et être modifiables ; s’ils sont masqués, les déclarer dans `fields`
 pour permettre leur enregistrement. Sans `xField`/`yField`, seule l’adresse est
 enregistrée. La recherche inverse conserve le XY du point cliqué.
-Ce contrôle ne modifie pas la géométrie de l’entité et ne reprojette pas les coordonnées.
+Ce contrôle ne modifie pas la géométrie de l’entité. Les attributs X/Y reçoivent
+toujours des coordonnées en WGS84.
 
 ## Validation et installation
 
