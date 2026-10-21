@@ -1,6 +1,8 @@
 const isObject = (value) => !!value && typeof value === "object" && !Array.isArray(value);
 
 const DEFAULT_FIELD_TYPE = "string";
+const normalizeBoolean = (value, fallback = false) => value === undefined || value === null
+    ? fallback : value !== "false" && value !== "0" && !!value;
 const DEFAULT_AUTO_DATE_FORMAT = "YYYY-MM-DD";
 const WFS_TO_INPUT_TYPE = {
     "xsd:int": "number",
@@ -89,8 +91,8 @@ const normalizeFieldEntry = (fieldEntry = []) => {
             name,
             label: label || name,
             type: type || DEFAULT_FIELD_TYPE,
-            editable: editable !== false,
-            required: !!required,
+            editable: normalizeBoolean(editable, true),
+            required: normalizeBoolean(required),
             roles: Array.isArray(roles) ? roles : [],
             options: normalizeFieldOptions(options)
         };
@@ -101,8 +103,8 @@ const normalizeFieldEntry = (fieldEntry = []) => {
             name: fieldEntry.name,
             label: fieldEntry.label || fieldEntry.name,
             type: fieldEntry.type || DEFAULT_FIELD_TYPE,
-            editable: fieldEntry.editable !== false,
-            required: !!fieldEntry.required,
+            editable: normalizeBoolean(fieldEntry.editable, true),
+            required: normalizeBoolean(fieldEntry.required),
             roles: Array.isArray(fieldEntry.roles) ? fieldEntry.roles : [],
             options: normalizeFieldOptions(fieldEntry.options)
         };

@@ -1,4 +1,6 @@
 import {
+    PANEL_EDITOR_SET_GEOCODING_PICK_FIELD,
+    PANEL_EDITOR_SET_GEOCODING_POINT,
     PANEL_EDITOR_SET_EDIT_MODE,
     PANEL_EDITOR_SET_SELECTED_RESPONSE_INDEX,
     PANEL_EDITOR_SET_SELECTED_FEATURE_INDEX,
@@ -21,6 +23,8 @@ import {
 } from "./actions";
 
 const initialState = {
+    geocodingPickField: "",
+    geocodingPoint: null,
     editMode: false,
     selectedResponseIndex: 0,
     selectedFeatureIndex: 0,
@@ -44,16 +48,32 @@ const initialState = {
 
 export default function panelEditor(state = initialState, action = {}) {
     switch (action.type) {
+    case PANEL_EDITOR_SET_GEOCODING_PICK_FIELD:
+        return {
+            ...state,
+            geocodingPickField: action.field || "",
+            geocodingPoint: action.field ? null : state.geocodingPoint
+        };
+    case PANEL_EDITOR_SET_GEOCODING_POINT:
+        return {
+            ...state,
+            geocodingPickField: "",
+            geocodingPoint: { field: action.field, ...action.point }
+        };
     case PANEL_EDITOR_SET_EDIT_MODE:
         return {
             ...state,
-            editMode: action.enabled
+            editMode: action.enabled,
+            geocodingPickField: "",
+            geocodingPoint: null
         };
     case PANEL_EDITOR_SET_SELECTED_RESPONSE_INDEX:
         return {
             ...state,
             editMode: false,
             selectedResponseIndex: Math.max(0, action.index || 0),
+            geocodingPickField: "",
+            geocodingPoint: null,
             selectedFeatureIndex: 0,
             formValues: {},
             saveStatus: "idle",
@@ -65,6 +85,8 @@ export default function panelEditor(state = initialState, action = {}) {
             ...state,
             editMode: false,
             selectedFeatureIndex: Math.max(0, action.index || 0),
+            geocodingPickField: "",
+            geocodingPoint: null,
             formValues: {},
             saveStatus: "idle",
             saveMessage: "",
