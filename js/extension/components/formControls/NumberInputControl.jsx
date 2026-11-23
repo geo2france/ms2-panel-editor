@@ -7,11 +7,14 @@ import { FormControl } from "react-bootstrap";
  * @param {object} props Input props.
  * @returns {React.ReactElement} Number form control.
  */
-const NumberInputControl = ({ value, onChange, disabled }) => (
+const NumberInputControl = ({ value, onChange, disabled, min, max }) => (
     <FormControl
         type="number"
         value={value ?? ""}
         disabled={disabled}
+        min={min}
+        max={max}
+        step="any"
         onChange={(event) => onChange(event.target.value)}
     />
 );
@@ -19,7 +22,9 @@ const NumberInputControl = ({ value, onChange, disabled }) => (
 NumberInputControl.propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     onChange: PropTypes.func,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    min: PropTypes.number,
+    max: PropTypes.number
 };
 
 NumberInputControl.defaultProps = {

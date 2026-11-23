@@ -51,6 +51,7 @@ Vous pouvez alors conserve les modifications via le bouton de sauvegarde ou les 
 - Si l’utilisateur ne peut pas éditer à cause de `restrictedArea`, un bouton `record` est affiché avec une tooltip.
 - Si les deux restrictions s’appliquent, les deux boutons sont affichés.
 - En mode édition, un champ non autorisé reste affiché mais en lecture seule.
+- Les [champs conditionnels](getting_started.fr.md#champs-conditionnels) restent affichés ; leur saisie est désactivée si la condition n'est pas satisfaite.
 - Un champ `required` vide devient éditable pour permettre la saisie obligatoire, y compris si son édition est normalement limitée à certains rôles.
 - Le bouton supprimer est affiché uniquement si `allowDelete` vaut `true`.
 - Si le bouton est affiché, il reste activé uniquement si l’utilisateur possède le droit de suppression.

@@ -7,14 +7,13 @@ import {
     postWfsTransaction
 } from "../../requests/wfsTransaction";
 import {
-    getEditableVisibleFieldNames,
     getWfsUrl,
-    resolveAttributeName,
-    resolveFieldDefinition
+    resolveAttributeName
 } from "../../utiles/attributes";
 import { getAutomaticFieldChanges } from "../../utiles/autoFields";
 import { t } from "../../utiles/i18n";
-import { canEditField } from "../../utiles/permissions";
+import { canEditLayer } from "../../utiles/permissions";
+import { getEditableFieldChanges } from "../../utiles/conditionalFields";
 import {
     PANEL_EDITOR_REQUEST_CANCEL_EDIT,
     PANEL_EDITOR_REQUEST_DELETE,
@@ -44,55 +43,11 @@ import {
     userRolesSelector
 } from "../selectors";
 
-const isRequiredValueMissing = (value) =>
-    value === null
-    || value === undefined
-    || (typeof value === "string" && value.trim() === "");
-
 const getLayerToRefresh = (state = {}, selectedLayerName = "") =>
     (state?.layers?.flat || []).find((layer) =>
         layer?.name === selectedLayerName
         || layer?.id === selectedLayerName
     );
-
-const getEditableFieldChanges = ({
-    locale,
-    userRoles,
-    selectedAttributes = {},
-    formValues = {},
-    layerConfig = {},
-    describeFeatureType = null
-}) => {
-    const visibleFields = getEditableVisibleFieldNames(selectedAttributes, layerConfig);
-    return visibleFields.reduce((acc, fieldName) => {
-        const fieldDefinition = resolveFieldDefinition(
-            fieldName,
-            selectedAttributes[fieldName],
-            layerConfig,
-            describeFeatureType
-        );
-
-        if (!canEditField(userRoles, fieldDefinition, selectedAttributes[fieldName])) {
-            return acc;
-        }
-
-        const nextValue = Object.prototype.hasOwnProperty.call(formValues, fieldName)
-            ? formValues[fieldName]
-            : selectedAttributes[fieldName];
-        const previousValue = selectedAttributes[fieldName];
-
-        if (fieldDefinition.required && isRequiredValueMissing(nextValue)) {
-            acc.validationErrors[fieldName] = t(locale, "requiredField");
-            return acc;
-        }
-
-        if (nextValue !== previousValue) {
-            acc.changedAttributes[fieldName] = nextValue;
-        }
-
-        return acc;
-    }, { changedAttributes: {}, validationErrors: {} });
-};
 
 const getTransactionParams = (state = {}) => {
     const pluginCfg = state?.panelEditor?.pluginCfg || {};
@@ -168,6 +123,10 @@ export const handlePanelEditorTransactionEpic = (action$, store) =>
                 itemId,
                 layerToRefresh
             } = getTransactionParams(state);
+
+            if (action.type === PANEL_EDITOR_REQUEST_SAVE && !canEditLayer(userRoles, layerConfig)) {
+                return Rx.Observable.empty();
+            }
 
             if (!wfsUrl || !typeName || idValue === undefined || idValue === null) {
                 return Rx.Observable.of(

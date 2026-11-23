@@ -127,6 +127,133 @@ Rules:
 - Duplicate and empty values are filtered out.
 - A field listed in `hidden` can be shown again in edit mode when it is explicitly declared in `fields`.
 
+### Conditional fields
+
+In `cfg.layers["workspace:layer"]`, define fields as objects. Conditions enable
+input without hiding attributes: when a condition fails, the field remains
+visible and read-only. Layer and field permissions still apply.
+
+Commented example (remove comments for a JSON configuration):
+
+```jsonc
+{
+  "allowEditRoles": ["EDITOR"], // Role allowed to edit this layer.
+  "fields": [
+    { "name": "champ1", "type": "list", "options": ["A", "B", "C"] },
+    {
+      "name": "champ2", "type": "list", "options": ["FOO", "BAR", "BLA"],
+      "editableIf": { "field": "champ1", "eq": "A" } // Enabled when champ1 = A.
+    },
+    {
+      "name": "champ3", "type": "string", "defaultValue": "TOTO",
+      "editableIf": { "field": "champ2", "eq": "FOO" } // Also depends on champ1.
+    },
+    {
+      "name": "champ4", "type": "string", "value": "BAZ", "readOnly": true,
+      "editableIf": { "field": "champ3", "operator": "notEmpty" }
+      // BAZ stays read-only; saved when the entire condition chain is satisfied.
+    }
+  ]
+}
+```
+
+| Parameter | Type | Usage |
+|---|---|---|
+| `name` / `id` | `string` | Existing WFS feature attribute name; `id` is an alias. |
+| `type` | `string` | `list` for a dropdown, `string` for text; aliases `select` and `text`. |
+| `options` | `array` | Available dropdown values. |
+| `editableIf` | `object \| object[]` | Single condition or array requiring all conditions to match (logical AND); omitted or empty array means no conditional restriction. |
+| `editableIf.field` | `string` | Attribute this field depends on. |
+| `editableIf.eq` | JSON value | Strict equality with the referenced attribute value. |
+| `editableIf.operator` | `string` | `notEmpty` for a populated value; optional `eq` for equality. |
+| `visibleIf` | `object \| object[]` | Alias for `editableIf`: does not hide any field. |
+| `defaultValue` | JSON value | Initializes an empty field when editing starts, preserving existing values. |
+| `value` | JSON value | Fixed value, saved when conditions and permissions allow it. |
+| `readOnly` | `boolean` | Prevents input, including for administrators; defaults to `false`. |
+| `roles` | `string[]` | Field editing permissions, following existing rules. |
+| `allowEditRoles` | `string[]` | At layer level: restricts all input to the listed roles. |
+
+Dependencies are evaluated as a chain. Unknown references, unsupported operators
+or cycles disable input. `notEmpty` excludes `null`, empty strings and whitespace.
+A field whose condition fails keeps its value but is neither validated nor sent
+in the WFS transaction. A field initialized with `defaultValue` can then be cleared
+without reapplying the default.
+
+To enable `champ4` only when `champ2` equals `FOO` **and** `champ3` equals `BZH`:
+
+```jsonc
+{
+  "name": "champ4", "type": "string",
+  "editableIf": [
+    { "field": "champ2", "eq": "FOO" },
+    { "field": "champ3", "eq": "BZH" } // Both conditions must match.
+  ]
+}
+```
+
+### Content validation
+
+Define these rules in `fields` objects. When saving, an invalid value blocks the
+save and displays a message below the field. Fields with unmet conditions or
+without input permission are excluded from validation.
+
+```jsonc
+[
+  {
+    "name": "code_postal", "type": "string", "required": true,
+    "pattern": "^[0-9]{5}$", // Text: exactly five digits.
+    "validationMessage": "Enter a five-digit postal code."
+  },
+  {
+    "name": "mesure", "type": "number",
+    "min": -10, "max": 20 // Number between -10 and 20, inclusive.
+  }
+]
+```
+
+| Parameter | Type | Usage |
+|---|---|---|
+| `pattern` | `string` | Regex only for `string` (alias `text`) and `textarea`. Without `/…/` delimiters; use `^` and `$` to check the entire text. |
+| `min` | `number` | Inclusive lower bound, only for `number`; optional. |
+| `max` | `number` | Inclusive upper bound, only for `number`; optional. |
+| `validationMessage` | `string` | Custom message for a format mismatch or an invalid/out-of-range number. Otherwise, a default message is used. |
+
+Empty values are allowed unless `required` is `true`. `number` accepts decimals
+(using `.`). Double regex backslashes in JSON: `"^\\d{5}$"`. An invalid regex
+or inconsistent bounds produce a configuration error when saving a populated field.
+
+### `date` field format
+
+In `cfg.layers["workspace:layer"].fields`, use an object definition to configure
+the format of a `date` field:
+
+```json
+{
+  "name": "date_visite",
+  "label": "Visit date",
+  "type": "date",
+  "editable": true,
+  "format": "DD/MM/YYYY"
+}
+```
+
+| Parameter | Type | Default | Usage |
+|---|---|---|---|
+| `format` | `string` | `YYYY-MM-DD` | Moment.js format used to read the field value and produce the value after selecting a date. Available in object definitions, not in compact arrays. |
+
+Examples: `DD/MM/YYYY` for `14/10/2026`, `YYYY-MM-DD` for `2026-10-14`
+or `MM.DD.YYYY` for `10.14.2026`. `DD` is the two-digit day,
+`MM` the two-digit month and `YYYY` the four-digit year.
+The format must match the attribute values and be accepted by the service that
+saves them.
+
+The native calendar keeps the display defined by the browser locale:
+`format` controls the value, not that display. In edit mode, a value that does
+not strictly match the format or an invalid date leaves the control empty;
+clearing the date produces an empty string. A disabled field displays its raw
+value. This parameter applies to `fields`; automatic dates in `auto` use their
+`source` parameter (see the automatic values section below).
+
 ### `geocoding` and `reverse-geocoding` fields
 
 These types populate a text address attribute using the Géoplateforme geocoding service:

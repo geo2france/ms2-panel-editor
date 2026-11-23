@@ -127,6 +127,136 @@ Règles :
 - Les doublons et valeurs vides sont filtrés.
 - Un champ présent dans `hidden` peut être réaffiché en mode édition s’il est explicitement déclaré dans `fields`.
 
+### Champs conditionnels
+
+Dans `cfg.layers["workspace:layer"]`, définir les champs sous forme d'objets.
+Les conditions activent la saisie sans masquer les attributs : si une condition
+échoue, le champ reste affiché en lecture seule. Les droits de couche et de champ
+continuent de s'appliquer.
+
+Exemple commenté (retirer les commentaires pour une configuration JSON) :
+
+```jsonc
+{
+  "allowEditRoles": ["EDITOR"], // Rôle autorisé à saisir sur cette couche.
+  "fields": [
+    { "name": "champ1", "type": "list", "options": ["A", "B", "C"] },
+    {
+      "name": "champ2", "type": "list", "options": ["FOO", "BAR", "BLA"],
+      "editableIf": { "field": "champ1", "eq": "A" } // Actif si champ1 = A.
+    },
+    {
+      "name": "champ3", "type": "string", "defaultValue": "TOTO",
+      "editableIf": { "field": "champ2", "eq": "FOO" } // Dépend aussi de champ1.
+    },
+    {
+      "name": "champ4", "type": "string", "value": "BAZ", "readOnly": true,
+      "editableIf": { "field": "champ3", "operator": "notEmpty" }
+      // BAZ reste en lecture seule ; enregistré si la chaîne de conditions est satisfaite.
+    }
+  ]
+}
+```
+
+| Paramètre | Type | Utilisation |
+|---|---|---|
+| `name` / `id` | `string` | Nom d'un attribut existant de l'entité WFS ; `id` est un alias. |
+| `type` | `string` | `list` pour une liste, `string` pour du texte ; alias `select` et `text`. |
+| `options` | `array` | Valeurs proposées dans la liste. |
+| `editableIf` | `object \| object[]` | Condition unique ou tableau de conditions à satisfaire toutes (ET logique) ; absent ou tableau vide, aucune restriction conditionnelle. |
+| `editableIf.field` | `string` | Attribut dont dépend le champ. |
+| `editableIf.eq` | valeur JSON | Égalité stricte avec la valeur de l'attribut référencé. |
+| `editableIf.operator` | `string` | `notEmpty` pour une valeur renseignée ; `eq` optionnel pour l'égalité. |
+| `visibleIf` | `object \| object[]` | Alias de `editableIf` : ne masque aucun champ. |
+| `defaultValue` | valeur JSON | Initialise un champ vide au début de l'édition, sans remplacer une valeur existante. |
+| `value` | valeur JSON | Valeur fixe, enregistrée si les conditions et les droits le permettent. |
+| `readOnly` | `boolean` | Bloque la saisie, même pour un administrateur ; défaut `false`. |
+| `roles` | `string[]` | Droits d'édition du champ, selon les règles existantes. |
+| `allowEditRoles` | `string[]` | Au niveau de la couche : restreint toute la saisie aux rôles indiqués. |
+
+Les dépendances sont évaluées en chaîne. Une référence inconnue, un opérateur
+inconnu ou un cycle désactive la saisie. `notEmpty` exclut `null` et les textes
+vides ou composés d'espaces. Un champ dont la condition échoue conserve sa valeur,
+mais n'est ni validé ni envoyé dans la transaction WFS. Un champ initialisé par
+`defaultValue` peut ensuite être effacé sans réapplication du défaut.
+
+Pour activer `champ4` uniquement si `champ2` vaut `FOO` **et** `champ3` vaut `BZH` :
+
+```jsonc
+{
+  "name": "champ4", "type": "string",
+  "editableIf": [
+    { "field": "champ2", "eq": "FOO" },
+    { "field": "champ3", "eq": "BZH" } // Les deux conditions doivent être satisfaites.
+  ]
+}
+```
+
+### Validation du contenu
+
+Les règles se déclarent dans les objets de `fields`. À l'enregistrement, une valeur
+invalide bloque la sauvegarde et affiche un message sous le champ. Les champs dont
+la condition échoue ou dont la saisie n'est pas autorisée sont exclus de la validation.
+
+```jsonc
+[
+  {
+    "name": "code_postal", "type": "string", "required": true,
+    "pattern": "^[0-9]{5}$", // Texte : exactement cinq chiffres.
+    "validationMessage": "Saisir un code postal à 5 chiffres."
+  },
+  {
+    "name": "mesure", "type": "number",
+    "min": -10, "max": 20 // Nombre compris entre -10 et 20, bornes incluses.
+  }
+]
+```
+
+| Paramètre | Type | Utilisation |
+|---|---|---|
+| `pattern` | `string` | Regex uniquement pour `string` (alias `text`) et `textarea`. Sans délimiteurs `/…/` ; utiliser `^` et `$` pour contrôler tout le texte. |
+| `min` | `number` | Borne minimale incluse, uniquement pour `number` ; facultative. |
+| `max` | `number` | Borne maximale incluse, uniquement pour `number` ; facultative. |
+| `validationMessage` | `string` | Message personnalisé pour un format incorrect ou un nombre invalide/hors bornes. Sinon, message par défaut. |
+
+Un champ vide est accepté sauf si `required` vaut `true`. Les décimales sont
+acceptées pour `number` (séparateur `.`). Dans le JSON, doubler les antislashs
+d'une regex : `"^\\d{5}$"`. Une regex invalide ou des bornes incohérentes
+provoquent une erreur de configuration à l'enregistrement d'un champ renseigné.
+
+### Format des champs `date`
+
+Dans `cfg.layers["workspace:layer"].fields`, utiliser une définition objet pour
+paramétrer le format d'un champ `date` :
+
+```json
+{
+  "name": "date_visite",
+  "label": "Date de visite",
+  "type": "date",
+  "editable": true,
+  "format": "DD/MM/YYYY"
+}
+```
+
+| Paramètre | Type | Défaut | Utilisation |
+|---|---|---|---|
+| `format` | `string` | `YYYY-MM-DD` | Format Moment.js utilisé pour lire la valeur du champ et produire la valeur après sélection d'une date. Disponible dans la définition objet, pas dans le tableau compact. |
+
+Exemples : `DD/MM/YYYY` pour `14/10/2026`, `YYYY-MM-DD` pour `2026-10-14`
+ou `MM.DD.YYYY` pour `10.14.2026`. `DD` désigne le jour sur deux chiffres,
+`MM` le mois sur deux chiffres et `YYYY` l'année sur quatre chiffres.
+Le format doit correspondre aux valeurs de l'attribut et être accepté par le
+service qui les enregistre.
+
+Le calendrier natif conserve l'affichage défini par la langue du navigateur :
+`format` contrôle la valeur, pas cet affichage. En édition, une valeur qui ne
+correspond pas strictement au format ou une date invalide laisse le contrôle
+vide ; effacer la date produit une chaîne vide. Un champ désactivé affiche sa
+valeur brute. Ce paramètre concerne les champs de `fields` ; les dates
+automatiques de `auto` utilisent leur paramètre `source` (voir la section sur
+les valeurs automatiques ci-dessous).
+
 ### Champs `geocoding` et `reverse-geocoding`
 
 Ces types renseignent un attribut texte contenant une adresse avec le service de géocodage de la Géoplateforme :

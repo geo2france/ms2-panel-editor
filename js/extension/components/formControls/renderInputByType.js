@@ -14,6 +14,7 @@ import GeocodingInputControl from "./GeocodingInputControl";
  * @param {Function} options.onChange Change handler.
  * @param {Array} [options.options=[]] Select options for list fields.
  * @param {boolean} [options.disabled=false] Whether the control is read-only in the UI.
+ * @param {string} [options.format] Date value format.
  * @param {string} [options.locale] UI locale for geocoding labels.
  * @param {string} [options.geocodingService] Base URL of the geocoding service.
  * @param {Function} [options.onCoordinatesChange] Handler receiving geocoded coordinates.
@@ -23,7 +24,7 @@ import GeocodingInputControl from "./GeocodingInputControl";
  * @param {Function} [options.onMapPickToggle] Toggle the map point picker.
  * @returns {React.ReactElement} Input component matching the requested type.
  */
-const renderInputByType = ({ type, value, onChange, options = [], disabled = false, locale,
+const renderInputByType = ({ type, value, onChange, options = [], disabled = false, locale, min, max, format,
     onCoordinatesChange, pickActive, mapPoint, onMapPickToggle, initialPoint, geocodingService }) => {
     switch (type) {
     case "geocoding":
@@ -38,13 +39,13 @@ const renderInputByType = ({ type, value, onChange, options = [], disabled = fal
     case "textarea":
         return <TextAreaControl value={value} onChange={onChange} disabled={disabled} />;
     case "number":
-        return <NumberInputControl value={value} onChange={onChange} disabled={disabled} />;
+        return <NumberInputControl value={value} onChange={onChange} disabled={disabled} min={min} max={max} />;
     case "date":
         // Disabled date fields use text input to keep the raw feature value visible
         // and avoid opening the native calendar picker.
         return disabled
             ? <TextInputControl value={value} onChange={onChange} disabled />
-            : <DateInputControl value={value} onChange={onChange} disabled={disabled} />;
+            : <DateInputControl value={value} onChange={onChange} disabled={disabled} format={format} />;
     case "list":
         return (
             <SelectInputControl

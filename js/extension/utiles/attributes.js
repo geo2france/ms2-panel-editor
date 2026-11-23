@@ -100,9 +100,11 @@ const normalizeFieldEntry = (fieldEntry = []) => {
 
     if (isObject(fieldEntry)) {
         return {
-            name: fieldEntry.name,
-            label: fieldEntry.label || fieldEntry.name,
-            type: fieldEntry.type || DEFAULT_FIELD_TYPE,
+            ...fieldEntry,
+            name: fieldEntry.name || fieldEntry.id,
+            label: fieldEntry.label || fieldEntry.name || fieldEntry.id,
+            type: ({ select: "list", text: "string" })[fieldEntry.type] || fieldEntry.type || DEFAULT_FIELD_TYPE,
+            readOnly: normalizeBoolean(fieldEntry.readOnly),
             editable: normalizeBoolean(fieldEntry.editable, true),
             required: normalizeBoolean(fieldEntry.required),
             roles: Array.isArray(fieldEntry.roles) ? fieldEntry.roles : [],

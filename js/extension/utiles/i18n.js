@@ -28,6 +28,13 @@ const TRANSLATIONS = {
         saveErrorGeneric: "Unable to save attributes.",
         editRestrictedAreaDenied: "You are not allowed to edit this feature outside your area of competence.",
         requiredField: "Required field",
+        invalidTextPattern: "The value does not match the expected format.",
+        invalidValidationConfig: "Invalid field validation configuration.",
+        invalidNumber: "Enter a valid number.",
+        numberBetween: "Enter a number between",
+        and: "and",
+        numberMinimum: "Enter a number greater than or equal to",
+        numberMaximum: "Enter a number less than or equal to",
         saveValidationError: "Some fields are invalid. Please fix them before saving.",
         saveNoChanges: "No editable field has changed."
     },
@@ -60,6 +67,13 @@ const TRANSLATIONS = {
         saveErrorGeneric: "Impossible d'enregistrer les attributs.",
         editRestrictedAreaDenied: "Vous n'êtes pas autorisé à modifier cette entité hors de votre zone de compétence.",
         requiredField: "Champ obligatoire",
+        invalidTextPattern: "La valeur ne respecte pas le format attendu.",
+        invalidValidationConfig: "La configuration de validation du champ est invalide.",
+        invalidNumber: "Saisir un nombre valide.",
+        numberBetween: "Saisir un nombre compris entre",
+        and: "et",
+        numberMinimum: "Saisir un nombre supérieur ou égal à",
+        numberMaximum: "Saisir un nombre inférieur ou égal à",
         saveValidationError: "Certains champs sont invalides. Corrigez-les avant d'enregistrer.",
         saveNoChanges: "Aucun champ modifiable n'a été modifié."
     }

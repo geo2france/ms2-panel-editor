@@ -17,6 +17,7 @@ import {
 import renderInputByType from "./formControls/renderInputByType";
 import SelectInputControl from "./formControls/SelectInputControl";
 import { getFeatureGeocodingPoint } from "../utiles/geocoding";
+import { getEffectiveFormValues, isFieldConditionSatisfied } from "../utiles/conditionalFields";
 
 const PANEL_SIZE_EXTRA = 100;
 
@@ -87,6 +88,9 @@ const PanelEditor = ({
 }) => {
     const initialGeocodingPoint = useMemo(() => getFeatureGeocodingPoint(selectedFeature?.geometry, featureProjection),
         [selectedFeature?.geometry, featureProjection]);
+    const currentValues = editMode
+        ? getEffectiveFormValues(selectedAttributes, formValues, layerConfig, userRoles)
+        : selectedAttributes;
     const visibleFields = editMode
         ? getEditableVisibleFieldNames(selectedAttributes, layerConfig)
         : getVisibleFieldNames(selectedAttributes, layerConfig);
@@ -264,12 +268,13 @@ const PanelEditor = ({
                                             layerConfig,
                                             describeFeatureType
                                         );
-                                        const fieldEditable = canEditField(
+                                        const conditionSatisfied = isFieldConditionSatisfied(fieldName, currentValues, layerConfig);
+                                        const fieldEditable = conditionSatisfied && canEditField(
                                             userRoles,
                                             fieldDefinition,
                                             selectedAttributes[fieldName]
                                         );
-                                        const fieldError = validationErrors[fieldName];
+                                        const fieldError = conditionSatisfied ? validationErrors[fieldName] : null;
                                         const fieldOptions = Array.isArray(resolvedListFieldOptions[fieldName])
                                             ? resolvedListFieldOptions[fieldName]
                                             : normalizeSelectOptions(fieldDefinition.options);
@@ -291,7 +296,8 @@ const PanelEditor = ({
                                                         return;
                                                     }
                                                     const definition = resolveFieldDefinition(target, selectedAttributes[target], layerConfig, describeFeatureType);
-                                                    if (canEditField(userRoles, definition, selectedAttributes[target])) {
+                                                    if (isFieldConditionSatisfied(target, currentValues, layerConfig)
+                                                        && canEditField(userRoles, definition, selectedAttributes[target])) {
                                                         onUpdateField(target, coordinates[axis]);
                                                     }
                                                 });
@@ -307,14 +313,20 @@ const PanelEditor = ({
                                                     ? renderInputByType({
                                                         ...geocodingProps,
                                                         type: fieldDefinition.type,
-                                                        value: formValues[fieldName] ?? selectedAttributes[fieldName] ?? "",
+                                                        min: fieldDefinition.min,
+                                                        max: fieldDefinition.max,
+                                                        format: fieldDefinition.format,
+                                                        value: currentValues[fieldName] ?? "",
                                                         options: fieldOptions,
                                                         onChange: (value) => onUpdateField(fieldName, value)
                                                     })
                                                     : renderInputByType({
                                                         ...geocodingProps,
                                                         type: fieldDefinition.type,
-                                                        value: formValues[fieldName] ?? selectedAttributes[fieldName] ?? "",
+                                                        min: fieldDefinition.min,
+                                                        max: fieldDefinition.max,
+                                                        format: fieldDefinition.format,
+                                                        value: currentValues[fieldName] ?? "",
                                                         options: fieldOptions,
                                                         onChange: () => {},
                                                         disabled: true

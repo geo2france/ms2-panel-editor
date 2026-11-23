@@ -47,6 +47,7 @@ Geocoding changes form attributes without moving the feature geometry. Changes r
 - If the user cannot edit because of `restrictedArea`, a `record` status button is shown with a tooltip.
 - If both restrictions apply, both buttons are shown.
 - In edit mode, unauthorized fields are still shown but stay read-only.
+- [Conditional fields](getting_started.en.md#conditional-fields) remain visible; input is disabled when their condition is not satisfied.
 - A `required` empty field becomes editable to allow mandatory input, including when editing is normally restricted to specific roles.
 - Delete button is shown only when `allowDelete` is `true`.
 - When the button is shown, it is enabled only if delete permission is granted.

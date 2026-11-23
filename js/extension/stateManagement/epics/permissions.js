@@ -4,6 +4,7 @@ import { LOAD_FEATURE_INFO } from "@mapstore/actions/mapInfo";
 import { getAreaOfCompetence } from "../../requests/restrictedArea";
 import { t } from "../../utiles/i18n";
 import { canEditLayer, isRoleAllowed } from "../../utiles/permissions";
+import { initializeFormValues } from "../../utiles/conditionalFields";
 import { extractAreaGeometry, getGeometryBounds, isRestrictedAreaOperationAllowed } from "../../utiles/restrictedArea";
 import {
     PANEL_EDITOR_REQUEST_START_EDIT,
@@ -172,7 +173,7 @@ export const startEditWithPermissionsEpic = (action$, store) =>
                 .switchMap(({ allowed, reasons }) => {
                     if (allowed) {
                         return Rx.Observable.of(
-                            setFormValues(selectedAttributes || {}),
+                            setFormValues(initializeFormValues(selectedAttributes, layerConfig, userRoles)),
                             setEditMode(true),
                             setSaveStatus("idle"),
                             setSaveMessage(""),
