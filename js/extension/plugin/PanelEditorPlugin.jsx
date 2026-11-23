@@ -10,6 +10,7 @@ import PanelEditor from "../components/PanelEditor";
 import reducer from "../stateManagement/reducer";
 import epics from "../stateManagement/epics";
 import {
+    setGeocodingPickField,
     setup,
     requestDelete,
     requestCancelEdit,
@@ -36,6 +37,7 @@ import {
     selectedLayerConfigSelector,
     selectedFeaturePropertiesSelector,
     selectedFeatureSelector,
+    selectedResponseFeaturesCrsSelector,
     selectedResponseIndexSelector,
     userRolesSelector,
     validationErrorsSelector
@@ -48,6 +50,8 @@ const compose = (...functions) => (args) =>
     functions.reduceRight((arg, fn) => fn(arg), args);
 
 const mapStateToProps = (state, ownProps) => ({
+    geocodingPickField: state?.panelEditor?.geocodingPickField || "",
+    geocodingPoint: state?.panelEditor?.geocodingPoint,
     active: isActive(state),
     enabled: isActive(state),
     dockStyle: mapLayoutValuesSelector(state, { height: true, right: true }, true),
@@ -62,6 +66,7 @@ const mapStateToProps = (state, ownProps) => ({
     layerConfig: selectedLayerConfigSelector(state),
     describeFeatureType: selectedDescribeFeatureTypeSelector(state),
     selectedFeature: selectedFeatureSelector(state),
+    featureProjection: selectedResponseFeaturesCrsSelector(state) || "EPSG:4326",
     selectedAttributes: selectedFeaturePropertiesSelector(state),
     resolvedListFieldOptions: resolvedListFieldOptionsSelector(state),
     editMode: editModeSelector(state),
@@ -73,6 +78,7 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+    onGeocodingPick: (field) => dispatch(setGeocodingPickField(field)),
     onClose: () => dispatch(toggleControl(PANEL_EDITOR_CONTROL, "enabled")),
     onSelectResponse: (index) => dispatch(setSelectedResponseIndex(index)),
     onSelectFeature: (index) => dispatch(setSelectedFeatureIndex(index)),

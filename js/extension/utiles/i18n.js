@@ -1,5 +1,12 @@
 const TRANSLATIONS = {
     en: {
+        geocodingPick: "Select a point on the map to find its address",
+        geocodingPickHint: "Click on the map to find the address. Click the button again to cancel.",
+        geocodingResults: "Results found:",
+        geocodingAddress: "Address",
+        geocodingLoading: "Searching…",
+        geocodingNoResults: "No address found.",
+        geocodingError: "The geocoding service is unavailable. Please try again.",
         panelTitle: "Attributes",
         sidebarTooltip: "Attributes",
         emptyState: "Click on the map to load feature attributes.",
@@ -25,6 +32,13 @@ const TRANSLATIONS = {
         saveNoChanges: "No editable field has changed."
     },
     fr: {
+        geocodingPick: "Choisir un point sur la carte pour retrouver l’adresse",
+        geocodingPickHint: "Cliquez sur la carte pour retrouver l’adresse. Recliquez sur le bouton pour annuler.",
+        geocodingResults: "Résultats trouvés :",
+        geocodingAddress: "Adresse",
+        geocodingLoading: "Recherche en cours…",
+        geocodingNoResults: "Aucune adresse trouvée.",
+        geocodingError: "Le service de géocodage est indisponible. Réessayez.",
         panelTitle: "Attributs",
         sidebarTooltip: "Attributs",
         emptyState: "Cliquez sur la carte pour charger les attributs d'une entité.",

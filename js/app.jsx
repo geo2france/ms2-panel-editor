@@ -38,12 +38,12 @@ ConfigUtils.setConfigProp('themePrefix', 'MapStoreExtension');
  */
 ConfigUtils.setLocalConfigurationFile('configs/localConfig.json');
 const appConfig = {
-	...require('@mapstore/product/appConfig').default,
-	pages: [{
-		name: "mapviewer",
-		path: "/",
-		component: require('@mapstore/product/pages/MapViewer').default
-	}]
+    ...require('@mapstore/product/appConfig').default,
+    pages: [{
+    	name: "mapviewer",
+    	path: "/",
+    	component: require('@mapstore/product/pages/MapViewer').default
+    }]
 };
 
 /**

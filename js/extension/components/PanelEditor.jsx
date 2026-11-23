@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import ResponsivePanel from "@mapstore/components/misc/panels/ResponsivePanel";
 import OverlayTrigger from "@mapstore/components/misc/OverlayTrigger";
@@ -11,10 +11,12 @@ import {
     getFeatureOptionLabel,
     getVisibleFieldNames,
     normalizeSelectOptions,
+    resolveAttributeName,
     resolveFieldDefinition
 } from "../utiles/attributes";
 import renderInputByType from "./formControls/renderInputByType";
 import SelectInputControl from "./formControls/SelectInputControl";
+import { getFeatureGeocodingPoint } from "../utiles/geocoding";
 
 const PANEL_SIZE_EXTRA = 100;
 
@@ -48,6 +50,9 @@ const ToolbarButton = ({ message, onClick, children }) => (
  * @returns {React.ReactElement} Panel editor markup.
  */
 const PanelEditor = ({
+    geocodingPickField,
+    geocodingPoint,
+    onGeocodingPick,
     layerConfig,
     describeFeatureType,
     enabled,
@@ -63,6 +68,7 @@ const PanelEditor = ({
     selectedFeatureIndex,
     selectedFeatures,
     selectedFeature,
+    featureProjection,
     selectedAttributes,
     resolvedListFieldOptions,
     editMode,
@@ -79,6 +85,8 @@ const PanelEditor = ({
     onSave,
     onDelete
 }) => {
+    const initialGeocodingPoint = useMemo(() => getFeatureGeocodingPoint(selectedFeature?.geometry, featureProjection),
+        [selectedFeature?.geometry, featureProjection]);
     const visibleFields = editMode
         ? getEditableVisibleFieldNames(selectedAttributes, layerConfig)
         : getVisibleFieldNames(selectedAttributes, layerConfig);
@@ -265,6 +273,30 @@ const PanelEditor = ({
                                         const fieldOptions = Array.isArray(resolvedListFieldOptions[fieldName])
                                             ? resolvedListFieldOptions[fieldName]
                                             : normalizeSelectOptions(fieldDefinition.options);
+                                        const coordinateFields = {
+                                            x: resolveAttributeName(fieldDefinition.options?.xField, selectedAttributes),
+                                            y: resolveAttributeName(fieldDefinition.options?.yField, selectedAttributes)
+                                        };
+                                        const geocodingProps = {
+                                            geocodingService: cfg?.geocodingService,
+                                            initialPoint: initialGeocodingPoint,
+                                            pickActive: geocodingPickField === fieldName,
+                                            mapPoint: geocodingPoint?.field === fieldName ? geocodingPoint : null,
+                                            onMapPickToggle: () => onGeocodingPick(geocodingPickField === fieldName ? "" : fieldName),
+                                            locale,
+                                            onCoordinatesChange: (coordinates) => {
+                                                Object.keys(coordinateFields).forEach((axis) => {
+                                                    const target = coordinateFields[axis];
+                                                    if (!target || target === fieldName || !Object.prototype.hasOwnProperty.call(selectedAttributes, target)) {
+                                                        return;
+                                                    }
+                                                    const definition = resolveFieldDefinition(target, selectedAttributes[target], layerConfig, describeFeatureType);
+                                                    if (canEditField(userRoles, definition, selectedAttributes[target])) {
+                                                        onUpdateField(target, coordinates[axis]);
+                                                    }
+                                                });
+                                            }
+                                        };
                                         return (
                                             <FormGroup key={fieldName} validationState={fieldError ? "error" : null}>
                                                 <ControlLabel>
@@ -273,12 +305,14 @@ const PanelEditor = ({
                                                 </ControlLabel>
                                                 {fieldEditable
                                                     ? renderInputByType({
+                                                        ...geocodingProps,
                                                         type: fieldDefinition.type,
-                                                        value: formValues[fieldName],
+                                                        value: formValues[fieldName] ?? selectedAttributes[fieldName] ?? "",
                                                         options: fieldOptions,
                                                         onChange: (value) => onUpdateField(fieldName, value)
                                                     })
                                                     : renderInputByType({
+                                                        ...geocodingProps,
                                                         type: fieldDefinition.type,
                                                         value: formValues[fieldName] ?? selectedAttributes[fieldName] ?? "",
                                                         options: fieldOptions,
@@ -300,6 +334,10 @@ const PanelEditor = ({
 };
 
 PanelEditor.propTypes = {
+    featureProjection: PropTypes.string,
+    geocodingPickField: PropTypes.string,
+    geocodingPoint: PropTypes.object,
+    onGeocodingPick: PropTypes.func,
     layerConfig: PropTypes.object,
     describeFeatureType: PropTypes.object,
     enabled: PropTypes.bool,
@@ -333,6 +371,10 @@ PanelEditor.propTypes = {
 };
 
 PanelEditor.defaultProps = {
+    featureProjection: "EPSG:4326",
+    geocodingPickField: "",
+    geocodingPoint: null,
+    onGeocodingPick: () => {},
     layerConfig: {},
     describeFeatureType: null,
     enabled: false,

@@ -14,8 +14,11 @@ import {
 } from "./epics/permissions";
 import { requestFeatureInfoOnMapClickEpic } from "./epics/featureInfo";
 import { loadDescribeFeatureTypeEpic, loadListFieldOptionsEpic } from "./epics/dataLoading";
+import { geocodingMapListenerEpic, geocodingMapClickEpic } from "./epics/geocoding";
 
 export default {
+    geocodingMapListenerEpic,
+    geocodingMapClickEpic,
     syncIdentifyStateWithPanelEditorEpic,
     registerPanelEditorDockPanelEpic,
     handlePanelEditorTransactionEpic,
